@@ -92,50 +92,6 @@ class UserSeed extends Seeder
         ],
 
 
-         [ //8
-            'firstname' => 'Deans',
-            'lastname' => 'Window 1',
-            'password' => 'deans1',
-            'email' => 'deans1@jblfmu.edu.ph',
-            'username' => 'deans1',
-            'designation' => 'clerk',
-            'title' => 'deans office clerk',
-            'company_id' => 2,
-            'department_id' => 3
-        ],
-        [ //9
-            'firstname' => 'Deans',
-            'lastname' => 'Window 2',
-            'password' => 'deans2',
-            'email' => 'deans2@jblfmu.edu.ph',
-            'username' => 'deans2',
-            'designation' => 'registrar officer',
-            'title' => 'deans office clerk',
-            'company_id' => 2,
-            'department_id' => 3
-        ],
-        [ //10
-            'firstname' => 'Deans',
-            'lastname' => 'Window 3',
-            'password' => 'deans3',
-            'email' => 'deans3@jblfmu.edu.ph',
-            'username' => 'deans3',
-            'designation' => 'clerk',
-            'title' => 'deans office clerk',
-            'company_id' => 2,
-            'department_id' => 3
-        ],
-        [ //11
-            'firstname' => 'Deans',
-            'lastname' => 'Department Head',
-            'password' => 'registrardepthead',
-            'email' => 'registrar3@jblfmu.edu.ph',
-            'username' => 'registrar3',
-            'designation' => 'dept_head',
-            'title' => 'Department Head',
-            'company_id' => 2,
-            'department_id' => 3
-        ],
     ];
 
 
