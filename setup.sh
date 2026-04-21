@@ -6,12 +6,7 @@ set -e
 # run this after installation
 # add additional setup for each microservice
 
-SERVICES="
-as-queue-asq-auth-service-1
-as-queue-asq-queue-service-1
-as-queue-asq-gate-service-1
-as-queue-asq-notif-service-1
-"
+SERVICES=$(docker ps -a --format "{{.Names}}" | grep 'asq-' | grep -E '^as-?queue-')
 
 # generate a JWT secret hash value for all services
 SHARED_JWT_SECRET=$(openssl rand -base64 48)
