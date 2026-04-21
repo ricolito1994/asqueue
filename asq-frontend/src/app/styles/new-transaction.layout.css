@@ -1,0 +1,43 @@
+.new-transaction-layout {
+    width:100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+    --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+    --mono: ui-monospace, Consolas, monospace;
+    font: 18px/145% var(--heading);
+}
+
+.ant-card-body {
+    height:100%;
+}
+
+.number-now-serving {
+    font-size: 200px;
+    font-weight: bold;
+}
+
+.new-transaction-layout-container {
+    width: 80%;
+    left:9%;
+    position: relative;
+}
+
+.transaction-concern {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 2fr));
+    gap: 16px;
+}
+
+
+.new-transaction-title-container {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.company-department {
+    flex:3;
+}

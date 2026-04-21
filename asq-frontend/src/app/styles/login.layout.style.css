@@ -1,0 +1,21 @@
+
+.login-spin.ant-spin {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+}
+
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  background: #f0dffb66;
+}
+
+.login-card {
+  width: 550px;
+}

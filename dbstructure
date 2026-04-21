@@ -1,0 +1,77 @@
+- auth_service
+    - company
+        - id (auto increment)
+        - name (string)
+        - logo (string / url) nullable
+        - created_at
+        - updated_at
+    - department
+        - id
+        - name
+        - company (id referenced at company)
+        - created_at
+        - updated_at
+    - user
+      - id (auto increment)
+      - firstname (cast)
+      - lastname (cast) - fullname
+      - designation (srting)
+      - department (id reference department) - nullable
+      - window (id reference window) - nullable
+      - company (id reference company)
+      - username (string)
+      - password (string - hash)
+      - email (nullable)
+      - title (nullable)
+      - created_at (string - timestamp)
+      - updated_at
+    - preference
+
+- queue_service
+    - window
+        - name
+        - description - nullable longtext
+        - company - referernce from company id
+        - department - reference from department id
+        - assigned - reference from user id
+        - created_at
+        - updated_at
+        - deleted_at
+    - concerns
+        - name
+        - window (id reference from window)
+        - department (id reference from department)
+        - company (id reference from company)
+        - description (longtext)
+        - created_at
+        - updated_at
+        - deleted_at
+    - transaction
+        - id (auto increment)
+        - created_by (id references from user)
+        - processed_by (id references from user) nullable
+        - window (id reference from window)
+        - department (id reference from department)
+        - company (id reference from company)
+        - concern (id reference from concern)
+        - queue_session (id reference from queue_session)
+        - pre_process_log (longtext) nullable
+        - post_process_log (longtext) nullable (resolution)
+        - status (string)
+        - queue_number (int)
+        - created_at
+        - process_start_at - nullable
+        - process_end_at - nullable
+        - is_priority - boolean nullable
+        - updated_at - nullable
+        - deleted_at - nullable
+    - queue_session
+        - id - ai
+        - window - id reference from window
+        - department - id reference from depeartment
+        - date
+        - session_type
+        - start_time
+        - end_time
+        - cutoff_number
+

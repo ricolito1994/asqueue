@@ -1,0 +1,42 @@
+.new-transaction-modal{
+   width:100%;
+   margin-top:30px;
+}
+
+.new-transaction-modal div.contents 
+{
+    text-align: center;
+    font-weight: bold;
+    line-height: 25px;
+}
+
+#window-name {
+    font-size:20px;
+}
+
+#concern-name {
+    font-size:40px;
+}
+
+
+#number-served {
+    font-size: 230px;
+    margin-top:140px;
+    height: 200px;
+}
+
+#date-transaction-container {
+    font-size:20px;
+}
+
+#queue-button-container, #queue-loading-container {
+    margin-top: 20px;
+}
+
+#new-transaction-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}

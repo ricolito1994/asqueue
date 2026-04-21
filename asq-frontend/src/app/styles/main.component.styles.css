@@ -1,0 +1,36 @@
+#main-layout{
+    width: 100%;
+    position:absolute;
+    height: 100%;
+    top: 0;
+    padding: 0;
+    left: 0;
+
+    --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+    --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+    --mono: ui-monospace, Consolas, monospace;
+
+    font: 18px/145% var(--sans);
+    letter-spacing: 0.18px;
+    color-scheme: light dark;
+    color: var(--text);
+
+    overflow: hidden;
+
+    @media (max-width: 1024px) {
+        font-size: 16px;
+    }
+}
+
+#main-content{
+    width:100%;
+    height: 93%;
+    display: flex;
+    flex-direction: row;
+}
+
+#main-container{
+    background-color: #f0dffb66;
+    width: 87%;
+    padding: 1%;
+}

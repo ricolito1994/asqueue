@@ -1,0 +1,16 @@
+#asmodal-confirm-dialog-container {
+    padding:2%;
+}
+
+.contents {
+    font-weight: bold;
+    line-height: 25px;
+}
+
+.as-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}

@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/app/components/*"],
+      "@constants/*": ["./src/app/constants/*"],
+      "@context/*": ["./src/app/context/*"],
+      "@hooks/*": ["./src/app/hooks/*"],
+      "@utils/*": ["./src/app/utils/*"],
+      "@pages/*": ["./src/app/pages/*"],
+      "@assets/*": ["./src/app/assets/*"],
+      "@styles/*": ["./src/app/styles/*"],
+      "@services/*": ["./src/app/services/*"],
+      "@types/*": ["./src/app/types/*"],
+      "@models/*": ["./src/app/models/*"],
+      "@layouts/*": ["./src/app/layouts/*"]
+    },
+
+    "types": ["vite/client"]
+  },
+  "include": ["src", "vite.config.ts"]
+}

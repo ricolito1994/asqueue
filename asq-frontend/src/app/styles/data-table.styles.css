@@ -1,0 +1,50 @@
+.data-table {
+  height:100%;
+}
+
+.datatable-filter-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 7%;
+}
+
+.data-table-container {
+  margin-top: 1%;
+  height : 100%;
+}
+
+.paginator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1%;
+  width: 100%;
+}
+
+.paginator .buttons {
+  display: flex;
+  flex: 2;
+}
+
+.paginator .buttons .buttons-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paginator .total-number-of-items {
+  display: flex;
+  flex: 1.6;
+}
+
+
+.css-var-root.ant-table-css-var.ant-table-wrapper.css-dev-only-do-not-override-1daqxe2{
+  height:100%;
+  background-color: #ccccccb8;
+  border-radius: 1%;
+}
+
+.row-prio-color {
+  background-color: #69fdab;
+}

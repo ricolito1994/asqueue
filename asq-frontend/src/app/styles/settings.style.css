@@ -1,0 +1,39 @@
+.settings-main-container{
+    position:relative;
+    height:85%;
+    max-height: 85%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.settings-menu-container{
+    display: flex;
+    padding-top:1%;
+    padding-bottom: 1%;
+    gap: 5px;
+    width: 100%;
+}
+
+.settings-menu-item {
+    width: 100%;
+}
+
+#profile-settings-container{
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+#profile-details-container {
+    line-height: 70px;
+}
+
+#profile-full-name-container {
+    font-size:70px;
+    font-weight: bold;
+}
+
+#profile-company-name-container {
+    font-size: 30px;
+    font-weight: bold;
+}
