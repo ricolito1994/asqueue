@@ -20,10 +20,6 @@ class DepartmentSeed extends Seeder
             'name' => 'Registrar',
             'company_id' => 2
         ],
-        [
-            'name' => "Dean`s Office",
-            'company_id' => 3
-        ],
     ];
 
 
