@@ -65,7 +65,14 @@ export abstract class AbstractApiService implements HTTPRequestableInterface
         this.apiClient.interceptors.response.use(
             response => response,
             async error => {
-                if (this.refreshToken && error.response?.data?.status === "Token is Expired") {
+                let errStatus = [
+                    'Token is Expired',
+                    'Invalid Token'
+                ]
+
+                let isAcceptedErrorMessage = errStatus.includes(error.response?.data?.status)
+
+                if (this.refreshToken && isAcceptedErrorMessage) {
                     try {
                         await this.refreshAccessTokenOnTheGo();
                         

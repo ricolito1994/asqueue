@@ -37,6 +37,8 @@ import Datatable from '@components/commons/DataTable';
 
 import Clock from '@components/commons/Clock';
 
+import dayjs from 'dayjs';
+
 const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
 
     const {
@@ -44,6 +46,8 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
         userWindow,
         setUser
     } = useContext(AppContext)
+
+    const now = dayjs()
 
     const [currentQueueNum, setCurrentQueueNum] = useState<number>(0);
 
@@ -161,6 +165,8 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                     "company_id" : user?.user?.company_id,
                     "department_id": user?.user?.department_id,
                     "window_id" : userWindow.id,
+                    "date_from" : now.format('YYYY-MM-DD'),
+                    "date_to" : now.format('YYYY-MM-DD')
                 }
             }
 
@@ -230,8 +236,8 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                 console.error(e)
             }
         }
-        
-        requestQueueSizes()
+        if(isQueueListLoading)
+            requestQueueSizes()
     }, [isQueueListLoading])
 
     return (
@@ -372,7 +378,9 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                                             "company_id" : user?.user?.company_id,
                                             "department_id": user?.user?.department_id,
                                             "window_id" : userWindow.id,
-                                            "is_priority": isSelectedPriority
+                                            "is_priority": isSelectedPriority,
+                                            "date_from" : now.format('YYYY-MM-DD'),
+                                            "date_to" : now.format('YYYY-MM-DD')
                                         }
                                     }
                                 }}
