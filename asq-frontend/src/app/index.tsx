@@ -34,6 +34,8 @@ import Dashboard from '@pages/main/Dashboard'
 
 import LoginLayout from './layouts/LoginLayout'
 
+import ConditionalRenderingLayout from '@layouts/ConditionalRenderingLayout'
+
 const App = (): React.ReactElement => {
 
     const {
@@ -114,10 +116,14 @@ const App = (): React.ReactElement => {
                     <Route path='/queues' element={<QueueLogsPage />} />
                     
                     <Route path='/settings' element={<SettingsLayout />}>
-                        <Route path='user' element={<UserSettings />} />
-                        <Route path='concern' element={<ConcernSettings />} />
-                        <Route path='window' element={<WindowSettings />} />
                         <Route path='profile' element={<ProfileSettings />} />
+                        {user?.designation == 'admin' ? 
+                            <>
+                                <Route path='concern' element={<ConcernSettings />} />
+                                <Route path='window' element={<WindowSettings />} />
+                                <Route path='user' element={<UserSettings />} />
+                            </>
+                        : ''}
                     </Route>
                     
                 </Route>    

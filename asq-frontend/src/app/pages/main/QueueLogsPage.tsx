@@ -41,7 +41,7 @@ const QueueLogsPage: React.FC <any> = ({}): React.ReactElement => {
 
     const [isSelectedPriority, setIsSelectedPriority]  = useState<boolean | null>(null)
 
-    const [fromDate, setFromDate] = useState<any | null>(defaultDate)
+    const [fromDate, setFromDate] = useState<any | null>(defaultDate.subtract(1, 'month'))
 
     const [toDate, setToDate] = useState<any | null>(defaultDate)
 

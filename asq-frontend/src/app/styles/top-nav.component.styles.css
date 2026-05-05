@@ -14,7 +14,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    gap:16px;
+    gap:20px;
     flex-direction: row;
 }
 
@@ -25,4 +25,17 @@
 #company-title > #main-title {
     font-weight: bold;
     font-size: 30px;
+}
+
+#image-profile-container {
+    position: relative;
+    top: 5%;
+}
+
+#image-profile-container > img {
+    cursor:pointer;
+}
+
+#user-detail-container{
+    line-height: 21px;
 }

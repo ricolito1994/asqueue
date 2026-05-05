@@ -165,8 +165,8 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                     "company_id" : user?.user?.company_id,
                     "department_id": user?.user?.department_id,
                     "window_id" : userWindow.id,
-                    "date_from" : now.format('YYYY-MM-DD'),
-                    "date_to" : now.format('YYYY-MM-DD')
+                    "from_date" : now.format('YYYY-MM-DD'),
+                    "to_date" : now.format('YYYY-MM-DD')
                 }
             }
 
@@ -204,7 +204,9 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                 
             }
         }
-        getLatestQueueNumber()
+
+        if (currentQueueNum == 0)
+            getLatestQueueNumber()
 
     }, [currentQueueNum])
 
@@ -379,8 +381,9 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                                             "department_id": user?.user?.department_id,
                                             "window_id" : userWindow.id,
                                             "is_priority": isSelectedPriority,
-                                            "date_from" : now.format('YYYY-MM-DD'),
-                                            "date_to" : now.format('YYYY-MM-DD')
+                                            "from_date" : now.format('YYYY-MM-DD'),
+                                            "to_date" : now.format('YYYY-MM-DD'),
+                                            "status" : "all"
                                         }
                                     }
                                 }}
