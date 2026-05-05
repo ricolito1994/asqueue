@@ -9,11 +9,14 @@ import React, {
 import {
     Button,
     notification,
-    Form
+    Form,
+    Dropdown, Avatar
 } from 'antd'
 
 import {
-    LogoutOutlined
+    LogoutOutlined,
+    UserOutlined,
+    WindowsOutlined
 } from '@ant-design/icons'
 
 import '@styles/top-nav.component.styles.css'
@@ -25,13 +28,16 @@ import { AppContext } from '@context/AppContext'
 import AuthenticationService from '@services/AuthenticationService';
 import AsConfirmModal from '@components/modals/AsConfirmModal'
 
+import profile from '@assets/profile.png'
+
 const TopNavComponent: React.FC <any> = ({children}) => {
     const APP_NAME = import.meta.env.NAME;
     const {
         user,
         setUser,
         setIsProcessing,
-        setUserWindow
+        setUserWindow,
+        userWindow
     }
     = useContext(AppContext)
 
@@ -39,7 +45,23 @@ const TopNavComponent: React.FC <any> = ({children}) => {
 
     const [displayConfirmLogout, setDisplayConfirmLogout] = useState<boolean>(false)
 
-
+    const items = [
+        {
+            key: "profile",
+            label: `Profile - ${user?.user?.full_name}`,
+            icon: <UserOutlined />,
+        },
+        {
+            key: "logout",
+            label: "Logout",
+            icon: <LogoutOutlined />,
+        },
+        {
+            key: "window-mode",
+            label: "Window Mode",
+            icon: <WindowsOutlined />,
+        },
+    ];
     const onRefreshToken = (data: any) => {
         setUser((prev: any) => ({
             ...prev,
@@ -83,6 +105,15 @@ const TopNavComponent: React.FC <any> = ({children}) => {
         }
     }
 
+    const handleProfileMenuClick = (e: any) => {
+        const menus: any = {
+            "logout": () => {
+                setDisplayConfirmLogout(true)
+            }
+        }
+        menus[e?.key]()
+    }
+
     return (
         <div id='top-nav-component'>
             {contextHolder}
@@ -103,11 +134,18 @@ const TopNavComponent: React.FC <any> = ({children}) => {
                      <div id='main-title'>{user?.user?.company?.name}</div>
                      <div id='sub-title'>Queue</div>
                 </div>
+                <div id='image-profile-container'>
+                    
+                    <Dropdown menu={{ items, onClick: handleProfileMenuClick }} placement="bottomLeft" trigger={["click"]}>
+                        <img src={profile} width='50'/>
+                    </Dropdown>
+                </div>
 
                 <div id='user-detail-container'>
-                    {user?.user?.title} {user?.user?.full_name}
+                    {user?.user?.department?.name} - {userWindow ? userWindow?.name : ''} <br />
+                    <span>{user?.user?.designation}</span>
                 </div>
-                <div id='user-detail-container'>
+                <div >
    
                     <Button
                         style={{
@@ -122,7 +160,7 @@ const TopNavComponent: React.FC <any> = ({children}) => {
                         block
                     >
                         <LogoutOutlined /> 
-                        Log Out
+                        
                     </Button>
 
                 </div>

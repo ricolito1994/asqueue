@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use GuzzleHttp\Client;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Exception\RequestException;
+use App\Exceptions\ServiceException;
 
 class BaseService
 {
@@ -89,20 +90,24 @@ class BaseService
             if ($e instanceof RequestException) {
                 if ($e->hasResponse()) {
                     $errorResponse = $e->getResponse();
-                    return [
-                        "data" => json_decode($errorResponse->getBody()->getContents(), true),
-                        "status" => $errorResponse->getStatusCode()
-                    ];
+
+                    throw new ServiceException(
+                        json_decode($errorResponse->getBody()?->getContents() ?? ["message" => "Failed"], true),
+                        $errorResponse->getStatusCode(),
+                        "Service Failed",
+                    );
                 }
             }
-            return [
-                "data" => [
+
+            throw new ServiceException(
+                [
                     "message" => "Failed, something went wrong.",
                     "reason" => $e->getMessage(),
                     "success" => false,
                 ],
-                "status" => 500
-            ];
+                500,
+                "Failed, something went wrong.",
+            );
         }
     }
 
