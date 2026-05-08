@@ -88,15 +88,36 @@ class BaseService
             ];
         } catch (\Exception $e) {
             if ($e instanceof RequestException) {
-                if ($e->hasResponse()) {
-                    $errorResponse = $e->getResponse();
+                $response = $e->getResponse();
 
-                    throw new ServiceException(
-                        json_decode($errorResponse->getBody()?->getContents() ?? ["message" => "Failed"], true),
-                        $errorResponse->getStatusCode(),
-                        "Service Failed",
-                    );
+                $statusCode = $response?->getStatusCode() ?? 500;
+
+                $body = $response
+                    ? (string) $response->getBody()
+                    : '';
+
+                $contentType = $response?->getHeaderLine('Content-Type');
+
+                $parsedBody = null;
+
+                if (str_contains($contentType, 'application/json')) {
+
+                    $parsedBody = json_decode($body, true);
+
+                } else {
+
+                    $parsedBody = [
+                        'message' => strip_tags($body)
+                    ];
                 }
+
+                throw new ServiceException(
+                    $parsedBody ?: [
+                        'message' => $body ?: $e->getMessage()
+                    ],
+                    $statusCode,
+                    'Service Failed'
+                );
             }
 
             throw new ServiceException(
