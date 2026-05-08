@@ -9,8 +9,10 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 
-class RecallQueueNumberEvent implements ShouldBroadcast
+class RecallQueueNumberEvent implements ShouldBroadcast, ShouldQueue
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -23,6 +25,17 @@ class RecallQueueNumberEvent implements ShouldBroadcast
         protected array $params
     )
     {
+    }
+
+    public function middleware(): array 
+    {
+        return [
+            (new WithoutOverlapping(
+                "recall-lock-{$this->params['company_id']}:{$this->params['department_id']}"
+            ))
+            ->releaseAfter(1)
+            ->expireAfter(10)
+        ];
     }
 
     public function broadcastOn(): Channel
@@ -41,5 +54,14 @@ class RecallQueueNumberEvent implements ShouldBroadcast
             'message' => "Customer number {$this->params['queue_number']} please proceed to {$this->params['window']['name']}",
             'data' => $this->params
         ];
+    }
+
+    public function failed(\Throwable $exception): void
+    {
+        \Log::error('RecallQueueNumberEvent failed', [
+            'params' => $this->params,
+            'error' => $exception->getMessage(),
+            'trace' => $exception->getTraceAsString(),
+        ]);
     }
 }

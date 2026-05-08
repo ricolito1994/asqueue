@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom"
 import QueueNumberLayout from '@layouts/QueueNumberLayout'
 import NewTransactionLayout from '@layouts/NewTransactionLayout'
 import LoadingLayout from '@layouts/LoadingLayout'
+import QueueScreenLayout from '@layouts/QueueScreenLayout'
 
 import TransactionWindow from '@pages/new-transaction/TransactionWindow'
 import TransactionConcern from '@pages/new-transaction/TransactionConcern'
@@ -25,6 +26,7 @@ import ProfileSettings from '@pages/main/settings/ProfileSettings'
 import ConcernSettings from '@pages/main/settings/ConcernSettings'
 import UserSettings from '@pages/main/settings/UserSettings'
 import WindowSettings from '@pages/main/settings/WindowSettings'
+import QueueScreenPage from '@pages/QueueScreenPage'
 
 import SettingsLayout from '@layouts/SettingsLayout'
 
@@ -135,8 +137,8 @@ const App = (): React.ReactElement => {
                     <Route path="company/:companyId/department/:departmentId/concerns/:concernId/windows" element={<TransactionWindow />} />
                 </Route>
 
-                <Route path='/windows' element={<NewTransactionLayout />} >
-                    <Route path='company/:companyId/department/:departmentId' element={<WindowsChannelPage />} />
+                <Route path='/windows' element={<QueueScreenLayout />} >
+                    <Route path='company/:companyId/department/:departmentId' element={<QueueScreenPage />} />
                 </Route>
             </Routes>
         </LoadingLayout>
