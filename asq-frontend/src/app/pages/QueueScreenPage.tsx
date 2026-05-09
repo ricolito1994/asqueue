@@ -91,7 +91,7 @@ const QueueScreenPage: React.FC <any> = ({}): React.ReactElement => {
 
             currentEvent.cb?.();
 
-            await new Promise ((resolve: any) => setTimeout(resolve, 3000))
+            await new Promise ((resolve: any) => setTimeout(resolve, 4000))
 
             setEventQueue((prev: any) => prev.slice(1));
 

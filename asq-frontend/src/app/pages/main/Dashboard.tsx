@@ -39,6 +39,8 @@ import Clock from '@components/commons/Clock';
 
 import dayjs from 'dayjs';
 
+import ConditionalRenderingLayout from '@layouts/ConditionalRenderingLayout';
+
 const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
 
     const {
@@ -304,19 +306,24 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                                     
                                 </div>
                                 <div className='card-footer-content'>
-                                    <Button
-                                        style={{
-                                            fontSize : '15px',
-                                            fontWeight: 'bold',
-                                            width: '100%',
-                                            padding: '5%'
-                                        }}
-                                        color="green"
-                                        variant="solid" 
-                                        onClick={()=>setIsOpenPriorityQueueActionModal(true)}
+                                    <ConditionalRenderingLayout
+                                        condition={user?.department?.is_priority_queue_allowed}
+                                        elseRender={''}
                                     >
-                                        NEXT QUEUE PRIORITY NUMBER <StepForwardOutlined />
-                                    </Button>
+                                        <Button
+                                            style={{
+                                                fontSize : '15px',
+                                                fontWeight: 'bold',
+                                                width: '100%',
+                                                padding: '5%'
+                                            }}
+                                            color="green"
+                                            variant="solid" 
+                                            onClick={()=>setIsOpenPriorityQueueActionModal(true)}
+                                        >
+                                            NEXT QUEUE PRIORITY NUMBER <StepForwardOutlined />
+                                        </Button>
+                                    </ConditionalRenderingLayout>
                                 </div>
                             </div>
                         </div>
@@ -426,23 +433,28 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                                         NORMAL QUEUE {isSelectedPriority === false  ? '*' : ''} 
                                         <StepForwardOutlined />
                                     </Button>&nbsp;
-                                    <Button
-                                        style={{
-                                            fontSize : '15px',
-                                            fontWeight: 'bold',
-                                            width: '32%',
-                                            padding: '2%'
-                                        }}
-                                        color="green"
-                                        variant={isSelectedPriority ? "outlined" : 'solid'} 
-                                        onClick={()=>{
-                                            setIsSelectedPriority(true)
-                                            setIsQueueListLoading(true)
-                                        }}
+                                    <ConditionalRenderingLayout
+                                        condition={user?.department?.is_priority_queue_allowed}
+                                        elseRender={''}
                                     >
-                                        PRIORITY QUEUE {isSelectedPriority ? '*' : ''} 
-                                        <StepForwardOutlined />
-                                    </Button>
+                                        <Button
+                                            style={{
+                                                fontSize : '15px',
+                                                fontWeight: 'bold',
+                                                width: '32%',
+                                                padding: '2%'
+                                            }}
+                                            color="green"
+                                            variant={isSelectedPriority ? "outlined" : 'solid'} 
+                                            onClick={()=>{
+                                                setIsSelectedPriority(true)
+                                                setIsQueueListLoading(true)
+                                            }}
+                                        >
+                                            PRIORITY QUEUE {isSelectedPriority ? '*' : ''} 
+                                            <StepForwardOutlined />
+                                        </Button>
+                                    </ConditionalRenderingLayout>
                                 </div>
                             </Datatable>
                         </div>
