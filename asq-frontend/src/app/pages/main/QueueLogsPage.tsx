@@ -32,6 +32,8 @@ import { useClock } from '@/app/hooks/useClock';
 
 import dayjs from 'dayjs';
 
+import ConditionalRenderingLayout from '@layouts/ConditionalRenderingLayout';
+
 const QueueLogsPage: React.FC <any> = ({}): React.ReactElement => {
     const t = useClock();
 
@@ -197,24 +199,28 @@ const QueueLogsPage: React.FC <any> = ({}): React.ReactElement => {
                                 <StepForwardOutlined />
                             </Button>
 
-
-                            <Button
-                                style={{
-                                    fontSize : '15px',
-                                    fontWeight: 'bold',
-                                    width: '20%',
-                                    padding: '1%'
-                                }}
-                                color="green"
-                                variant={isSelectedPriority ? "outlined" : 'solid'}
-                                onClick={()=>{
-                                    setIsSelectedPriority(true)
-                                    setIsQueueListLoading(true)
-                                }}
+                            <ConditionalRenderingLayout
+                                condition={user?.department?.is_priority_queue_allowed}
+                                elseRender={''}
                             >
-                                PRIO QUEUE {isSelectedPriority ? '*' : ''} 
-                                <StepForwardOutlined />
-                            </Button>       
+                                <Button
+                                    style={{
+                                        fontSize : '15px',
+                                        fontWeight: 'bold',
+                                        width: '20%',
+                                        padding: '1%'
+                                    }}
+                                    color="green"
+                                    variant={isSelectedPriority ? "outlined" : 'solid'}
+                                    onClick={()=>{
+                                        setIsSelectedPriority(true)
+                                        setIsQueueListLoading(true)
+                                    }}
+                                >
+                                    PRIO QUEUE {isSelectedPriority ? '*' : ''} 
+                                    <StepForwardOutlined />
+                                </Button> 
+                            </ConditionalRenderingLayout>      
                         </div>       
                     </Datatable>
                 </div>             

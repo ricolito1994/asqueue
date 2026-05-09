@@ -30,6 +30,8 @@ import { QueueManagerService } from '@services/QueueManagerService'
 
 import AsConfirmModal from '@components/modals/AsConfirmModal'
 
+import ConditionalRenderingLayout from '@layouts/ConditionalRenderingLayout'
+
 const AcceptTransactionModal: React.FC <any> = ({
     data,
     open,
@@ -37,7 +39,7 @@ const AcceptTransactionModal: React.FC <any> = ({
 }): React.ReactElement => {
 
     const {
-        
+        user
     } = useContext(AppContext)
 
     const navigate = useNavigate();
@@ -112,15 +114,20 @@ const AcceptTransactionModal: React.FC <any> = ({
                 open={open} 
             >
                 <div className='new-transaction-modal'>
-                    <AsConfirmModal 
-                        onOk={() => processQueueingNumber(true)}
-                        okText='Yes'
-                        onDeny={()=> processQueueingNumber(false)}
-                        denyText='No'
-                        onCancel={()=> setIsOpenPrioDialog(false)}
-                        title="Is this a priority?"
-                        isOpen={isOpenPrioDialog}
-                    />
+                    <ConditionalRenderingLayout 
+                        condition={user?.department?.is_priority_queue_allowed}
+                        elseRender={''}
+                    >
+                        <AsConfirmModal 
+                            onOk={() => processQueueingNumber(true)}
+                            okText='Yes'
+                            onDeny={()=> processQueueingNumber(false)}
+                            denyText='No'
+                            onCancel={()=> setIsOpenPrioDialog(false)}
+                            title="Is this a priority?"
+                            isOpen={isOpenPrioDialog}
+                        />
+                    </ConditionalRenderingLayout>
                     
                     <div id='printable-queue-number-container'>
                         <div className='contents'>
@@ -133,7 +140,13 @@ const AcceptTransactionModal: React.FC <any> = ({
                         {!isLoadingQueue && !doneQueue ?
                             <div className='contents' id="queue-button-container">
                                 <Button 
-                                    onClick={()=>setIsOpenPrioDialog(true)} 
+                                    onClick={()=>{
+                                        if (user?.department?.is_priority_queue_allowed){
+                                            setIsOpenPrioDialog(true);
+                                            return;
+                                        }
+                                        processQueueingNumber(false)
+                                    }} 
                                     color="purple"
                                     variant="solid" 
                                     style={{

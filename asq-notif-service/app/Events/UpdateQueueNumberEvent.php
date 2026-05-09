@@ -31,7 +31,7 @@ class UpdateQueueNumberEvent implements ShouldBroadcast, ShouldQueue
     {
         return [
             (new WithoutOverlapping(
-                "recall-lock-{$this->params['company_id']}:{$this->params['department_id']}"
+                "update-queue-num-lock-{$this->params['company_id']}:{$this->params['department_id']}"
             ))
             ->releaseAfter(1)
             ->expireAfter(10)
