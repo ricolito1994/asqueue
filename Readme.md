@@ -3,7 +3,7 @@
 <hr />
 
 <H2>
-  A dockerized CRUD application utilize microservice pattern. 
+  A simple Queueing System developed by AS systems inc.
 </H2>
 
 ## Technologies used
