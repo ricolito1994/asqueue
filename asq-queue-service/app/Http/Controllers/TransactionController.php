@@ -58,15 +58,9 @@ class TransactionController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(Request $request): JsonResponse
     {
-        //
         try {
-            \DB::beginTransaction();
-
             $only = $request->only([
                 'concern_id',
                 'company_id', 
@@ -76,34 +70,31 @@ class TransactionController extends Controller
                 'processed_by'
             ]);
 
-            $latestTransaction = Transaction::filterByIds($only)
-                ->lockForUpdate()
-                ->whereDate ('created_at', Carbon::now())
-                //->latest()
-                ->orderBy('queue_number', 'DESC')
-                ->first();
-            
-            $queueNumber = $latestTransaction ? $latestTransaction->queue_number + 1 : 1;
-            
-            $insertData = [
-                'description' => 'Queue log',
-                'status' => 'queue',
-                'queue_number' => $queueNumber,
-                'created_by' => 0,
-                'queue_session_id' => 0,
-                'pre_process_log' => 'Queued successfully',
-                #'process_start_at' => Carbon::now()
-            ];
+            $queueTransaction = DB::transaction(function () use ($only) {
 
-            $qt = Transaction::create(array_merge($insertData, $only));
+                $latestTransaction = Transaction::filterByIds($only)
+                    ->whereDate ('created_at', Carbon::now())
+                    ->orderByDesc('queue_number')
+                    ->lockForUpdate()
+                    ->first();
+                
+                $queueNumber = ($latestTransaction?->queue_number ?? 0) + 1;
+                
+                $insertData = [
+                    'description' => 'Queue log',
+                    'status' => 'queue',
+                    'queue_number' => $queueNumber,
+                    'created_by' => 0,
+                    'queue_session_id' => 0,
+                    'pre_process_log' => 'Queued successfully',
+                ];
 
-            \DB::commit();
+                return Transaction::create(array_merge($insertData, $only));
+            });
 
-            return response ()
-                -> json ($qt, 200);
+            return response()->json($queueTransaction, 200);
 
         } catch (\Exception $e) {
-            \DB::rollback();
             return response()
                 ->json ([
                     'success' => false,
@@ -115,71 +106,74 @@ class TransactionController extends Controller
 
     public function processQueueNumber (Request $request): JsonResponse
     {
-        return DB::transaction (function () use ($request) {
-            try {
-                $only = $request->only([
-                    'company_id', 
-                    'department_id',
-                ]);
+        try {
+            $payload = $request->only([
+                'company_id',
+                'department_id'
+            ]);
 
-                $latestTransaction = Transaction::filterByIds($only)
-                    ->lockForUpdate()
-                    ->whereDate ('created_at', Carbon::now())
+            $now = Carbon::now();
+
+            $currentQueue = Transaction::query()
+                ->filterByIds($payload)
+                ->whereDate('created_at', $now)
+                ->window($request->input('window_id'))
+                ->where('status', 'processed')
+                ->lockForUpdate()
+                ->orderBy('queue_number', 'asc')
+                ->first();
+
+            if ($currentQueue && ! $currentQueue->process_end_at) {
+                $currentQueue->update([
+                    'process_end_at' => $now,
+                ]);
+            }
+
+            $processed = DB::transaction (function () use ($payload, $request, $now) {
+
+                $nextQueue = Transaction::query()
+                    ->filterByIds($payload)
+                    ->whereDate('created_at', $now)
                     ->isPriority($request->boolean('is_priority'))
                     ->window($request->input('window_id'))
-                    ->with('window')
-                    ->with('concern')
                     ->where('status', 'queue')
-                    ->orderBy('queue_number', 'ASC')
-                    ->first();
-
-                $transactionBefore = Transaction::filterByIds($only)
+                    ->with(['window', 'concern'])
                     ->lockForUpdate()
-                    ->whereDate ('created_at', Carbon::now())
-                    ->window($request->input('window_id'))
-                    ->where('status', 'processed')
-                    ->orderBy('process_start_at', 'desc')
-                    //->orderBy('queue_number', 'desc')
+                    ->orderBy('queue_number')
                     ->first();
 
-                if ($transactionBefore) {
-                    $transactionBefore->update([
-                        'process_end_at' => Carbon::now()
-                    ]);
+                if (! $nextQueue) {
+                    throw new \Exception('There are no queue transactions to process.');
                 }
+                
+                $nextQueue->update([
+                    'status' => 'processed',
+                    'process_start_at' => Carbon::now()
+                ]);
 
-                if ($latestTransaction) {
-                    $latestTransaction->update([
-                        'status' => 'processed',
-                        'process_start_at' => Carbon::now()
-                    ]);
-                    
-                    $request->merge([
-                        'queue_number' => $latestTransaction->queue_number,
-                        'window' => $latestTransaction->window?->toArray(),
-                        'concern' => $latestTransaction->concern?->toArray()
-                    ]);
+                $request->merge([
+                    'queue_number' => $nextQueue->queue_number,
+                    'window'       => $nextQueue->window?->toArray(),
+                    'concern'      => $nextQueue->concern?->toArray()
+                ]);
 
-                    $this->notifService->processNextQueueNumber($request);
-                } else {
-                    return response () -> json ([
-                        'success' => false,
-                        'message' => 'Queue Transaction',
-                        'reason' => 'There are no queue transactions to process.'
-                    ], 422);
-                }
+                $this->notifService->processNextQueueNumber($request);
 
-                return response()
-                    -> json ($latestTransaction, 200);
-            } catch (\Exception $e) {
-                return response() 
-                    ->json ([
-                        'success' => false,
-                        'message' => 'Something went wrong.',
-                        'reason' => $e->getMessage()
-                    ], 500);
-            }
-        });
+                return $nextQueue->fresh([
+                    'window', 
+                    'concern'
+                ]);
+            });
+
+            return response()->json($processed, 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong.',
+                'reason'  => $e->getMessage()
+            ],500);
+        }
     }
 
     public function recallQueueNumber (Request $request, int $queueNumber): JsonResponse

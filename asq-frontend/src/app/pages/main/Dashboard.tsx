@@ -99,8 +99,6 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
         onRefreshToken
     ));
 
-    const [time, setTime] = useState(new Date());
-
     const processNextQueueNumber = async (
         next: boolean = true, 
         isPriority: boolean = false
@@ -305,11 +303,12 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                                     </Button>
                                     
                                 </div>
-                                <div className='card-footer-content'>
-                                    <ConditionalRenderingLayout
-                                        condition={user?.department?.is_priority_queue_allowed}
-                                        elseRender={''}
-                                    >
+                                <ConditionalRenderingLayout
+                                    condition={user?.department?.is_priority_queue_allowed}
+                                    elseRender={''}
+                                >
+                                    <div className='card-footer-content'>
+                                    
                                         <Button
                                             style={{
                                                 fontSize : '15px',
@@ -323,8 +322,8 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                                         >
                                             NEXT QUEUE PRIORITY NUMBER <StepForwardOutlined />
                                         </Button>
-                                    </ConditionalRenderingLayout>
-                                </div>
+                                    </div>
+                                </ConditionalRenderingLayout>
                             </div>
                         </div>
                     </Card>
@@ -416,23 +415,28 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                                         ALL QUEUE {isSelectedPriority === null ? '*' : ''} 
                                         <StepForwardOutlined />
                                     </Button>&nbsp;
-                                    <Button
-                                        style={{
-                                            fontSize : '15px',
-                                            fontWeight: 'bold',
-                                            width: '32%',
-                                            padding: '2%'
-                                        }}
-                                        color="purple"
-                                        variant={isSelectedPriority === false ? "outlined" : 'solid'} 
-                                        onClick={()=>{
-                                            setIsSelectedPriority(false)
-                                            setIsQueueListLoading(true)
-                                        }}
+                                    <ConditionalRenderingLayout
+                                        condition={user?.department?.is_priority_queue_allowed}
+                                        elseRender={''}
                                     >
-                                        NORMAL QUEUE {isSelectedPriority === false  ? '*' : ''} 
-                                        <StepForwardOutlined />
-                                    </Button>&nbsp;
+                                        <Button
+                                            style={{
+                                                fontSize : '15px',
+                                                fontWeight: 'bold',
+                                                width: '32%',
+                                                padding: '2%'
+                                            }}
+                                            color="purple"
+                                            variant={isSelectedPriority === false ? "outlined" : 'solid'} 
+                                            onClick={()=>{
+                                                setIsSelectedPriority(false)
+                                                setIsQueueListLoading(true)
+                                            }}
+                                        >
+                                            NORMAL QUEUE {isSelectedPriority === false  ? '*' : ''} 
+                                            <StepForwardOutlined />
+                                        </Button>&nbsp;
+                                    </ConditionalRenderingLayout>
                                     <ConditionalRenderingLayout
                                         condition={user?.department?.is_priority_queue_allowed}
                                         elseRender={''}
