@@ -104,3 +104,34 @@
   position:relative;
   top: 25%;
 }
+
+#announcement-container {
+    position: absolute;
+    height: 20%;
+    z-index: 9999;
+    background-color: #f2d5d5ac;
+    font-weight: bold;
+    width: 100%;
+    bottom: 0;
+    overflow: hidden;
+}
+
+#announcement-container > #text-announcement-container {
+    position: absolute;
+    white-space: nowrap;
+    padding: 3%;
+    font-size: 120px;
+    color: black;
+    animation: scroll-left 21s linear infinite;
+    text-transform: uppercase;
+}
+
+@keyframes scroll-left {
+    from {
+        transform: translateX(100vw);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
