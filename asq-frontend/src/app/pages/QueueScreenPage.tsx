@@ -138,6 +138,13 @@ const QueueScreenPage: React.FC <any> = ({}): React.ReactElement => {
                     <source src={vid} type="video/mp4" />
                     Your browser does not support the video tag.
                 </video>
+                <div id="announcement-container">
+                    <div id='text-announcement-container'>
+                        WELCOME TO {department?.name}.
+                        PLEASE DO NOT LOSE AND PAY ATTENTION TO YOUR QUEUE NUMBER. 
+                        IF YOU MISSED YOUR NUMBER, YOU HAVE TO QUEUE AGAIN.
+                    </div>
+                </div>
             </div>
             <div id="now-serving-container">
                 <div id="now-serving-cards">
