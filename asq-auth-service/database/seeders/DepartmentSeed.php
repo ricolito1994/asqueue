@@ -13,12 +13,16 @@ class DepartmentSeed extends Seeder
      */
     const DEPARTMENT_DATA = [
         [
-            'name' => 'Consultation Department',
+            'name' => 'Registrar',
             'company_id' => 1
         ],
         [
-            'name' => 'Registrar',
-            'company_id' => 2
+            'name' => 'Dean',
+            'company_id' => 1
+        ],
+        [
+            'name' => 'Accounting',
+            'company_id' => 1
         ],
     ];
 
