@@ -15,4 +15,5 @@ Route::group([
         Route::get ('recall/{queueNumber}', 'NotificationsController@recallQueueNumberEvent');
         Route::get ('updateQueueList/{windowId}', 'NotificationsController@updateQueueList');
     });
+    Route::get('update-queue-list/{windowId}/company/{companyId}', 'NotificationsController@updateQueueList');
 });

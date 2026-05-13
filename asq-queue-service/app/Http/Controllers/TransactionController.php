@@ -44,7 +44,7 @@ class TransactionController extends Controller
                 ->dateBetweenCreated($createdDates)
                 ->with('concern')
                 ->orderBy('process_end_at', 'ASC')
-                ->paginate(10);
+                ->paginate(12);
                 
             return response()->json ($transactions, 200);
         } catch (\Exception $e) {

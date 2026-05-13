@@ -52,9 +52,10 @@ class NotificationsController extends Controller
         }
     }
 
-    public function updateQueueList (Request $request, int $windowId): JsonResponse
+    public function updateQueueList (Request $request, int $windowId, int $companyId): JsonResponse
     {
         try {
+            dd ($request->all(), $windowId, $companyId);
 
         } catch (\Exception $e) {
             
