@@ -15,47 +15,71 @@ class WindowSeed extends Seeder
     {
         //
         $windowData = [
+            //registrar
             [
-                'name' => 'Doc Kevin',
-                'description' => 'For patient Consultation and Followup check up.',
+                'name' => 'Registrar MAR-E Window',
+                'description' => 'For Maritime Engineering Students',
                 'company_id' => 1,
                 'department_id' => 1,
                 'assigned_to' => 1
             ],
             [
-                'name' => 'Doc Bimbao',
-                'description' => 'For patient Consultation and Followup check up and pre-natal services.',
+                'name' => 'Registrar HRM Window',
+                'description' => 'For Hotel Restaurant Management Students.',
                 'company_id' => 1,
                 'department_id' => 1,
                 'assigned_to' => 2
             ],
             [
-                'name' => 'Doc Abelarde',
-                'description' => 'For patient Consultation, Followup check up and animal bite.',
+                'name' => 'Registrar Nautical Window',
+                'description' => 'For Nautical Engineering Students.',
                 'company_id' => 1,
                 'department_id' => 1,
                 'assigned_to' => 3
             ],
+            // deans
             [
-                'name' => 'MAR-E Window',
+                'name' => 'Deans MAR-E Window',
                 'description' => 'For Maritime Engineering Students',
-                'company_id' => 2,
-                'department_id' => 2,
-                'assigned_to' => 4
-            ],
-            [
-                'name' => 'HRM Window',
-                'description' => 'For Hotel Restaurant Management Students.',
-                'company_id' => 2,
+                'company_id' => 1,
                 'department_id' => 2,
                 'assigned_to' => 5
             ],
             [
-                'name' => 'Nautical',
-                'description' => 'For Nautical Engineering Students.',
-                'company_id' => 2,
+                'name' => 'Deans HRM Window',
+                'description' => 'For Hotel Restaurant Management Students.',
+                'company_id' => 1,
                 'department_id' => 2,
                 'assigned_to' => 6
+            ],
+            [
+                'name' => 'Deans Nautical Window',
+                'description' => 'For Nautical Engineering Students.',
+                'company_id' => 1,
+                'department_id' => 2,
+                'assigned_to' => 7
+            ],
+            // accounting
+            [
+                'name' => 'Accounting Window 1',
+                'description' => 'Accounting Concerns',
+                'company_id' => 1,
+                'department_id' => 3,
+                'assigned_to' => 9
+            ],
+            [
+                'name' => 'Accounting Window 2',
+                'description' => 'Accounting Concerns',
+                'company_id' => 1,
+                'department_id' => 3,
+                'assigned_to' => 10
+            ],
+            [
+                'name' => 'Accounting Window 3',
+                'description' => 'Accounting Concerns',
+                'company_id' => 1,
+                'department_id' => 3,
+                'assigned_to' => 11
             ],
         ];
 

@@ -14,39 +14,6 @@ class UserSeed extends Seeder
      */
     const USER_DATA = [
         [
-            'firstname' => 'Kevin',
-            'lastname' => 'Valdez',
-            'password' => 'kevinvaldez01',
-            'email' => 'kevinvaldez@gmail.com',
-            'username' => 'kevinvaldez',
-            'designation' => 'clerk',
-            'title' => 'doctor',
-            'company_id' => 1,
-            'department_id' => 1
-        ],
-        [
-            'firstname' => 'Doctor',
-            'lastname' => 'Bimbao',
-            'password' => 'bimbao01',
-            'email' => 'bimbao01@gmail.com',
-            'username' => 'bimbao01',
-            'designation' => 'clerk',
-            'title' => 'doctor',
-            'company_id' => 1,
-            'department_id' => 1
-        ],
-        [
-            'firstname' => 'Doctor',
-            'lastname' => 'Abelarde',
-            'password' => 'abelarde01',
-            'email' => 'abelarde01@gmail.com',
-            'username' => 'abelarde01',
-            'designation' => 'clerk',
-            'title' => 'doctor',
-            'company_id' => 1,
-            'department_id' => 1
-        ],
-        [ //4
             'firstname' => 'Registrar',
             'lastname' => 'Window 1',
             'password' => 'registrar1',
@@ -54,21 +21,21 @@ class UserSeed extends Seeder
             'username' => 'registrar1',
             'designation' => 'clerk',
             'title' => 'registrar officer',
-            'company_id' => 2,
-            'department_id' => 2
+            'company_id' => 1,
+            'department_id' => 1
         ],
-        [ //5
+        [
             'firstname' => 'Registrar',
             'lastname' => 'Window 2',
             'password' => 'registrar2',
             'email' => 'registrar2@jblfmu.edu.ph',
             'username' => 'registrar2',
-            'designation' => 'registrar officer',
-            'title' => 'doctor',
-            'company_id' => 2,
-            'department_id' => 2
+            'designation' => 'clerk',
+            'title' => 'registrar officer',
+            'company_id' => 1,
+            'department_id' => 1
         ],
-        [ //6
+        [
             'firstname' => 'Registrar',
             'lastname' => 'Window 3',
             'password' => 'registrar3',
@@ -76,10 +43,10 @@ class UserSeed extends Seeder
             'username' => 'registrar3',
             'designation' => 'clerk',
             'title' => 'registrar officer',
-            'company_id' => 2,
-            'department_id' => 2
+            'company_id' => 1,
+            'department_id' => 1
         ],
-        [ //7
+        [
             'firstname' => 'Registrar',
             'lastname' => 'Department Head',
             'password' => 'registrardepthead',
@@ -87,10 +54,101 @@ class UserSeed extends Seeder
             'username' => 'registrar3',
             'designation' => 'dept_head',
             'title' => 'Department Head',
-            'company_id' => 2,
+            'company_id' => 1,
+            'department_id' => 1
+        ],
+
+
+        [
+            'firstname' => 'Deans',
+            'lastname' => 'Clerk 1',
+            'password' => 'deans1',
+            'email' => 'deans1@jblfmu.edu.ph',
+            'username' => 'deans1',
+            'designation' => 'clerk',
+            'title' => 'deans office clerk',
+            'company_id' => 1,
+            'department_id' => 2
+        ],
+        [
+            'firstname' => 'Deans',
+            'lastname' => 'Clerk 2',
+            'password' => 'deans2',
+            'email' => 'deans2@jblfmu.edu.ph',
+            'username' => 'deans2',
+            'designation' => 'clerk',
+            'title' => 'deans office clerk',
+            'company_id' => 1,
+            'department_id' => 2
+        ],
+        [
+            'firstname' => 'Deans',
+            'lastname' => 'Clerk 3',
+            'password' => 'deans1',
+            'email' => 'deans1@jblfmu.edu.ph',
+            'username' => 'deans1',
+            'designation' => 'clerk',
+            'title' => 'deans office clerk',
+            'company_id' => 1,
+            'department_id' => 2
+        ],
+        [
+            'firstname' => 'Deans',
+            'lastname' => 'Head',
+            'password' => 'deanshead',
+            'email' => 'deanshead@jblfmu.edu.ph',
+            'username' => 'deans',
+            'designation' => 'dept_head',
+            'title' => 'Department Head',
+            'company_id' => 1,
             'department_id' => 2
         ],
 
+
+        [
+            'firstname' => 'Accounting',
+            'lastname' => 'Clerk 1',
+            'password' => 'accounting1',
+            'email' => 'accounting1@jblfmu.edu.ph',
+            'username' => 'accounting1',
+            'designation' => 'clerk',
+            'title' => 'accounting clerk',
+            'company_id' => 1,
+            'department_id' => 3
+        ],
+        [
+            'firstname' => 'Accounting',
+            'lastname' => 'Clerk 2',
+            'password' => 'accounting1',
+            'email' => 'accounting1@jblfmu.edu.ph',
+            'username' => 'accounting1',
+            'designation' => 'clerk',
+            'title' => 'accounting clerk',
+            'company_id' => 1,
+            'department_id' => 3
+        ],
+         [
+            'firstname' => 'Accounting',
+            'lastname' => 'Clerk 3',
+            'password' => 'accounting3',
+            'email' => 'accounting3@jblfmu.edu.ph',
+            'username' => 'accounting3',
+            'designation' => 'clerk',
+            'title' => 'accounting clerk',
+            'company_id' => 1,
+            'department_id' => 3
+        ],
+        [
+            'firstname' => 'Accounting',
+            'lastname' => 'Head',
+            'password' => 'accountinghead',
+            'email' => 'accountinghead@jblfmu.edu.ph',
+            'username' => 'accountinghead',
+            'designation' => 'dept_head',
+            'title' => 'Department Head',
+            'company_id' => 1,
+            'department_id' => 3
+        ],
 
     ];
 

@@ -13,9 +13,6 @@ class CompanySeed extends Seeder
      */
     const COMPANY_DATA = [
         [
-            'name' => 'CITY HEALTH OF BAGO CITY'
-        ],
-        [
             'name' => 'JBLFMU'
         ],
     ];
