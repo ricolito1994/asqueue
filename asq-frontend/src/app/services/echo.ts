@@ -10,7 +10,7 @@ export const getEcho = () => {
     echo = new Echo({
       broadcaster: 'reverb',
       key: 'local',
-      wsHost: 'localhost',
+      wsHost: import.meta.env.REVERB_HOST,
       wsPort: 80, // Ensure this matches your Nginx port
       forceTLS: false,
       disableStats: true,
