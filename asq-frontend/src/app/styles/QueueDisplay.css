@@ -1,0 +1,256 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #eef3f9;
+}
+
+
+/* Card Effect */
+.queue-card {
+  background: #ffffff;
+
+  border: 1px solid rgba(17, 24, 39, 0.10);
+
+  border-radius: clamp(10px, 1vw, 18px);
+
+  padding: clamp(12px, 1.2vw, 20px);
+
+  min-height: clamp(120px, 12vh, 220px);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.06),
+    0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* WRAPPER - RESPONSIVE STAGE CENTER */
+.queue-screen-wrapper {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+  background: #dfe7f1;
+}
+
+.queue-screen-layout {
+  width: min(1920px, 100vw);
+  height: min(1080px, 100vh);
+
+  aspect-ratio: 16 / 9;
+
+  padding: clamp(12px, 1.5vw, 32px);
+
+  display: grid;
+
+  grid-template-columns: 30% 70%;
+
+  gap: clamp(12px, 1.2vw, 32px);
+
+  background: #eef3f9;
+
+  overflow: hidden;
+}
+
+/* LEFT PANEL - FLUID STACK */
+.queue-left-panel {
+  display: grid;
+
+  grid-template-rows: auto auto 1fr;
+
+  gap: clamp(12px, 1.2vw, 24px);
+
+  min-height: 0;
+
+  align-items: start;
+}
+
+/* NOW SERVING */
+.dept-banner {
+  background: #ffffff;
+
+  /* border: 3px dashed #111827; */
+  border-radius: clamp(12px, 1vw, 20px);
+  margin-bottom: -45px;
+  min-height: clamp(140px, 18vh, 220px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dept-banner h1 {
+  font-size: clamp(2rem, 3vw, 4rem);
+  font-weight: 700;
+  color: #0e41af;
+}
+
+/* WINDOW GRID - AUTO FIT (NO BREAKPOINTS) */
+.window-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+  gap: clamp(10px, 1vw, 16px);
+}
+
+/* .window-card {
+  background: #ffffff;
+
+  border: 3px dashed #111827;
+  border-radius: clamp(12px, 1vw, 18px);
+
+  min-height: clamp(180px, 20vh, 280px);
+
+  padding: clamp(10px, 1vw, 16px);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+} */
+
+.window-card.active {
+  border-color: #2563eb;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.12);
+}
+
+.window-name {
+  font-size: clamp(0.9rem, 1.1vw, 1.2rem);
+  color: #374151;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.window-card h2 {
+  font-size: clamp(2rem, 3.5vw, 4rem);
+  color: #111827;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.window-card p {
+  margin-top: 1rem;
+  color: #2563eb;
+  font-weight: 700;
+}
+
+/* WAITING CONTAINER */
+.waiting-container {
+  background: #ffffff;
+
+  /* border: 3px dashed #111827; */
+  border-radius: clamp(12px, 1vw, 20px);
+
+  padding: clamp(12px, 1.2vw, 24px);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+.waiting-header h2 {
+  float: inherit;
+}
+
+.waiting-list-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+
+  gap: clamp(8px, 0.8vw, 14px);
+  padding-top: 0.5%;
+}
+
+.waiting-item {
+  background: #f3f7ff;
+  font-size: 50px;
+  border: 2px;
+  border-radius: clamp(10px, 0.8vw, 14px);
+  padding: clamp(10px, 1vw, 16px);
+  text-align: center;
+  font-weight: 800;
+
+  color: #1d4ed8;
+}
+
+
+.video-panel {
+  position: relative;
+  border-radius: clamp(12px, 1vw, 20px);
+  overflow: hidden;
+  background: #111827;
+  min-height: clamp(300px, 50vh, 80vh);
+}
+
+.video-player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+}
+
+.video-overlay h2 {
+  font-size: clamp(1.2rem, 1.6vw, 2rem);
+  margin-bottom: 0.5rem;
+}
+
+.video-overlay p {
+  font-size: clamp(0.9rem, 1vw, 1.2rem);
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.announcement-wrapper {
+  width: 100%;
+  overflow: hidden;
+  background: #5a62cf;
+  color: white;
+  height: 30px;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+
+  display: flex;
+  align-items: center;
+}
+
+.announcement-track {
+  display: flex;
+  width: max-content;
+
+  animation: ticker 20s linear infinite;
+}
+
+.announcement-text {
+  white-space: nowrap;
+  padding-right: 20px;
+}
+
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
