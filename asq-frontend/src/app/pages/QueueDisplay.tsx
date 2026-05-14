@@ -132,7 +132,7 @@ const QueueDisplay: React.FC <any> = (): React.ReactElement => {
         </div>
 
         {/* WINDOWS */}
-        <div className="window-grid">
+        <div className="window-gridqdwqdqw">
           {windowData?.data?.map((data: any, index: number) => (
             <div
               key={index}
