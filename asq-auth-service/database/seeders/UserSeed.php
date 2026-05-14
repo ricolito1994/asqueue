@@ -119,9 +119,9 @@ class UserSeed extends Seeder
         [
             'firstname' => 'Accounting',
             'lastname' => 'Clerk 2',
-            'password' => 'accounting1',
+            'password' => 'accounting2',
             'email' => 'accounting1@jblfmu.edu.ph',
-            'username' => 'accounting1',
+            'username' => 'accounting2',
             'designation' => 'clerk',
             'title' => 'accounting clerk',
             'company_id' => 1,
