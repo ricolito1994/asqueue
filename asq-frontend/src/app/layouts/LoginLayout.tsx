@@ -51,7 +51,6 @@ const LoginLayout: React.FC <any> = (): React.ReactElement => {
         try {
             setProcessLogin(true);
             let loginData = await auth.current.login<any>(values)
-            console.log(loginData.user.id)
             let userWindow = await qmService.current.findWindowByAssignedTo(loginData.user.id, null, {
                 params : {
                     company_id : loginData.user.company.id,
