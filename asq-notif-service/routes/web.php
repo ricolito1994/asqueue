@@ -13,7 +13,7 @@ Route::group([
     ], function () {
         Route::post ('process', 'NotificationsController@processNextQueueNumber');
         Route::get ('recall/{queueNumber}', 'NotificationsController@recallQueueNumberEvent');
-        Route::get ('updateQueueList/{windowId}', 'NotificationsController@updateQueueList');
+        
     });
     Route::get('update-queue-list/{windowId}/company/{companyId}', 'NotificationsController@updateQueueList');
 });

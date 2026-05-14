@@ -44,7 +44,7 @@ class TransactionController extends Controller
                 ->dateBetweenCreated($createdDates)
                 ->with('concern')
                 ->orderBy('process_end_at', 'ASC')
-                ->paginate(12);
+                ->paginate(10);
                 
             return response()->json ($transactions, 200);
         } catch (\Exception $e) {
@@ -70,7 +70,7 @@ class TransactionController extends Controller
                 'processed_by'
             ]);
 
-            $queueTransaction = DB::transaction(function () use ($only) {
+            $queueTransaction = DB::transaction(function () use ($only, $request) {
 
                 $latestTransaction = Transaction::filterByIds($only)
                     ->whereDate ('created_at', Carbon::now())
@@ -88,6 +88,8 @@ class TransactionController extends Controller
                     'queue_session_id' => 0,
                     'pre_process_log' => 'Queued successfully',
                 ];
+
+                $this->notifService->updateQueList($request, $only['window_id'], $only['company_id']);
 
                 return Transaction::create(array_merge($insertData, $only));
             });
@@ -158,6 +160,7 @@ class TransactionController extends Controller
                 ]);
 
                 $this->notifService->processNextQueueNumber($request);
+                $this->notifService->updateQueList($request, $nextQueue->window_id, $nextQueue->company_id);
 
                 return $nextQueue->fresh([
                     'window', 

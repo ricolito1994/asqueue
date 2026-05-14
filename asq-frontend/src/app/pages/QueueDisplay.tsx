@@ -17,63 +17,110 @@ import AuthenticationService from '@services/AuthenticationService';
 import dayjs from 'dayjs';
 
 
-const servingWindows = [
-  {
-    window: 'WINDOW 1',
-    queue: 'A023',
-  },
-  {
-    window: 'WINDOW 2',
-    queue: 'B104',
-    active: true,
-  },
-  {
-    window: 'WINDOW 3',
-    queue: 'C056',
-  },
-    {
-    window: 'WINDOW 3',
-    queue: 'C056',
-  },
-    {
-    window: 'WINDOW 3',
-    queue: 'C056',
-  },
-    {
-    window: 'WINDOW 3',
-    queue: 'C056',
-  },
-];
-
-const waitingList = [
-  'A024',
-  'A025',
-  'A026',
-  'A027',
-  'A028',
-  'B105',
-  'B106',
-  'B107',
-  'C057',
-  'C058',
-];
-
-
-
-    
-
 const QueueDisplay: React.FC <any> = (): React.ReactElement => {
     const [windowData, setWindowData] = useState<any>(null)
     const [refreshWindows , setRefreshWindows] = useState<boolean>(false)
     const {companyId, departmentId, concernId} = useParams();
     const queueService = useMemo(() => new QueueManagerService(null), [])
     const queueTransactionService = useMemo(() => new QueueManagerService(null), []);
-    const [waitingList, setWaitingList] = useState<any[]>([])
+    
     const defaultDate = dayjs()
     const [fromDate, setFromDate] = useState<any | null>(defaultDate)
     const [toDate, setToDate] = useState<any | null>(defaultDate)
 
+    const [eventQueue, setEventQueue] = useState<any []> ([]);
+    const [isProcessing, setIsProcessing] = useState<boolean>(false);
+
+    const sock = useEcho();
+    const [nowServing, setNowServing] = useState<any>(0)
+    const tts = useRef<any>(new TTSService());
+    const [department , setDepartment] = useState<any>({})
+
+    const authService = useRef(new AuthenticationService(null));
+
+    const [waitingList, setWaitingList] = useState<any[]>([])
+
+    const [isUpdateWaitingList, setIsUpdateWaitingList] = useState<boolean>(false)
+
+    // WebSocket / Automatic Updates
     useEffect(() => {
+        
+      let windowChannelUri = `window.update.department.${departmentId}.company.${companyId}`;
+      let windowChannel = sock.channel(windowChannelUri);
+        
+      windowChannel.listen('.window.update-queue-number', (e:any) => {
+        e['cb'] = () => {
+          tts.current.speak(e.message)
+          setRefreshWindows(true)
+          setNowServing(e.data)
+        }
+    
+        setEventQueue((prev:any) => [...prev, e])
+        })
+        
+        windowChannel.listen('.window.recall-queue-number',  (e:any) => {
+              e['cb'] = () => {
+                console.log("fuck", e.message)
+                tts.current.speak(e.message)
+                setNowServing(e.data)
+              }
+    
+            setEventQueue((prev:any) => [...prev, e])
+        })
+
+        windowChannel.listen('.window.update-queue-list',  (e:any) => {
+            e['cb'] = () => {
+              setIsUpdateWaitingList(true)
+            }
+    
+            setEventQueue((prev:any) => [...prev, e])
+
+        })
+    
+    
+        const getDepartment = async () => {
+          try {
+            let dept = await authService.current.department(parseInt(departmentId ?? ''), null)
+              setDepartment(dept)
+            } catch (e) {
+              console.error(e)
+           }
+        }
+          getDepartment()
+        
+          return () => {
+            sock.leave(windowChannelUri)
+          }
+
+      }, [])
+
+
+      // Implementation of FIFO queing
+      useEffect(() => {
+
+        const processQueue = async () => {
+                
+          if (eventQueue.length == 0 || isProcessing) return;
+    
+          setIsProcessing(true)
+    
+          const currentEvent = eventQueue[0]
+  
+          currentEvent.cb?.();
+    
+          await new Promise ((resolve: any) => setTimeout(resolve, 3000))
+    
+          setEventQueue((prev: any) => prev.slice(1));
+    
+          setIsProcessing(false)
+        }
+    
+        processQueue();
+    
+      }, [eventQueue, isProcessing])
+
+    useEffect(() => {
+
         const fetchWindows = async () => {
           let waitingList = await queueTransactionService.indexTransactions(1, null, {
 
@@ -86,16 +133,15 @@ const QueueDisplay: React.FC <any> = (): React.ReactElement => {
             }
           });
 
-
+          setIsUpdateWaitingList(false);
           setWaitingList(waitingList?.data)
         }
 
         fetchWindows()
-    }, []);
+    }, [isUpdateWaitingList]);
 
     useEffect ( () => {
-          //queueService.enableAbort();
-          //console.log(nowServing)
+
           const fetchWindows = async () => {
             //setIsLoading(true)
             let windowData = await queueService.windows(1, null, {
@@ -111,24 +157,23 @@ const QueueDisplay: React.FC <any> = (): React.ReactElement => {
           }
     
           fetchWindows()
-          //let timeout = setTimeout (() => {
-          //setIsLoading(false)
-          //}, 1000);
-    
+
           return () => {
-            //queueService.abortController.abort();
-            //clearTimeout(timeout)
+
           }
         }, [companyId, departmentId, refreshWindows])
 
 
+
+
   return (
+
     <div className="queue-screen-layout">
       {/* LEFT PANEL */}
       <section className="queue-left-panel">
         {/* NOW SERVING HEADER */}
         <div className="dept-banner">
-          <h1>Registrar</h1>
+          <h1>{department?.name}</h1>
         </div>
 
         {/* WINDOWS */}
@@ -154,11 +199,15 @@ const QueueDisplay: React.FC <any> = (): React.ReactElement => {
           </div>
 
           <div className="waiting-list-grid">
-            {waitingList.map((queue, index) => (
-              <div key={index} className="waiting-item">
-                {queue?.queue_number ?? 0}
-              </div>
-            ))}
+            {waitingList.length > 0 ? (
+              <>
+                {waitingList.map((queue, index) => (
+                  <div key={index } className="waiting-item">
+                    {queue?.queue_number ?? 0}
+                  </div>
+                ))}
+              </>
+            ) : <div className="">No items in waiting list.</div>}
           </div>
         </div>
       </section>
@@ -176,8 +225,16 @@ const QueueDisplay: React.FC <any> = (): React.ReactElement => {
         </video>
 
         <div className="video-overlay">
-          <h2>School Announcements</h2>
-          <p>Please wait for your queue number to be called.</p>
+          <div className="announcement-wrapper">
+            <div className="announcement-track">
+              <div className="announcement-text">
+                📢 Enrollment for SY 2026–2027 is now open Enrollment for SY 2026–2027 is now open Enrollment for SY 2026–2027 is now openEnrollment for SY 2026–2027 is now open
+              </div>              
+              <div className="announcement-text">
+                📢 Enrollment for SY 2026–2027 is now open Enrollment for SY 2026–2027 is now open Enrollment for SY 2026–2027 is now openEnrollment for SY 2026–2027 is now open
+              </div>
+            </div>
+          </div>
         </div>
       </aside>
     </div>

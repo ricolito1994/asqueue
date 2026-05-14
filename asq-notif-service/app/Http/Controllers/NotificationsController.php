@@ -55,10 +55,21 @@ class NotificationsController extends Controller
     public function updateQueueList (Request $request, int $windowId, int $companyId): JsonResponse
     {
         try {
-            dd ($request->all(), $windowId, $companyId);
+            broadcast(new UpdateQueueListEvent(params: $request->all()));
+
+            return response ()
+                ->json ([
+                    'success' => true,
+                    'message' => 'Update Queue List Notification sent!'
+                ],200);
 
         } catch (\Exception $e) {
-            
+            return response ()
+                ->json ([
+                    'success' => false,
+                    'message' => 'Something went wrong.',
+                    'reason' => $e->getMessage()
+                ],500);
         }
     }
 }
