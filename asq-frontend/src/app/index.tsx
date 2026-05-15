@@ -29,6 +29,8 @@ import WindowSettings from '@pages/main/settings/WindowSettings'
 import QueueScreenPage from '@pages/QueueScreenPage'
 import QueueDisplay from '@pages/QueueDisplay'
 
+import QueueDisplay02 from '@pages/QueueDisplay02'
+
 import SettingsLayout from '@layouts/SettingsLayout'
 
 import MainLayout from '@layouts/MainLayout'
@@ -139,7 +141,7 @@ const App = (): React.ReactElement => {
                 </Route>
 
                 <Route path='/windows' element={<QueueScreenLayout />} >
-                    <Route path='company/:companyId/department/:departmentId' element={<QueueDisplay />} />
+                    <Route path='company/:companyId/department/:departmentId' element={<QueueDisplay02 />} />
                 </Route>
             </Routes>
         </LoadingLayout>
