@@ -119,13 +119,14 @@ class TransactionController extends Controller
             $currentQueue = Transaction::query()
                 ->filterByIds($payload)
                 ->whereDate('created_at', $now)
+                ->where('process_end_at', null)
                 ->window($request->input('window_id'))
                 ->where('status', 'processed')
                 ->lockForUpdate()
                 ->orderBy('queue_number', 'asc')
                 ->first();
-
-            if ($currentQueue && ! $currentQueue->process_end_at) {
+            
+            if ($currentQueue) {
                 $currentQueue->update([
                     'process_end_at' => $now,
                 ]);
@@ -158,9 +159,8 @@ class TransactionController extends Controller
                     'window'       => $nextQueue->window?->toArray(),
                     'concern'      => $nextQueue->concern?->toArray()
                 ]);
-
-                $this->notifService->processNextQueueNumber($request);
-                $this->notifService->updateQueList($request, $nextQueue->window_id, $nextQueue->company_id);
+                
+                $this->notifService->updateQueueListV2($request, $nextQueue->window_id, $nextQueue->company_id);
 
                 return $nextQueue->fresh([
                     'window', 
