@@ -208,7 +208,7 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
         if (currentQueueNum == 0)
             getLatestQueueNumber()
 
-    }, [currentQueueNum])
+    }, [])
 
     useEffect(() => {
         let uriDashboardChannel = `dashboard.window.${userWindow.id}.user.${user.user.department.id}.company.${user.user.company.id}`;
@@ -360,10 +360,12 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                                         // }
                                     },
                                     {
-                                        title : "Created At",
-                                        dataIndex: 'created_at',
-                                        key: 'created_at',
+                                        title : "Status",
+                                        key: 'status',
                                         //sorter: (a:any, b:any) => a.created_at.localeCompare(b.created_at),
+                                        render: function (data: any) {
+                                             return <>{data.process_end_at ? 'done' : data.status}</>;
+                                        }
                                     },
                                     /*{
                                         title : "Actions",
