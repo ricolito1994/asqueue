@@ -1,9 +1,19 @@
 
 @import "tailwindcss";
 
+/* Collor Pallete */
+/* ["0561e0","eff0f0","d7d7d7","1861b9","093f8e","8eb9e9","072759","0065df"] */
+
 /* Queue Display Dark Theme - Digital Signage Aesthetic */
 :root {
-  --background: #f6f5f3;
+  --highlight:#0561e0;
+  --blue:#093f8e;
+  --blue-dark:#072a5f;
+  --white:#eff0f0;
+  --black:#264348;
+  --gradient-background:#0B1120 → #064E3B;
+
+  --background: #eff0f0;
   --foreground: #ecf0f1;
   --card: #106bc2;
   --card-foreground: oklch(0.98 0 0);
@@ -42,10 +52,10 @@
 @theme inline {
   --font-sans: 'Geist', 'Geist Fallback';
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
+  --color-background: var(--white);
+  --color-foreground: var(--white);
+  --color-card: var(--blue-dark);
+  --color-card-foreground: var(--blue);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
@@ -58,7 +68,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
+  --color-border: transparent;
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);

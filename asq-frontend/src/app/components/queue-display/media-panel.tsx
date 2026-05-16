@@ -1,12 +1,6 @@
-"use client"
-
 import { useState, useEffect } from "react"
 
-interface MediaProps {
-  pathToMedia: string
-}
-
-export function MediaPanel({ pathToMedia }: MediaProps) {
+export function MediaPanel() {
   const [currentTime, setCurrentTime] = useState(new Date())
 
   useEffect(() => {
@@ -56,7 +50,7 @@ export function MediaPanel({ pathToMedia }: MediaProps) {
       {/* Video/Media area */}
       <div className="flex-1 rounded-2xl bg-card border border-border overflow-hidden relative">
         {/* Placeholder content - replace with actual video */}
-        {/* <div className="absolute inset-0 flex flex-col items-center justify-center bg-secondary/50">
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-secondary/50">
           <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
             <svg
               className="w-10 h-10 text-primary"
@@ -82,9 +76,9 @@ export function MediaPanel({ pathToMedia }: MediaProps) {
           <p className="text-sm text-muted-foreground mt-1">
             Video ads & announcements
           </p>
-        </div> */}
+        </div>
 
-        {/* Uncomment to use actual video */}
+        {/* Uncomment to use actual video
         <video
           className="w-full h-full object-cover"
           autoPlay
@@ -92,15 +86,15 @@ export function MediaPanel({ pathToMedia }: MediaProps) {
           loop
           playsInline
         >
-          <source src={pathToMedia} type="video/mp4" />
+          <source src="/path-to-video.mp4" type="video/mp4" />
         </video>
-       
+        */}
       </div>
 
       {/* Announcement bar */}
       <div className="rounded-2xl bg-primary/10 border border-primary/20 p-4">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
             <svg
               className="w-4 h-4 text-primary"
               fill="none"

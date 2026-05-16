@@ -1,12 +1,12 @@
-"use client"
 
 import { useEffect, useState } from "react"
 
-interface DepartmentDisplayProps {
-  deptName: string
+interface DeptDisplayProps {
+  queueNumber: string
+  windowLabel: string
 }
 
-export function DepartmentDisplay({ deptName }: DepartmentDisplayProps) {
+export function DeptDisplay({ queueNumber, windowLabel }: DeptDisplayProps) {
   const [isGlowing, setIsGlowing] = useState(true)
 
   useEffect(() => {
@@ -33,21 +33,26 @@ export function DepartmentDisplay({ deptName }: DepartmentDisplayProps) {
         <div className="flex items-center gap-3 mb-4">
           <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
           <h2 className="text-lg font-medium text-muted-foreground uppercase tracking-wider">
-            Department
+            Now Serving
           </h2>
         </div>
 
         <div className="flex items-baseline gap-4">
           <span
-            className="text-[3rem] font-bold leading-none text-foreground tracking-tight"
+            className="text-[8rem] font-bold leading-none text-foreground tracking-tight"
             style={{
               textShadow: "0 0 40px oklch(0.72 0.19 160 / 0.3)",
             }}
           >
-            {deptName}
+            {queueNumber}
           </span>
         </div>
 
+        <div className="mt-4 flex items-center gap-2">
+          <div className="h-px flex-1 bg-border" />
+          <span className="text-xl font-medium text-primary">{windowLabel}</span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
       </div>
     </div>
   )
