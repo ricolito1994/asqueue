@@ -1,5 +1,6 @@
+
 interface WaitingListProps {
-  queueNumbers: string[]
+  queueNumbers: string[];
 }
 
 export function WaitingList({ queueNumbers }: WaitingListProps) {
@@ -17,7 +18,11 @@ export function WaitingList({ queueNumbers }: WaitingListProps) {
         </span> */}
       </div>
 
-      <div className="grid grid-cols-4 gap-3">
+      {/* <div className="grid grid-cols-4 gap-3">
+          {queueNumbers}
+      </div> */}
+
+      {/* <div className="grid grid-cols-4 gap-3">
         {queueNumbers.map((number, index) => (
           <div
             key={number}
@@ -26,7 +31,7 @@ export function WaitingList({ queueNumbers }: WaitingListProps) {
               ${
                 index === 0
                   ? "bg-primary/10 border border-primary/30"
-                  : "bg-secondary border border-border"
+                  : "bg-primary/10 border border-primary/30"
               }
             `}
           >
@@ -39,7 +44,33 @@ export function WaitingList({ queueNumbers }: WaitingListProps) {
             </span>
           </div>
         ))}
-      </div>
+      </div> */}
+
+<div className="grid grid-cols-4 gap-3">
+  {queueNumbers.map((number, index) => (
+    <div
+      key={index}
+      className={`
+        rounded-xl p-4 text-center transition-all duration-300
+        ${
+          index === 0
+            ? "bg-primary/10 border border-primary/30"
+            : "bg-secondary border border-border"
+        }
+      `}
+    >
+      <span
+        className={`text-xl font-semibold ${
+          index === 0
+            ? "text-primary"
+            : "text-foreground"
+        }`}
+      >
+        {number}
+      </span>
+    </div>
+  ))}
+</div>
     </div>
   )
 }

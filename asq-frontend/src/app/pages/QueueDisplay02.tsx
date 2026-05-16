@@ -31,6 +31,8 @@ const textToAnnounce = [
   "Window 3 is temporarily unavailable.",
 ];
 
+// waitingList: ["A043", "A044", "A045", "A046", "A047", "A048", "A049", "A050"]
+
 export default function QueueDisplay() {
 
     const [windowData, setWindowData] = useState<any>(null)
@@ -214,18 +216,20 @@ export default function QueueDisplay() {
               </div>
             </div>
 
-            {/* Waiting List */}
-              {waitingList.length < 0 ? (
-              <>
-                {waitingList.map((queue, index) => (
-                  <WaitingList
-                    key={index}
-                    queueNumbers={queue?.queue_number ?? 0} />
-                ))}
-                    </>
-            ) : <div className="">No items in waiting list.</div>}
+            {/* Waiting List */}  
+            {/* {waitingList.map((queue, index) => (
+              <WaitingList
+                key={index}
+                queueNumbers={[queue?.queue_number ?? ""]}
+              />
+            ))} */}
 
-           
+            <WaitingList
+              queueNumbers={waitingList.map(
+                (queue) => queue.id
+              )}
+            />
+ 
           </div>
 
           {/* Right Column - Media/Advertisements */}

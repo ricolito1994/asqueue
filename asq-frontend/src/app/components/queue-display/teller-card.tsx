@@ -20,23 +20,26 @@ export function TellerCard({ windowName, currentlyServing }: TellerCardProps) {
   }
 
   return (
-    <div className="rounded-xl bg-card border border-border p-4 transition-all duration-300 h-autofit flex flex-col pb-2">
-      <div className="flex items-start justify-between mb-autofit">
-        <div>
-          {/* <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
-            {windowName}
-          </p> */}
-          <p className="text-[52px] font-bold text-foreground">{currentlyServing ? currentlyServing : "---"}</p>
-        </div>
-      </div>
-
-      {/* Always render this section to maintain equal height */}
-      <div className="pt-3 border-t border-border mt-auto">
-        <p className="text-xs text-muted-foreground mb-6">Currently Serving</p>
-        <p className="text-xl font-semibold">
-          {windowName}
-        </p>
-      </div>
+    <div className="rounded-xl bg-card border border-border p-4 transition-all duration-300 min-h-[220px] flex flex-col">
+  
+  <div className="flex-1 flex items-center justify-center">
+    <div>
+      <p className="text-[72px] font-bold text-foreground leading-none">
+        {currentlyServing || "---"}
+      </p>
     </div>
+  </div>
+
+  <div className="pt-3 border-t border-border mt-auto">
+    <p className="text-xs text-muted-foreground mb-2 uppercase tracking-wide">
+      Currently Serving
+    </p>
+
+    <p className="text-xl font-semibold text-center">
+      {windowName}
+    </p>
+  </div>
+
+</div>
   )
 }
