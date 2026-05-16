@@ -10,9 +10,11 @@ export function WaitingList({ queueNumbers }: WaitingListProps) {
         <h2 className="text-lg font-medium text-muted-foreground uppercase tracking-wider">
           Waiting List
         </h2>
-        <span className="ml-auto text-sm text-muted-foreground">
+
+        {/* Uncomment to activate feature - Number of Queue List */}
+        {/* <span className="ml-auto text-sm text-muted-foreground">
           {queueNumbers.length} in queue
-        </span>
+        </span> */}
       </div>
 
       <div className="grid grid-cols-4 gap-3">
@@ -35,11 +37,6 @@ export function WaitingList({ queueNumbers }: WaitingListProps) {
             >
               {number}
             </span>
-            {index === 0 && (
-              <p className="text-xs text-primary mt-1 uppercase tracking-wide">
-                Next
-              </p>
-            )}
           </div>
         ))}
       </div>
