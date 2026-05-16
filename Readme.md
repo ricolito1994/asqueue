@@ -34,7 +34,7 @@
 <ol>
   <li>clone the repository</li>
   <li>cd to as-queue <code>cd as-queue</code></li>
-  <li>run <code>docker compose --build --no-cache</code></li>
+  <li>run <code>docker compose build --no-cache</code></li>
   <li>to activate the containers <code>docker compose up -d</code></li>
   <li>after installation run on your git bash terminal <code>./setup.sh</code> everything will install/setup including mysql db and migration</li>
 </ol>
