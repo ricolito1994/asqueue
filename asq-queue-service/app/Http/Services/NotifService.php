@@ -53,4 +53,26 @@ class NotifService extends BaseService
         ]);
     }
 
+    public function updateQueueListV2 (Request $request, int $windowId, int $companyId): array 
+    {
+        return $this->asyncRequest([
+            [
+                'method' => 'POST',
+                'url' => self::QUEUE_NOTIF_MICROSERVICE_URL . "/process",
+                'headers' => [
+                    'Authorization' => "Bearer {$request->bearerToken()}"
+                ],
+                'options' => ($request->all())
+            ],
+            [
+                'method' => 'GET',
+                'url' => self::QUEUE_NOTIF_MICROSERVICE_URL_UNGROUPED . "/update-queue-list/{$windowId}/company/{$companyId}",
+                'headers' => [
+                    'Authorization' => "Bearer {$request->bearerToken()}"
+                ],
+                'options' => ($request->all())
+            ]
+        ]);
+    }
+
 }
