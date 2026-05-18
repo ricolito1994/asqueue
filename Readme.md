@@ -3,7 +3,7 @@
 <hr />
 
 <H2>
-  A simple Queueing System developed by AS systems inc.
+  A simple Queueing System developed by AutoSave systems inc.
 </H2>
 
 ## Technologies used
