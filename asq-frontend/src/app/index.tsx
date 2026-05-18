@@ -40,6 +40,7 @@ import Dashboard from '@pages/main/Dashboard'
 import LoginLayout from './layouts/LoginLayout'
 
 import ConditionalRenderingLayout from '@layouts/ConditionalRenderingLayout'
+import FrontDeskLayout from './layouts/FrontDeskLayout'
 
 const App = (): React.ReactElement => {
 
@@ -135,8 +136,13 @@ const App = (): React.ReactElement => {
 
                 <Route path="*" element={<>Not found</>} />
            
-                <Route path='/new-transaction' element={<NewTransactionLayout />}>
+                {/* <Route path='/new-transaction' element={<NewTransactionLayout />}>
                     <Route path="company/:companyId/department/:departmentId/concerns" element={<TransactionConcern />} />
+                    <Route path="company/:companyId/department/:departmentId/concerns/:concernId/windows" element={<TransactionWindow />} />
+                </Route> */}
+
+                <Route path='/new-transaction'>
+                    <Route path="company/:companyId/department/:departmentId/concerns" element={<FrontDeskLayout />} />
                     <Route path="company/:companyId/department/:departmentId/concerns/:concernId/windows" element={<TransactionWindow />} />
                 </Route>
 
