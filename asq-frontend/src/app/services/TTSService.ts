@@ -22,38 +22,59 @@ export class TTSService {
     });
   }
 
-  async speak(text: string) {
+  async speak(text: string): Promise <void> {
+    
     if (!this.synth) return;
 
     await this.waitForVoices();
+    return new Promise ((resolve, reject) => {
+      const utterance = new SpeechSynthesisUtterance(text);
 
-    const utterance = new SpeechSynthesisUtterance(text);
+      utterance.pitch = 1;
+      utterance.rate = 1;
+      utterance.volume = 1;
 
-    utterance.pitch = 1;
-    utterance.rate = 1;
-    utterance.volume = 1;
+      utterance.onend = () => {
+        resolve()
+      }
 
-    this.synth.cancel();
-    this.synth.speak(utterance);
+      utterance.onerror = () => {
+        reject()
+      }
+
+      this.synth.cancel();
+      this.synth.speak(utterance);
+    });
+    
   }
 
-  async speakWithVoice(text: string, voiceName: string) {
+  async speakWithVoice(text: string, voiceName: string): Promise <void> {
     const voices = await this.waitForVoices();
 
-    const selected = voices.find(v => v.name === voiceName);
+    return new Promise ((resolve, reject) => {
+      const selected = voices.find(v => v.name === voiceName);
 
-    const utterance = new SpeechSynthesisUtterance(text);
+      const utterance = new SpeechSynthesisUtterance(text);
 
-    if (selected) {
-      utterance.voice = selected;
-    }
+      if (selected) {
+        utterance.voice = selected;
+      }
 
-    utterance.pitch = 1;
-    utterance.rate = 1;
-    utterance.volume = 1;
+      utterance.pitch = 1;
+      utterance.rate = 1;
+      utterance.volume = 1;
 
-    this.synth.cancel();
-    this.synth.speak(utterance);
+      utterance.onend = () => {
+        resolve()
+      }
+
+      utterance.onerror = () => {
+        reject();
+      }
+
+      this.synth.cancel();
+      this.synth.speak(utterance);
+    });
   }
 
   async getVoices(): Promise<SpeechSynthesisVoice[]> {
