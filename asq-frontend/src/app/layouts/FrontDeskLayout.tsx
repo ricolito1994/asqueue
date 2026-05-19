@@ -144,7 +144,7 @@ export default function FrontDeskLayout() {
               {hasNextPage && (
                 <button
                   onClick={() => changePage(page + 1)}
-                  className="bg-gradient-to-br from-[#1B4FD8] to-[#1239A6] text-white rounded-2xl p-6 text-left"
+                  className="bg-linear-to-br from-[#1B4FD8] to-[#1239A6] text-white rounded-2xl p-6 text-left"
                 >
                   <h3 className="text-lg font-semibold">More Services</h3>
                   <p className="text-white/80 text-sm">
