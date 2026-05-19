@@ -2,15 +2,18 @@
 
 namespace App\Http\Services;
 
+use Throwable;
 use GuzzleHttp\Client;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Exception\RequestException;
+use App\Exceptions\ServiceException;
 
-abstract class BaseService
+class BaseService
 {
     public Client $client;
 
-    public function __construct() {
+    public function __construct() 
+    {
         $this->client = new Client;
     }
     //
@@ -60,8 +63,14 @@ abstract class BaseService
                 }
             }
         ]);
+        
+        try {
+            $pool->promise()->wait();
+        } catch (\Throwable $e) {
+            $this->respondToError($e);
+        }
 
-        $pool->promise()->wait();
+        ksort($response);
 
         return $response;
     }
@@ -78,31 +87,14 @@ abstract class BaseService
                 $url, 
                 $headers, 
                 $options
-            );
+            )->wait();
 
-            $res = $promise()->wait();
             return [
                 "data" => json_decode($res->getBody()->getContents(), true),
                 "status" => $res->getStatusCode()
             ];
         } catch (\Exception $e) {
-            if ($e instanceof RequestException) {
-                if ($e->hasResponse()) {
-                    $errorResponse = $e->getResponse();
-                    return [
-                        "data" => json_decode($errorResponse->getBody()->getContents(), true),
-                        "status" => $errorResponse->getStatusCode()
-                    ];
-                }
-            }
-            return [
-                "data" => [
-                    "message" => "Failed, something went wrong.",
-                    "reason" => $e->getMessage(),
-                    "success" => false,
-                ],
-                "status" => 500
-            ];
+            $this->respondToError($e);
         }
     }
 
@@ -139,6 +131,60 @@ abstract class BaseService
                 ]);
             }
         };
+    }
+
+    protected function respondToError (Throwable $e) 
+    {
+        $errors = [
+            "message" => "Failed, something went wrong.",
+            "reason" => $e->getMessage(),
+            "success" => false,
+        ];
+        
+        $errorCode = 500;
+
+        $errorMessage = $e->getMessage();
+
+        if ($e instanceof RequestException) {
+            $response = $e->getResponse();
+
+            $statusCode = $response?->getStatusCode() ?? 500;
+
+            $body = $response
+                ? (string) $response->getBody()
+                : '';
+
+            $contentType = $response?->getHeaderLine('Content-Type');
+
+            $parsedBody = null;
+
+            if (str_contains($contentType, 'application/json')) {
+                $parsedBody = json_decode($body, true);
+            } else {
+                $parsedBody = [
+                    'message' => strip_tags($body)
+                ];
+            }
+
+            
+            $errors = $parsedBody ?: [
+                'message' => $body ?: $e->getMessage(),
+                'reason'  => $body ?: $e->getMessage(),
+                'success' => false
+            ];
+
+            $errorCode = $statusCode;
+            
+            $errorMessage = 'Service Failed '.  $body ?: $e->getMessage();
+            
+        }
+
+        throw new ServiceException(
+            $errors,
+            $errorCode,
+            $errorMessage,
+            $e
+        );
     }
 
 }
