@@ -14,6 +14,12 @@ const services: Service[] = [
   { id: 4, name: "Insurance", prefix: "I", icon: "ti ti-shield-check" },
   { id: 5, name: "Appointments", prefix: "A", icon: "ti ti-calendar" },
   { id: 6, name: "Documents", prefix: "D", icon: "ti ti-file-text" },
+  { id: 7, name: "Payments", prefix: "P", icon: "ti ti-credit-card" },
+  { id: 8, name: "Loans", prefix: "L", icon: "ti ti-building-bank" },
+  { id: 9, name: "Customer Support", prefix: "C", icon: "ti ti-headset" },
+  { id: 10, name: "Insurance", prefix: "I", icon: "ti ti-shield-check" },
+  { id: 11, name: "Appointments", prefix: "A", icon: "ti ti-calendar" },
+  { id: 12, name: "Documents", prefix: "D", icon: "ti ti-file-text" },
 ];
 
 export default function FrontDeskLayout() {
@@ -25,7 +31,7 @@ export default function FrontDeskLayout() {
   const [page, setPage] = useState(0);
   const [animating, setAnimating] = useState(false);
 
-  const PAGE_SIZE = 5;
+  const PAGE_SIZE = 8;
 
   const totalPages = Math.ceil(services.length / PAGE_SIZE);
 
@@ -104,8 +110,8 @@ export default function FrontDeskLayout() {
             }`}
           >
 
-            <div className="text-center mb-10">
-              <h1 className="text-4xl font-bold text-gray-800 mb-2">
+            <div className="text-center mb-10 fixed top-30 left-1/2 transform -translate-x-1/2">
+              <h1 className="text-4xl font-bold text-gray-800 mb-2 ">
                 Welcome!
               </h1>
               <p className="text-gray-500 text-lg">
