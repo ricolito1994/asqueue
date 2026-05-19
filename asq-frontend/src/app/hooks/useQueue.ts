@@ -1,4 +1,4 @@
-import { 
+import React, { 
     useCallback, 
     useEffect, 
     useRef, 
@@ -9,43 +9,31 @@ export type FifoEvent<T = any> = T & {
     cb?: () => void | Promise<void>;
 };
 
-type UseFifoOptions = {
-    delay?: number;
+type QueueOptions = {
+    delay?: number
+}
+
+type UseFifoOptions <T> = {
+    options? : T
 };
 
-export default function useQueue <T = any>(
-    options?: UseFifoOptions
-) {
+const useQueue =  <T=any> ({options} : UseFifoOptions<QueueOptions>)  => {
 
     const delay = options?.delay ?? 4000;
 
-    const [queue, setQueue] = useState<FifoEvent<T>[]>([]);
+    const queueEvent = useRef<FifoEvent<T>[]>([]);
 
     const processingRef = useRef(false);
 
-    const enqueue = useCallback((item: FifoEvent<T>) => {
-        setQueue((prev) => [...prev, item]);
-    }, []);
-
-    const dequeue = useCallback(() => {
-        setQueue((prev) => prev.slice(1));
-    }, []);
-
-    const clear = useCallback(() => {
-        setQueue([]);
-    }, []);
-
     const processQueue = useCallback(async () => {
 
-        if (processingRef.current) return;
+        if (processingRef.current || queueEvent.current.length === 0) return;
 
         processingRef.current = true;
 
         try {
-
-            while (queue.length > 0) {
-
-                const currentEvent = queue[0];
+            while (queueEvent.current.length > 0) {
+                const currentEvent = queueEvent.current[0];
 
                 await currentEvent.cb?.();
 
@@ -65,22 +53,29 @@ export default function useQueue <T = any>(
             processingRef.current = false;
         }
 
-    }, [queue, delay]);
+    }, [delay]);
 
-    useEffect(() => {
+    const enqueue = useCallback((item: FifoEvent<T>) => {
+        queueEvent.current.push(item)
+        processQueue()
+    }, [processQueue]);
 
-        if (queue.length === 0) return;
+    const dequeue = useCallback(() => {
+        queueEvent.current.shift()
+    }, []);
 
-        processQueue();
-
-    }, [queue, processQueue]);
+    const clear = useCallback(() => {
+        queueEvent.current = [];
+    }, []);
 
     return {
-        queue,
+        queue: queueEvent.current,
         enqueue,
         dequeue,
         clear,
         isProcessing: processingRef.current,
-        size: queue.length
+        size: queueEvent.current.length
     };
 }
+
+export default useQueue;

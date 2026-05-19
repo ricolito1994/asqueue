@@ -14,8 +14,6 @@ import { useParams } from 'react-router-dom';
 
 import useEcho from '@hooks/useEcho';
 
-import useQueue from '@/app/hooks/useQueue';
-
 import AuthenticationService from '@services/AuthenticationService';
 
 const QueueScreenPage: React.FC <any> = ({}): React.ReactElement => {
@@ -26,10 +24,6 @@ const QueueScreenPage: React.FC <any> = ({}): React.ReactElement => {
     const authService = useRef(new AuthenticationService(null));
 
     const sock = useEcho();
-
-    const {enqueue} = useQueue({
-        delay: 4000
-    })
 
     const {companyId, departmentId, concernId} = useParams();
 
@@ -56,17 +50,18 @@ const QueueScreenPage: React.FC <any> = ({}): React.ReactElement => {
                 setRefreshWindows(true)
                 setNowServing(e.data)
             }
-            enqueue(e)
-            //setEventQueue((prev:any) => [...prev, e])
+
+            setEventQueue((prev:any) => [...prev, e])
         })
     
         windowChannel.listen('.window.recall-queue-number',  (e:any) => {
              e['cb'] = () => {
+                console.log("fuck", e.message)
                 tts.current.speak(e.message)
                 setNowServing(e.data)
             }
-            enqueue(e)
-            //setEventQueue((prev:any) => [...prev, e])
+
+            setEventQueue((prev:any) => [...prev, e])
         })
 
          const getDepartment = async () => {
@@ -84,7 +79,7 @@ const QueueScreenPage: React.FC <any> = ({}): React.ReactElement => {
         }
     }, [])
 
-    /*useEffect(() => {
+    useEffect(() => {
 
         const processQueue = async () => {
             
@@ -105,7 +100,7 @@ const QueueScreenPage: React.FC <any> = ({}): React.ReactElement => {
 
         processQueue();
 
-    }, [eventQueue, isProcessing])*/
+    }, [eventQueue, isProcessing])
 
 
     useEffect ( () => {
