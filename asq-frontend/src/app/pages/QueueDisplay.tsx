@@ -16,6 +16,7 @@ import AuthenticationService from '@services/AuthenticationService';
 
 import dayjs from 'dayjs';
 
+import useQueue from '@hooks/useQueue';
 
 const QueueDisplay: React.FC <any> = (): React.ReactElement => {
     const [windowData, setWindowData] = useState<any>(null)
@@ -25,14 +26,17 @@ const QueueDisplay: React.FC <any> = (): React.ReactElement => {
     const queueTransactionService = useMemo(() => new QueueManagerService(null), []);
     
     const defaultDate = dayjs()
-    const [fromDate, setFromDate] = useState<any | null>(defaultDate)
-    const [toDate, setToDate] = useState<any | null>(defaultDate)
-
-    const [eventQueue, setEventQueue] = useState<any []> ([]);
-    const [isProcessing, setIsProcessing] = useState<boolean>(false);
+    const fromDate: any = defaultDate
+    const toDate: any = defaultDate
 
     const sock = useEcho();
-    const [nowServing, setNowServing] = useState<any>(0)
+
+    const {enqueue} = useQueue({
+      options : {
+        delay: 1000
+      }
+    })
+
     const tts = useRef<any>(new TTSService());
     const [department , setDepartment] = useState<any>({})
 
@@ -49,122 +53,106 @@ const QueueDisplay: React.FC <any> = (): React.ReactElement => {
       let windowChannel = sock.channel(windowChannelUri);
         
       windowChannel.listen('.window.update-queue-number', (e:any) => {
+        e['cb'] = async () => {
+          setWindowData((prev: any) => ({
+            ...prev,
+            data: prev?.data?.map((item: any) =>
+              item.id === e?.data?.window_id
+                ? {
+                    ...item,
+                    queue_number : e?.data?.queue_number,
+                  }
+                : item
+            )
+          }));
+          await tts.current.speak(e.message)
+        }
+        enqueue(e)
+      })
+        
+      windowChannel.listen('.window.recall-queue-number',  (e:any) => {
+        e['cb'] = async () => {
+          setWindowData((prev: any) => ({
+            ...prev,
+            data: prev?.data?.map((item: any) =>
+              item.id === e?.data?.window_id
+                ? {
+                    ...item,
+                    queue_number : e?.data?.queue_number,
+                  }
+                : item
+            )
+          }));
+          await tts.current.speak(e.message)
+        }
+        enqueue(e)
+      })
+
+      windowChannel.listen('.window.update-queue-list',  (e:any) => {
         e['cb'] = () => {
-          tts.current.speak(e.message)
-          setRefreshWindows(true)
-          setNowServing(e.data)
+          setIsUpdateWaitingList(true)
         }
+        enqueue(e)
+      })
     
-        setEventQueue((prev:any) => [...prev, e])
-        })
-        
-        windowChannel.listen('.window.recall-queue-number',  (e:any) => {
-              e['cb'] = () => {
-                console.log("fuck", e.message)
-                tts.current.speak(e.message)
-                setNowServing(e.data)
-              }
-    
-            setEventQueue((prev:any) => [...prev, e])
-        })
-
-        windowChannel.listen('.window.update-queue-list',  (e:any) => {
-            e['cb'] = () => {
-              setIsUpdateWaitingList(true)
-            }
-    
-            setEventQueue((prev:any) => [...prev, e])
-
-        })
-    
-    
-        const getDepartment = async () => {
-          try {
-            let dept = await authService.current.department(parseInt(departmentId ?? ''), null)
-              setDepartment(dept)
-            } catch (e) {
-              console.error(e)
-           }
+      const getDepartment = async () => {
+        try {
+          let dept = await authService.current.department(parseInt(departmentId ?? ''), null)
+          setDepartment(dept)
+        } catch (e) {
+          console.error(e)
         }
-          getDepartment()
-        
-          return () => {
-            sock.leave(windowChannelUri)
-          }
-
-      }, [])
-
-
-      // Implementation of FIFO queing
-      useEffect(() => {
-
-        const processQueue = async () => {
-                
-          if (eventQueue.length == 0 || isProcessing) return;
-    
-          setIsProcessing(true)
-    
-          const currentEvent = eventQueue[0]
-  
-          currentEvent.cb?.();
-    
-          await new Promise ((resolve: any) => setTimeout(resolve, 3000))
-    
-          setEventQueue((prev: any) => prev.slice(1));
-    
-          setIsProcessing(false)
-        }
-    
-        processQueue();
-    
-      }, [eventQueue, isProcessing])
+      }
+      getDepartment()
+      return () => {
+        sock.leave(windowChannelUri)
+      }
+    }, [])
 
     useEffect(() => {
+      const fetchWaitingList = async () => {
+        let waitingList = await queueTransactionService.indexTransactions(1, null, {
 
-        const fetchWindows = async () => {
-          let waitingList = await queueTransactionService.indexTransactions(1, null, {
+          params: {
+            "company_id" :  companyId,
+            "department_id":    departmentId,                
+            "from_date" : !fromDate ?  null : fromDate.format('YYYY-MM-DD'),
+            "to_date" : !toDate ? null : toDate.format('YYYY-MM-DD')
+          }
+        });
 
-            params: {
-                "company_id" :  companyId,
-                "department_id":    departmentId,
-                                    
-                "from_date" : !fromDate ?  null : fromDate.format('YYYY-MM-DD'),
-                "to_date" : !toDate ? null : toDate.format('YYYY-MM-DD')
-            }
-          });
+        setIsUpdateWaitingList(false);
+        setWaitingList(waitingList?.data)
+      }
 
-          setIsUpdateWaitingList(false);
-          setWaitingList(waitingList?.data)
-        }
-
-        fetchWindows()
+      fetchWaitingList()
     }, [isUpdateWaitingList]);
 
-    useEffect ( () => {
-
-          const fetchWindows = async () => {
-            //setIsLoading(true)
-            let windowData = await queueService.windows(1, null, {
-              params: {
-                company_id : companyId,
-                department_id : departmentId,
-                concern_id : concernId
-              }
-            });
-
-            setWindowData(windowData)
-            setRefreshWindows(false)
+    useEffect (() => {
+      const fetchWindows = async () => {
+        let windowData = await queueService.windows(1, null, {
+          params: {
+            company_id : companyId,
+            department_id : departmentId,
+            concern_id : concernId
           }
+        });
+
+        windowData = {...windowData , data : windowData?.data?.map((item: any) => ({
+          ...item,
+          'queue_number': item?.transactions[0]?.queue_number ?? 0
+        }))}
+
+        setWindowData(windowData)
+        setRefreshWindows(false)
+      }
     
-          fetchWindows()
+      fetchWindows()
 
-          return () => {
+      return () => {
+      }
 
-          }
-        }, [companyId, departmentId, refreshWindows])
-
-
-
+  }, [companyId, departmentId])
 
   return (
 
@@ -185,7 +173,7 @@ const QueueDisplay: React.FC <any> = (): React.ReactElement => {
             >
               <span className="window-name">{data.name}</span>
 
-              <h2>{data.transactions[0]?.queue_number ?? 0}</h2>
+              <h2>{data.queue_number ?? 0}</h2>
 
               <p>Now Serving</p>
             </div>
