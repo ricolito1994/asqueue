@@ -1,15 +1,13 @@
-import {
-  DeptDisplay,
-  WaitingList,
-  TellerCard,
-  MediaPanel,
-} from "@components/queue-display"
-
 import React, {useContext, useEffect, useState, useMemo, useRef} from 'react'
+
+import WaitingList from '@components/queue-display/WaitingList'
+import TellerCard from '@components/queue-display/TellerCard'
+import MediaPanel from '@components/queue-display/MediaPanel'
+import DeptDisplay from '@components/queue-display/DeptDisplay'
 
 import {} from 'antd'
 
-import '@styles/QueueDisplay02.css'
+import '@styles/QueueDisplayV2.css'
 
 import vid from '@assets/promotion_video.mp4'
 
@@ -31,9 +29,8 @@ const textToAnnounce = [
   "Window 3 is temporarily unavailable.",
 ];
 
-// waitingList: ["A043", "A044", "A045", "A046", "A047", "A048", "A049", "A050"]
+const QueueDisplayV2: React.FC <any> = (): React.ReactElement => {
 
-export default function QueueDisplay() {
 
     const [windowData, setWindowData] = useState<any>(null)
     const [refreshWindows , setRefreshWindows] = useState<boolean>(false)
@@ -143,7 +140,7 @@ export default function QueueDisplay() {
                 params: {
                     "company_id" :  companyId,
                     "department_id":    departmentId,
-                                        
+                    "per_page": 8,            
                     "from_date" : !fromDate ?  null : fromDate.format('YYYY-MM-DD'),
                     "to_date" : !toDate ? null : toDate.format('YYYY-MM-DD')
                 }
@@ -217,16 +214,9 @@ export default function QueueDisplay() {
             </div>
 
             {/* Waiting List */}  
-            {/* {waitingList.map((queue, index) => (
-              <WaitingList
-                key={index}
-                queueNumbers={[queue?.queue_number ?? ""]}
-              />
-            ))} */}
-
             <WaitingList
               queueNumbers={waitingList.map(
-                (queue) => queue.id
+                (queue) => queue.queue_number
               )}
             />
  
@@ -242,3 +232,5 @@ export default function QueueDisplay() {
     </div>
   )
 }
+
+export default QueueDisplayV2;

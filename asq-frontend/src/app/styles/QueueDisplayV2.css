@@ -6,6 +6,13 @@
 
 :root {
 
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Roboto';
+
+  font-family: var(--font-mono);
+  
+ 
+
   /* Custom Palette */
   --cp-l1:#c1e8ff;
   --cp-l2:#7da0ca;

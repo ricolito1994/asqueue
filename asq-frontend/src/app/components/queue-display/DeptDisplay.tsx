@@ -4,8 +4,8 @@ import { useEffect, useState } from "react"
 interface DeptDisplayProps {
   deptName: string
 }
-
-export function DeptDisplay({ deptName }: DeptDisplayProps) {
+const DeptDisplay: React.FC <DeptDisplayProps> = ({ deptName }): React.ReactElement => {
+  
   const [isGlowing, setIsGlowing] = useState(true)
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export function DeptDisplay({ deptName }: DeptDisplayProps) {
         }`}
         style={{
           background:
-            "radial-gradient(ellipse at center, oklch(0.72 0.19 160 / 0.15) 0%, transparent 70%)",
+            "radial-gradient(ellipse at center, oklch(0.6042 0.1626 238.94 / 0.30) 0%, transparent 70%)",
         }}
       />
 
@@ -39,7 +39,7 @@ export function DeptDisplay({ deptName }: DeptDisplayProps) {
           <span
             className="text-[4rem] font-bold leading-none text-foreground tracking-tight"
             style={{
-              textShadow: "0 0 40px oklch(0.72 0.19 160 / 0.15)",
+              textShadow: "0 0 40px oklch(0.6042 0.1626 238.94 / 0.30)",
             }}
           >
             {deptName}
@@ -50,3 +50,5 @@ export function DeptDisplay({ deptName }: DeptDisplayProps) {
     </div>
   )
 }
+
+export default DeptDisplay;

@@ -24,7 +24,7 @@ class TransactionController extends Controller
             $only = $request->only([
                 'company_id', 
                 'department_id', 
-                'window_id'
+                'window_id',
             ]);
 
             $createdDates = $request->only([
@@ -44,7 +44,7 @@ class TransactionController extends Controller
                 ->dateBetweenCreated($createdDates)
                 ->with('concern')
                 ->orderBy('process_end_at', 'ASC')
-                ->paginate(10);
+                ->paginate($request->input('per_page', 10));
                 
             return response()->json ($transactions, 200);
         } catch (\Exception $e) {

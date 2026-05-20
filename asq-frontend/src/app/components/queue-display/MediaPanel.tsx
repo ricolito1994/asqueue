@@ -5,7 +5,8 @@ interface MediaPanelProps {
   textToAnnounce: string[]
 }
 
-export function MediaPanel( { pathToMedia, textToAnnounce }: MediaPanelProps) {
+const MediaPanel: React.FC <MediaPanelProps> = ({ pathToMedia, textToAnnounce }): React.ReactElement => {
+
   const [currentTime, setCurrentTime] = useState(new Date())
 
   useEffect(() => {
@@ -112,3 +113,5 @@ export function MediaPanel( { pathToMedia, textToAnnounce }: MediaPanelProps) {
     </div>
   )
 }
+
+export default MediaPanel;
