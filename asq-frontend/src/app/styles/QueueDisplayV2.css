@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+/* =========================
+   BLUE SAAS / DASHBOARD PALETTE
+   ========================= */
+
+:root {
+
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Roboto';
+
+  font-family: var(--font-mono);
+  
+ 
+
+  /* Custom Palette */
+  --cp-l1:#c1e8ff;
+  --cp-l2:#7da0ca;
+  --cp-m1:#5483b3;
+  --cp-d1:#052659;
+  --cp-d2:#021024;
+
+  /* Base */
+  --background: #ffffff;
+  --foreground: #1b194c;
+
+  /* Cards */
+  --card: #f8f9fc;
+  --card-foreground: #1b194c;
+
+  --popover: #ffffff;
+  --popover-foreground: #1b194c;
+
+  /* Primary Blue (main brand) */
+  --primary: #4965ed;
+  --primary-foreground: #ffffff;
+
+  /* Secondary neutrals */
+  --secondary: #e9ecf5;
+  --secondary-foreground: #1b194c;
+
+  /* Muted UI */
+  --muted: #f1f3f9;
+  --muted-foreground: #807d93;
+
+  /* Accent */
+  --accent: #384290;
+  --accent-foreground: #ffffff;
+
+  /* Status */
+  --destructive: #e5484d;
+  --destructive-foreground: #ffffff;
+
+  /* Borders */
+  --border: #c1c3d0;
+  --input: #c1c3d0;
+  --ring: #4965ed;
+
+  /* Chart palette */
+  --chart-1: #4965ed;
+  --chart-2: #384290;
+  --chart-3: #807d93;
+  --chart-4: #1b194c;
+  --chart-5: #c1c3d0;
+
+  --radius: 0.625rem;
+
+  /* Sidebar */
+  --sidebar: #f8f9fc;
+  --sidebar-foreground: #1b194c;
+  --sidebar-primary: #4965ed;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e9ecf5;
+  --sidebar-accent-foreground: #1b194c;
+  --sidebar-border: #c1c3d0;
+  --sidebar-ring: #4965ed;
+}
+
+/* DARK MODE (deep navy interpretation of same palette) */
+.dark {
+  --background: #1b194c;
+  --foreground: #f8f9fc;
+
+  --card: #26245f;
+  --card-foreground: #f8f9fc;
+
+  --popover: #26245f;
+  --popover-foreground: #f8f9fc;
+
+  --primary: #4965ed;
+  --primary-foreground: #ffffff;
+
+  --secondary: #2f2d6b;
+  --secondary-foreground: #f8f9fc;
+
+  --muted: #2a285f;
+  --muted-foreground: #c1c3d0;
+
+  --accent: #4965ed;
+  --accent-foreground: #ffffff;
+
+  --destructive: #ff5a5f;
+  --destructive-foreground: #ffffff;
+
+  --border: #384290;
+  --input: #384290;
+  --ring: #4965ed;
+
+  --chart-1: #4965ed;
+  --chart-2: #6a7cff;
+  --chart-3: #807d93;
+  --chart-4: #c1c3d0;
+  --chart-5: #ffffff;
+
+  --sidebar: #26245f;
+  --sidebar-foreground: #f8f9fc;
+  --sidebar-primary: #4965ed;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #2f2d6b;
+  --sidebar-accent-foreground: #f8f9fc;
+  --sidebar-border: #384290;
+  --sidebar-ring: #4965ed;
+}
+
+/* =========================
+   TAILWIND TOKEN MAPPING
+   ========================= */
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* =========================
+   BASE STYLES
+   ========================= */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* =========================
+   MARQUEE ANIMATION
+   ========================= */
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}

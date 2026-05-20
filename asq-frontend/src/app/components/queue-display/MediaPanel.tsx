@@ -1,12 +1,12 @@
-"use client"
-
 import { useState, useEffect } from "react"
 
-interface MediaProps {
+interface MediaPanelProps {
   pathToMedia: string
+  textToAnnounce: string[]
 }
 
-export function MediaPanel({ pathToMedia }: MediaProps) {
+const MediaPanel: React.FC <MediaPanelProps> = ({ pathToMedia, textToAnnounce }): React.ReactElement => {
+
   const [currentTime, setCurrentTime] = useState(new Date())
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export function MediaPanel({ pathToMedia }: MediaProps) {
   }, [])
 
   return (
-    <div className="h-full flex flex-col gap-4">
+    <div className="h-full flex flex-col gap-4 pr-6">
       {/* Header with time */}
       <div className="rounded-2xl bg-card border border-border p-4">
         <div className="flex items-center justify-between">
@@ -55,36 +55,7 @@ export function MediaPanel({ pathToMedia }: MediaProps) {
 
       {/* Video/Media area */}
       <div className="flex-1 rounded-2xl bg-card border border-border overflow-hidden relative">
-        {/* Placeholder content - replace with actual video */}
-        {/* <div className="absolute inset-0 flex flex-col items-center justify-center bg-secondary/50">
-          <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
-            <svg
-              className="w-10 h-10 text-primary"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-          <p className="text-lg font-medium text-foreground">Media Display</p>
-          <p className="text-sm text-muted-foreground mt-1">
-            Video ads & announcements
-          </p>
-        </div> */}
 
-        {/* Uncomment to use actual video */}
         <video
           className="w-full h-full object-cover"
           autoPlay
@@ -115,14 +86,32 @@ export function MediaPanel({ pathToMedia }: MediaProps) {
               />
             </svg>
           </div>
-          <div>
-            <p className="text-sm font-medium text-primary">Announcement</p>
-            <p className="text-sm text-muted-foreground">
-              Please have your ID ready when your number is called.
+
+          <div className="overflow-hidden whitespace-nowrap">
+            <p className="text-sm font-medium text-primary mb-1">
+              Announcements
             </p>
+
+            <div className="relative w-full overflow-hidden">
+              <div className="flex w-max animate-marquee gap-16">
+
+                {[...textToAnnounce, ...textToAnnounce].map((text, index) => (
+                  <span
+                    key={index}
+                    className="text-md text-muted-foreground tracking-wide"
+                  >
+                    📢 {text}
+                  </span>
+                ))}
+
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
     </div>
   )
 }
+
+export default MediaPanel;
