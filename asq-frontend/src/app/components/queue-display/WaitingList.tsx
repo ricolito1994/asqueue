@@ -19,7 +19,7 @@ const WaitingList: React.FC <WaitingListProps> = ({queueNumbers}): React.ReactEl
       </div>
 
       {/* <div className="grid grid-cols-4 gap-3">
-          {queueNumbers}
+          {queueNumbers} 
       </div> */}
 
       {/* <div className="grid grid-cols-4 gap-3">

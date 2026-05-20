@@ -183,7 +183,7 @@ const QueueDisplayV2: React.FC <any> = (): React.ReactElement => {
     <div className="h-screen w-screen p-6 overflow-hidden relative">
 
       {/* Main container with 16:9 aspect ratio maintained */}
-      <div className="h-full w-full max-w-[1920px] max-h-[1080px] mx-auto">
+      <div className="h-full w-full max-w-480 max-h-270 mx-auto">
         <div className="h-full grid grid-cols-[35%_65%] gap-6">
           {/* Left Column - Queue Information */}
           <div className="flex flex-col gap-6 min-h-0">

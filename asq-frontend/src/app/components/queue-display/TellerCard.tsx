@@ -6,7 +6,7 @@ interface TellerCardProps {
 const TellerCard: React.FC <TellerCardProps> = ({windowName, currentlyServing}): React.ReactElement => {
 
   // User for Status Configuration - Uncomment when status feature is implemented
-  
+
   // const statusConfig = {
   //   active: {
   //     color: "bg-primary",
@@ -23,7 +23,7 @@ const TellerCard: React.FC <TellerCardProps> = ({windowName, currentlyServing}):
   // }
 
   return (
-    <div className="rounded-xl bg-card border border-border p-4 transition-all duration-300 min-h-[220px] flex flex-col">
+    <div className="rounded-xl bg-card border border-border p-4 transition-all duration-300 min-h-55 flex flex-col">
   
       <div className="flex-1 flex items-center justify-center">
         <div>
