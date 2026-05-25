@@ -1,15 +1,20 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\User;
 use App\Models\RefreshToken;
+use App\Http\Services\QueueManagerService;
+use Carbon\Carbon;
 
 class AuthenticationController extends Controller
 {
-    //
+    
+    public function __construct(
+        protected readonly QueueManagerService $queueManagerService
+    ){}
+
     public function index (): JsonResponse 
     {
         return response()->json([
@@ -21,8 +26,9 @@ class AuthenticationController extends Controller
     public function login (Request $request): JsonResponse 
     {
         try {
+            $now = Carbon::now();
             $credentials = $request->only("username", "password");
-            
+
             if (! $token = auth()->attempt($credentials)) {
                 return response()->json([
                     "message" => "Login failed.",
@@ -31,7 +37,24 @@ class AuthenticationController extends Controller
                 ], 401);
             }
 
-            return $this->respondWithToken($token, auth()->user());
+            $user = auth()->user();
+
+            $window = $this->queueManagerService->windowAssignedTo($request, $user->id);
+
+            $request->merge([
+                'session_type' => 'active',
+                'created_by' => $user->id, 
+                'department_id' => $user->department_id,
+                'window_id' => $window['data']['id'] ,
+                'date' => $now->toDateString(),
+                'start_time' => $now->format('H:i:s'),
+                'company_id' => $user->company_id,
+                'last_queue_number' => 0
+            ]);
+
+            $session = $this->queueManagerService->createQueueSession($request);
+
+            return $this->respondWithToken($token, $user, $session[0]['id']);
         } catch (\Exception $e) {
             return response()->json([
                 "message" => "Login failed.",
@@ -84,6 +107,22 @@ class AuthenticationController extends Controller
     public function logout(Request $request): JsonResponse
     {
         try {
+            $user = auth()->user();
+
+            $now = Carbon::now();
+
+            # $window = $this->queueManagerService->windowAssignedTo($request, $user->id);
+
+            $request->merge([
+                'session_type' => 'inactive',
+                'end_time' => $now->format('H:i:s'),
+                'department_id' => $user->department_id,
+                'company_id' => $user->company_id,
+                'window_id' => $request->input('window_id', 0)
+            ]);
+
+            $this->queueManagerService->updateQueueSession($request, $request->input('session_id', 0));
+            
             auth()->logout();
 
             return response()->json([
@@ -107,7 +146,7 @@ class AuthenticationController extends Controller
         ], 200);
     }
 
-    protected function respondWithToken(mixed $token, User $user = null): JsonResponse 
+    protected function respondWithToken(mixed $token, User $user = null, int|null $session_id = null): JsonResponse 
     {
         if ($user) {
             $user->load(['company', 'department']);
@@ -119,6 +158,7 @@ class AuthenticationController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60,
             'refresh_token' => $user ? $user->createRefreshToken() : null,
             'user' => $user ?? null,
+            'session_id' => $session_id ?? null
         ], 200);
     }
 

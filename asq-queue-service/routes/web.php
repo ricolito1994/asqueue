@@ -35,15 +35,16 @@ Route::group([
     });
 
     Route::group([
-        'middleware' => ['jwt.auth.middleware']
-    ], function(){
-
+        'prefix' => 'session',
+    ], function () {
+        Route::post('', 'QueueSessionController@create');
         Route::group([
-            'prefix' => 'session',
-        ], function () {
-            
+            'middleware' => ['jwt.auth.middleware']
+        ], function(){
+            Route::get('', 'QueueSessionController@index');
+            Route::patch('{session}', 'QueueSessionController@update');
         });
+    });
 
-    }); 
 
 });

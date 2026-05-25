@@ -15,5 +15,12 @@ Route::group([
         Route::get ('recall/{queueNumber}', 'NotificationsController@recallQueueNumberEvent');
         
     });
+
+    Route::group([
+        'prefix' => 'user'
+    ],function () {
+        Route::post ('active', 'NotificationsController@updateActiveUser');
+    });
+
     Route::get('update-queue-list/{windowId}/company/{companyId}', 'NotificationsController@updateQueueList');
 });

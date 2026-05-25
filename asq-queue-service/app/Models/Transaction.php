@@ -100,7 +100,7 @@ class Transaction extends Model
 
     public function scopeCreatedDate(Builder $query,  mixed $date = null): Builder
     {
-        # return $query->whereDate('created_at',  $date ?? Carbon::now());
+        # return $query->whereDate('created_at',  $date ?? Carbon::today());
         return $query->when(isset($date), function (Builder $q) use ($date) {
             $query->whereDate('created_at',  $date);
         });

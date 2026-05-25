@@ -8,6 +8,7 @@ use App\Events\RecallQueueNumberEvent;
 use App\Events\UpdateQueueListEvent;
 use Illuminate\Http\JsonResponse;
 use App\Events\EventClient;
+use App\Events\UpdateUserActiveEvent;
 
 class NotificationsController extends Controller
 {
@@ -61,6 +62,27 @@ class NotificationsController extends Controller
                 ->json ([
                     'success' => true,
                     'message' => 'Update Queue List Notification sent!'
+                ],200);
+
+        } catch (\Exception $e) {
+            return response ()
+                ->json ([
+                    'success' => false,
+                    'message' => 'Something went wrong.',
+                    'reason' => $e->getMessage()
+                ],500);
+        }
+    }
+
+    public function updateActiveUser (Request $request): JsonResponse
+    {
+        try {
+            broadcast(new UpdateUserActiveEvent(params: $request->all()));
+
+            return response ()
+                ->json ([
+                    'success' => true,
+                    'message' => 'User active!'
                 ],200);
 
         } catch (\Exception $e) {

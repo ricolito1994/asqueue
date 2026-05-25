@@ -12,16 +12,19 @@ class WindowController extends Controller
     {
         try {
             $windowData = Window::filter($request)
-                ->with('concerns')
-                ->with('transactions', function($q) {
-                    $q->whereDate('created_at', Carbon::now())
-                        ->where('status', 'processed')
-                        ->orderBy('process_start_at', 'desc')
-                        ->limit(1);
-                })
+                ->with([
+                    'concerns',
+                    'transactions' => function ($q) {
+                        $q->whereDate('created_at', Carbon::today())
+                            ->where('status', 'processed')
+                            ->orderBy('process_start_at', 'desc');
+                    },
+                    'sessions' => function ($q) use ($request) {
+                        $q->filter($request);
+                    }
+                ])
                 ->paginate(10);
-            return response() -> json ($windowData, 200);
-            
+            return response()->json($windowData, 200);
         } catch (Exception $e) {
             response()->json([
                 'success' => false,
@@ -35,16 +38,20 @@ class WindowController extends Controller
     {
          try {
             $windowData = Window::where('assigned_to', $user_id)->filter($request)
-                ->with('transactions', function($q) {
-                    $q->whereDate('created_at', Carbon::now())
-                        ->where('status', 'processed')
-                        ->orderBy('process_start_at', 'desc')
-                        ->with('concern')
-                        ->limit(1);
-                })
+                ->with([
+                    'transactions' => function($q) {
+                        $q->whereDate('created_at', Carbon::today())
+                            ->where('status', 'processed')
+                            ->orderBy('process_start_at', 'desc')
+                            ->with('concern')
+                            ->limit(1);
+                    },
+                    'sessions' => function ($q) use ($request) {
+                        $q->filter($request);
+                    }
+                ])
                 ->first();
-            
-            //dd($windowData->transactions?->toArray());
+                
             return response() -> json ($windowData, 200);
             
         } catch (Exception $e) {
