@@ -14,6 +14,7 @@ interface WindowType {
   id: number;
   name: string;
   description: string;
+  assigned_to: number;
 }
 
 interface Service {
@@ -218,47 +219,46 @@ export default function FrontDeskLayout() {
   */
 
   const handleWindowSelect = async (
-    window: WindowType
-  ) => {
+  window: WindowType
+) => {
 
-    try {
+  try {
 
-      setIsProcessing(true);
+    setIsProcessing(true);
 
-      /*
-        TEMPORARY TICKET GENERATOR
-        REPLACE WITH REAL API LATER
-      */
+    const queueService =
+      new QueueManagerService(null);
 
-      const randomNumber =
-        Math.floor(Math.random() * 99) + 1;
+    const qt =
+      await queueService.createQueue({
+        company_id: companyId,
+        window_id: window.id,
+        department_id: departmentId,
+        is_priority: false,
+        processed_by: window.assigned_to,
+        concern_id: selectedService?.id
+      });
 
-      const prefix =
-        selectedService?.prefix ?? "Q";
+    setSelectedWindow(window);
 
-      const ticket =
-        `${prefix}${randomNumber
-          .toString()
-          .padStart(3, "0")}`;
+    setTicketNumber(qt?.queue_number);
 
-      setSelectedWindow(window);
+    setIssuedTime(
+      new Date(qt?.created_at)
+    );
 
-      setTicketNumber(ticket);
+    setScreen("ticket");
 
-      setScreen("ticket");
+  } catch (e) {
 
-      setIssuedTime(new Date());
+    console.error(e);
 
-    } catch (e) {
+  } finally {
 
-      console.error(e);
+    setIsProcessing(false);
 
-    } finally {
-
-      setIsProcessing(false);
-
-    }
-  };
+  }
+};
 
   /*
     RESET FLOW
@@ -611,7 +611,7 @@ export default function FrontDeskLayout() {
       <footer className="bg-white border-t p-4 text-center text-sm text-gray-500">
 
         <p className="italic">
-          Having trouble? Please feel free to approach the counter for assistance.
+          Having trouble? Please feel free approach the counter for assistance.
         </p>
 
       </footer>
