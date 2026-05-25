@@ -27,6 +27,8 @@ interface Service {
 
 export default function FrontDeskLayout() {
 
+  const [issuedTime, setIssuedTime] = useState<Date | null>(null);
+
   const [screen, setScreen] = useState<
     "select" | "window" | "ticket"
   >("select");
@@ -245,6 +247,8 @@ export default function FrontDeskLayout() {
 
       setScreen("ticket");
 
+      setIssuedTime(new Date());
+
     } catch (e) {
 
       console.error(e);
@@ -293,6 +297,10 @@ export default function FrontDeskLayout() {
       setAnimating(false);
 
     }, 120);
+  };
+
+  const handleGenerateTicket = () => {
+    setIssuedTime(new Date());
   };
 
   return (
@@ -535,8 +543,7 @@ export default function FrontDeskLayout() {
 
             </div>
 
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
-
+            <div className="bg-white rounded-2xl shadow-xl w-full min-w-[500px] overflow-hidden">
               <div className="h-2 bg-blue-400" />
 
               <div className="p-8 text-center">
@@ -553,9 +560,9 @@ export default function FrontDeskLayout() {
 
                   <div className="flex justify-between">
 
-                    <span>Service</span>
+                    <span className="font-bold">Service</span>
 
-                    <span>
+                    <span className="text-sm">
                       {selectedService?.name}
                     </span>
 
@@ -563,9 +570,9 @@ export default function FrontDeskLayout() {
 
                   <div className="flex justify-between">
 
-                    <span>Window</span>
+                    <span className="font-bold">Window</span>
 
-                    <span>
+                    <span className="text-sm">
                       {selectedWindow?.name}
                     </span>
 
@@ -573,10 +580,10 @@ export default function FrontDeskLayout() {
 
                   <div className="flex justify-between">
 
-                    <span>Time</span>
+                    <span className="font-bold">Time</span>
 
                     <span className="font-mono">
-                      {formatTime(currentTime)}
+                      {issuedTime && formatTime(issuedTime)}
                     </span>
 
                   </div>
@@ -604,7 +611,7 @@ export default function FrontDeskLayout() {
       <footer className="bg-white border-t p-4 text-center text-sm text-gray-500">
 
         <p className="italic">
-          Please approach the counter for help.
+          Having trouble? Please feel free to approach the counter for assistance.
         </p>
 
       </footer>
