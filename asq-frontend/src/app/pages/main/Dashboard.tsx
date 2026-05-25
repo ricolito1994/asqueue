@@ -41,6 +41,8 @@ import dayjs from 'dayjs';
 
 import ConditionalRenderingLayout from '@layouts/ConditionalRenderingLayout';
 
+import ActivateClerkWarn from '@components/commons/ActivateClerkWarn';
+
 const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
 
     const {
@@ -263,6 +265,9 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                 okText='Next Number'
                 denyText='Recall Number'
             />
+
+            <ActivateClerkWarn />
+            
             <div className='long-bar-title'>
                 Queueing Dashboard
             </div>

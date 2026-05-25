@@ -7,7 +7,7 @@
 :root {
 
   --font-sans: 'Geist', 'Geist Fallback';
-  --font-mono: 'Roboto';
+  --font-mono: 'system-ui';
 
   font-family: var(--font-mono);
   

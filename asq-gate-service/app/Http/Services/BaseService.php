@@ -87,7 +87,9 @@ class BaseService
                 $url, 
                 $headers, 
                 $options
-            )->wait();
+            );
+
+            $res = $promise()->wait();
 
             return [
                 "data" => json_decode($res->getBody()->getContents(), true),
