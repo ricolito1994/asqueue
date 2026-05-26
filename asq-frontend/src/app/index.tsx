@@ -116,12 +116,16 @@ const App = (): React.ReactElement => {
     return (<>
         <LoadingLayout isLoading={isLoading}>
             <Routes>
+
+                {/* New Routing for Clear */}
                 <Route element={<ClerkLayout />}>
                     <Route path="/"  element={<ClerkDashboard />} />
                     {/* <Route path="/clerk/queue-logs" element={<QueueLogsPage />} />  */}
                     {/* <Route path="/clerk/settings"   element={<SettingsPage />} />  */}
                 </Route>
-                {/* <Route element={renderLayout()} >
+
+                {/* Old Routing for Clear */}
+                <Route element={renderLayout()} >
                     <Route path='/' element={<Dashboard />} />
 
                     <Route path='/queues' element={<QueueLogsPage />} />
@@ -137,7 +141,7 @@ const App = (): React.ReactElement => {
                         : ''}
                     </Route>
                     
-                </Route>     */}
+                </Route>    
 
                 <Route path="*" element={<>Not found</>} />
            

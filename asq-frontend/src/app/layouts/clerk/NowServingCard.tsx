@@ -21,12 +21,17 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
       </div>
 
       {/* Next button */}
-      <div className="px-4">
-        <button className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-[13px] font-medium py-3 rounded-lg transition-colors">
+      <div className="px-4 flex gap-2">
+        <button className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-[13px] font-medium py-3 rounded-lg transition-colors">
           <i className="ti ti-player-skip-forward text-[16px]" aria-hidden="true" />
           Next Queue Number
         </button>
+        <button className="flex-1 flex items-center justify-center gap-2 bg-white hover:bg-[#f0f4fa] active:scale-[0.98] text-blue-600 text-[13px] font-medium py-3 rounded-lg border border-blue-600 transition-colors">
+          <i className="ti ti-repeat text-[16px]" aria-hidden="true" />
+          Recall Number
+        </button>
       </div>
+      
 
       {/* Footer */}
       <div className="flex items-center justify-between px-4 py-3 mt-3 border-t border-[#dde4ef]">

@@ -49,13 +49,13 @@ const QueueListCard: React.FC<any> = (): React.ReactElement => {
         <table className="w-full table-fixed">
           <thead className="sticky top-0 bg-[#f5f8fe]">
             <tr>
-              <th className="text-left text-[11px] font-medium text-[#5a7099] uppercase tracking-wider px-4 py-2.5 border-b border-[#dde4ef] w-[100px]">
+              <th className="text-left text-[11px] font-medium text-[#5a7099] uppercase tracking-wider px-4 py-2.5 border-b border-[#dde4ef] w-25">
                 Queue No.
               </th>
               <th className="text-left text-[11px] font-medium text-[#5a7099] uppercase tracking-wider px-4 py-2.5 border-b border-[#dde4ef]">
                 Concern
               </th>
-              <th className="text-left text-[11px] font-medium text-[#5a7099] uppercase tracking-wider px-4 py-2.5 border-b border-[#dde4ef] w-[100px]">
+              <th className="text-left text-[11px] font-medium text-[#5a7099] uppercase tracking-wider px-4 py-2.5 border-b border-[#dde4ef] w-25">
                 Status
               </th>
             </tr>
@@ -89,13 +89,13 @@ const QueueListCard: React.FC<any> = (): React.ReactElement => {
           {mockRows.length} out of {mockRows.length} items
         </span>
         <div className="flex items-center gap-1.5">
-          <button className="w-[26px] h-[26px] flex items-center justify-center rounded-lg border border-[#dde4ef] hover:bg-[#f0f4fa] transition-colors" aria-label="Previous page">
+          <button className="w-6.5 h-6.5 flex items-center justify-center rounded-lg border border-[#dde4ef] hover:bg-[#f0f4fa] transition-colors" aria-label="Previous page">
             <i className="ti ti-chevron-left text-[13px] text-[#5a7099]" aria-hidden="true" />
           </button>
-          <button className="w-[26px] h-[26px] flex items-center justify-center rounded-lg bg-blue-600 text-white text-[12px] font-medium" aria-label="Page 1">
+          <button className="w-6.5 h-6.5 flex items-center justify-center rounded-lg bg-blue-600 text-white text-[12px] font-medium" aria-label="Page 1">
             1
           </button>
-          <button className="w-[26px] h-[26px] flex items-center justify-center rounded-lg border border-[#dde4ef] hover:bg-[#f0f4fa] transition-colors" aria-label="Next page">
+          <button className="w-6.5 h-6.5 flex items-center justify-center rounded-lg border border-[#dde4ef] hover:bg-[#f0f4fa] transition-colors" aria-label="Next page">
             <i className="ti ti-chevron-right text-[13px] text-[#5a7099]" aria-hidden="true" />
           </button>
         </div>
