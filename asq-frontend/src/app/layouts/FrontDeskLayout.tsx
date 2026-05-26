@@ -353,18 +353,13 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
       {/* MAIN */}
 
       <main className="flex-1 flex items-center justify-center p-6">
-
         <ConditionalRenderingLayout
           condition={
-            screen === "select" ||
-            screen === "window" ||
-            screen === "ticket"
+            screen === "select"
           }
-          elseRender={<p>Invalid Screen</p>}
+          elseRender={''}
         >
-
-          {screen === "select" && (
-            <ServiceSelection
+          <ServiceSelection
               animating={animating}
               pagedServices={pagedServices}
               handleServiceSelect={handleServiceSelect}
@@ -377,10 +372,15 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
               changePage={changePage}
             />
-          )}
+        </ConditionalRenderingLayout>
 
-          {screen === "window" && (
-            <WindowSelection
+        <ConditionalRenderingLayout
+          condition={
+            screen === "window"
+          }
+          elseRender={''}
+        >
+          <WindowSelection
               animating={animating}
               selectedService={selectedService}
               handleWindowSelect={handleWindowSelect}
@@ -388,10 +388,15 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
                 setScreen(s as "select" | "window" | "ticket")
               }
             />
-          )}
+        </ConditionalRenderingLayout>
 
-          {screen === "ticket" && (
-            <TicketScreen
+        <ConditionalRenderingLayout
+          condition={
+            screen === "ticket"
+          }
+          elseRender={''}
+        >
+          <TicketScreen
               ticketNumber={ticketNumber}
               selectedService={selectedService}
               selectedWindow={selectedWindow}
@@ -399,10 +404,7 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
               formatTime={formatTime}
               handleNewTransaction={handleNewTransaction}
             />
-          )}
-
         </ConditionalRenderingLayout>
-
       </main>
 
       {/* FOOTER */}
