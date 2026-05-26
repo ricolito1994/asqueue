@@ -10,6 +10,13 @@ import { QueueManagerService } from '@services/QueueManagerService';
 
 import { ArrowLeftToLine, FileText, ShipWheel, SquareUserRound } from 'lucide-react';
 
+import { useClock } from "../hooks/useClock";
+
+import TicketScreen from "@components/frontdesk/TicketScreen";
+import WindowSelection  from "@components/frontdesk/WindowSelection";
+import ServiceSelection  from "@components/frontdesk//ServiceSelection";
+import ConditionalRenderingLayout from "./ConditionalRenderingLayout";
+
 interface WindowType {
   id: number;
   name: string;
@@ -303,6 +310,8 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
     setIssuedTime(new Date());
   };
 
+  const t = useClock();
+
   return (
     <div className="min-h-screen bg-[#F0F4FF] flex flex-col">
 
@@ -331,7 +340,12 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
         {/* RIGHT SIDE */}
         <p className="text-2xl font-mono text-black font-semibold">
-          {formatTime(currentTime)}
+          {t.time.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true,
+          })}
         </p>
 
       </header>
@@ -340,285 +354,54 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
       <main className="flex-1 flex items-center justify-center p-6">
 
-        {/* SELECT SCREEN */}
-
-        {screen === "select" && (
-
-          <div
-            className={`w-full max-w-6xl transition-opacity duration-150 ${
-              animating
-                ? "opacity-40"
-                : "opacity-100"
-            }`}
-          >
-
-            <div className="text-center mb-10 mt-10 px-4">
-
-              <h1 className="text-4xl font-bold text-gray-800 mb-2">
-                Welcome!
-              </h1>
-
-              <p className="text-gray-500 text-lg">
-                Select a service to start.
-              </p>
-
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-
-              {pagedServices.map(
-                (data: any, index: number) => (
-
-                  <button
-                    key={data.id}
-                    onClick={() =>
-                      handleServiceSelect(data)
-                    }
-                    className="bg-white border-2 border-[#D1D9F0] rounded-2xl p-6 text-left hover:border-blue-500 hover:bg-blue-50 transition"
-                  >
-
-                    <div className="flex items-center gap-4">
-
-                      <div className="w-14 h-14 bg-blue-300 rounded-xl flex items-center justify-center">
-
-                        <FileText />
-
-                      </div>
-
-                      <div>
-
-                        <h2 className="text-xl font-semibold text-gray-800">
-                          {data.name}
-                        </h2>
-
-                        <p className="text-gray-500">
-                          Description:
-                          {" "}
-                          {data.description}
-                        </p>
-
-                      </div>
-
-                    </div>
-
-                  </button>
-                )
-              )}
-
-              {/* MORE BUTTON */}
-
-              {hasNextPage && (
-
-                <button
-                  onClick={() =>
-                    changePage(page + 1)
-                  }
-                  className="bg-linear-to-br from-[#1B4FD8] to-[#1239A6] text-white rounded-2xl p-6 text-left"
-                >
-
-                  <h3 className="text-lg font-semibold">
-                    More Services
-                  </h3>
-
-                  <p className="text-white/80 text-sm">
-                    Page {page + 1} / {totalPages}
-                  </p>
-
-                </button>
-              )}
-
-              {/* BACK BUTTON */}
-
-              {hasPrevPage && (
-
-                <button
-                  onClick={() =>
-                    changePage(page - 1)
-                  }
-                  className="bg-gray-200 text-gray-700 rounded-2xl p-6 text-left"
-                >
-
-                  <h3 className="text-lg font-semibold">
-                    Previous
-                  </h3>
-
-                  <p className="text-sm text-gray-500">
-                    Go back
-                  </p>
-
-                </button>
-              )}
-
-            </div>
-
-          </div>
-        )}
-
-        {/* WINDOW SCREEN */}
-
-        {screen === "window" && (
-
-          <div
-            className={`w-full max-w-6xl transition-opacity duration-150 ${
-              animating
-                ? "opacity-40"
-                : "opacity-100"
-            }`}
-          >
-
-            <div className="text-center mb-10 mt-10 px-4">
-
-              <h1 className="text-4xl font-bold text-gray-800 mb-2">
-                Choose Window
-              </h1>
-
-              <p className="text-gray-500 text-lg">
-                {selectedService?.name}
-              </p>
-
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-
-              {selectedService?.windows?.map(
-                (window: any) => (
-
-                  <button
-                    key={window.id}
-                    onClick={() =>
-                      handleWindowSelect(window)
-                    }
-                    className="bg-white border-2 border-[#D1D9F0] rounded-2xl p-6 text-left hover:border-blue-500 hover:bg-blue-50 transition"
-                  >
-
-                    <div className="flex items-center gap-4">
-
-                      <div className="w-14 h-14 bg-blue-300 rounded-xl flex items-center justify-center">
-
-                        <SquareUserRound />
-
-                      </div>
-
-                      <div>
-
-                        <h2 className="text-xl font-semibold text-gray-800">
-                          {window.name}
-                        </h2>
-
-                        <p className="text-gray-500">
-                          {window.description}
-                        </p>
-
-                      </div>
-
-                    </div>
-
-                  </button>
-                )
-              )}
-
-              {/* BACK BUTTON */}
-
-              <button
-                onClick={() =>
-                  setScreen("select")
-                }
-                className="bg-gray-200 text-gray-700 rounded-2xl p-6 text-left hover:bg-blue-400 hover:text-white transition"
-              >
-
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center hover:bg-gray-700 transition">
-                    <ArrowLeftToLine className="text-white"/>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold">
-                      Back
-                    </h3>
-                    <p className="text-sm">
-                      Return to services
-                    </p>
-                  </div>
-                </div>
-                
-              </button>
-
-            </div>
-
-          </div>
-        )}
-
-        {/* TICKET SCREEN */}
-
-        {screen === "ticket" && (
-
-          <div className="flex flex-col items-center">
-
-            <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center mb-6">
-
-              <i className="ti ti-check text-white text-4xl" />
-
-            </div>
-
-            <div className="bg-white rounded-2xl shadow-xl w-full min-w-[500px] overflow-hidden">
-              <div className="h-2 bg-blue-400" />
-
-              <div className="p-8 text-center">
-
-                <p className="text-gray-500 uppercase text-sm mb-2">
-                  Your Queue / Ticket Number
-                </p>
-
-                <h1 className="text-6xl font-bold text-blue-600 font-mono">
-                  {ticketNumber}
-                </h1>
-
-                <div className="mt-6 border-t pt-4 text-left space-y-2 text-gray-500">
-
-                  <div className="flex justify-between">
-
-                    <span className="font-bold">Service</span>
-
-                    <span className="text-sm">
-                      {selectedService?.name}
-                    </span>
-
-                  </div>
-
-                  <div className="flex justify-between">
-
-                    <span className="font-bold">Window</span>
-
-                    <span className="text-sm">
-                      {selectedWindow?.name}
-                    </span>
-
-                  </div>
-
-                  <div className="flex justify-between">
-
-                    <span className="font-bold">Time</span>
-
-                    <span className="font-mono">
-                      {issuedTime && formatTime(issuedTime)}
-                    </span>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-            <button
-              onClick={handleNewTransaction}
-              className="mt-8 bg-blue-600 text-white px-6 py-3 rounded-xl"
-            >
-              New Transaction
-            </button>
-
-          </div>
-        )}
+        <ConditionalRenderingLayout
+          condition={
+            screen === "select" ||
+            screen === "window" ||
+            screen === "ticket"
+          }
+          elseRender={<p>Invalid Screen</p>}
+        >
+
+          {screen === "select" && (
+            <ServiceSelection
+              animating={animating}
+              pagedServices={pagedServices}
+              handleServiceSelect={handleServiceSelect}
+
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+
+              page={page}
+              totalPages={totalPages}
+
+              changePage={changePage}
+            />
+          )}
+
+          {screen === "window" && (
+            <WindowSelection
+              animating={animating}
+              selectedService={selectedService}
+              handleWindowSelect={handleWindowSelect}
+              setScreen={(s: string) =>
+                setScreen(s as "select" | "window" | "ticket")
+              }
+            />
+          )}
+
+          {screen === "ticket" && (
+            <TicketScreen
+              ticketNumber={ticketNumber}
+              selectedService={selectedService}
+              selectedWindow={selectedWindow}
+              issuedTime={issuedTime}
+              formatTime={formatTime}
+              handleNewTransaction={handleNewTransaction}
+            />
+          )}
+
+        </ConditionalRenderingLayout>
 
       </main>
 
