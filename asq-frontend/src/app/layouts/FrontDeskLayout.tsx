@@ -8,6 +8,8 @@ import AuthenticationService from '@services/AuthenticationService';
 
 import { QueueManagerService } from '@services/QueueManagerService';
 
+import { ArrowLeftToLine, FileText, Ship, ShipWheel, SquareUserRound } from 'lucide-react';
+
 interface WindowType {
   id: number;
   name: string;
@@ -306,19 +308,29 @@ export default function FrontDeskLayout() {
 
       {/* HEADER */}
 
-      <header className="bg-white border-b border-[#D1D9F0] p-4 flex justify-between">
+      <header className="bg-white border-b border-[#D1D9F0] p-4 flex items-center justify-between">
 
-        <h1 className="text-2xl font-bold text-blue-600">
+        {/* LEFT SIDE */}
+        <div className="flex items-center gap-3">
 
-          {department?.name}
+          <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+            <ShipWheel className="text-blue-600" size={28} />
+          </div>
 
-          <p className="text-sm text-black">
-            {department?.company?.name}
-          </p>
+          <div>
+            <h1 className="text-2xl font-bold text-blue-600 leading-tight">
+              {department?.name}
+            </h1>
 
-        </h1>
+            <p className="text-sm text-gray-950">
+              {department?.company?.name}
+            </p>
+          </div>
 
-        <p className="text-2xl font-mono text-gray-500 font-semibold">
+        </div>
+
+        {/* RIGHT SIDE */}
+        <p className="text-2xl font-mono text-black font-semibold">
           {formatTime(currentTime)}
         </p>
 
@@ -340,7 +352,7 @@ export default function FrontDeskLayout() {
             }`}
           >
 
-            <div className="text-center mb-10 fixed top-30 left-1/2 transform -translate-x-1/2">
+            <div className="text-center mb-10 mt-10 px-4">
 
               <h1 className="text-4xl font-bold text-gray-800 mb-2">
                 Welcome!
@@ -367,9 +379,9 @@ export default function FrontDeskLayout() {
 
                     <div className="flex items-center gap-4">
 
-                      <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
+                      <div className="w-14 h-14 bg-blue-300 rounded-xl flex items-center justify-center">
 
-                        <i className={`${data.icon ?? 'Ship'} text-2xl text-blue-600`} />
+                        <FileText />
 
                       </div>
 
@@ -454,7 +466,7 @@ export default function FrontDeskLayout() {
             }`}
           >
 
-            <div className="text-center mb-10 fixed top-30 left-1/2 transform -translate-x-1/2">
+            <div className="text-center mb-10 mt-10 px-4">
 
               <h1 className="text-4xl font-bold text-gray-800 mb-2">
                 Choose Window
@@ -481,9 +493,9 @@ export default function FrontDeskLayout() {
 
                     <div className="flex items-center gap-4">
 
-                      <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
+                      <div className="w-14 h-14 bg-blue-300 rounded-xl flex items-center justify-center">
 
-                        <i className="ti ti-building text-2xl text-blue-600" />
+                        <SquareUserRound />
 
                       </div>
 
@@ -511,17 +523,23 @@ export default function FrontDeskLayout() {
                 onClick={() =>
                   setScreen("select")
                 }
-                className="bg-gray-200 text-gray-700 rounded-2xl p-6 text-left"
+                className="bg-gray-200 text-gray-700 rounded-2xl p-6 text-left hover:bg-blue-400 hover:text-white transition"
               >
 
-                <h3 className="text-lg font-semibold">
-                  Back
-                </h3>
-
-                <p className="text-sm text-gray-500">
-                  Return to services
-                </p>
-
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center hover:bg-gray-700 transition">
+                    <ArrowLeftToLine className="text-white"/>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold">
+                      Back
+                    </h3>
+                    <p className="text-sm">
+                      Return to services
+                    </p>
+                  </div>
+                </div>
+                
               </button>
 
             </div>
