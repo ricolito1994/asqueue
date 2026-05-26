@@ -30,8 +30,7 @@ import AsConfirmModal from '@components/modals/AsConfirmModal'
 
 import profile from '@assets/profile.png'
 
-const TopNavComponent: React.FC <any> = ({children}) => {
-    const APP_NAME = import.meta.env.NAME;
+const TopNavComponent: React.FC <any> = () => {
     const {
         user,
         setUser,
@@ -77,15 +76,16 @@ const TopNavComponent: React.FC <any> = ({children}) => {
         onRefreshToken
     ))
 
-    useEffect(()=> {
-        
+    useEffect(()=> {    
     }, [])
 
     const logout = async () => {
         try {
             setIsProcessing(true)
             await logoutService.current.logout({
-                "user_id" : user.user.id
+                "user_id" : user.user.id,
+                "session_id" : user?.session_id,
+                "window_id" : userWindow?.id
             })
             setUser(null)
             setUserWindow(null)

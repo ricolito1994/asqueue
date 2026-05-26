@@ -38,6 +38,7 @@ import Dashboard from '@pages/main/Dashboard'
 import LoginLayout from './layouts/LoginLayout'
 
 import ConditionalRenderingLayout from '@layouts/ConditionalRenderingLayout'
+
 import FrontDeskLayout from './layouts/FrontDeskLayout'
 
 const App = (): React.ReactElement => {
@@ -56,7 +57,6 @@ const App = (): React.ReactElement => {
 
     useEffect(() => {
         let t = setTimeout(() => {
-           //setIsLoading((prev: boolean) => !prev)
            setIsLoading(false)
         }, 1000)
         return () => clearTimeout(t)

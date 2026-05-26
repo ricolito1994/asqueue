@@ -4,8 +4,6 @@ import { AppContext } from '@context/AppContext';
 
 import { useParams } from 'react-router-dom';
 
-import hero from '@assets/hero.png'
-
 import AuthenticationService from '@services/AuthenticationService';
 
 import { QueueManagerService } from '@services/QueueManagerService';

@@ -126,6 +126,12 @@ class BaseService
                     'json' => $options
                 ]);
             },
+            'PATCH' => function () use ($url, $headers, $options, $client) {
+                return $client->patchAsync($url, [
+                    'headers' => $headers,
+                    'json' => $options
+                ]);
+            },
             'DELETE' => function () use ($url, $headers, $options, $client) {
                 return $client->deleteAsync($url, [
                     'headers' => $headers,

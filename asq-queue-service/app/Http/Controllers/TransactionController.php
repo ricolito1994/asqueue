@@ -73,7 +73,7 @@ class TransactionController extends Controller
             $queueTransaction = DB::transaction(function () use ($only, $request) {
 
                 $latestTransaction = Transaction::filterByIds($only)
-                    ->whereDate ('created_at', Carbon::now())
+                    ->whereDate ('created_at', Carbon::today())
                     ->orderByDesc('queue_number')
                     ->lockForUpdate()
                     ->first();
@@ -114,7 +114,7 @@ class TransactionController extends Controller
                 'department_id'
             ]);
 
-            $now = Carbon::now();
+            $now = Carbon::today();
 
             $currentQueue = Transaction::query()
                 ->filterByIds($payload)
@@ -151,7 +151,7 @@ class TransactionController extends Controller
                 
                 $nextQueue->update([
                     'status' => 'processed',
-                    'process_start_at' => Carbon::now()
+                    'process_start_at' => Carbon::today()
                 ]);
 
                 $request->merge([
@@ -188,7 +188,7 @@ class TransactionController extends Controller
                 'department_id',
             ]);
             $transaction = Transaction::filterByIds($only)
-                ->whereDate ('created_at', Carbon::now())
+                ->whereDate ('created_at', Carbon::today())
                 ->where ('queue_number', $queueNumber)
                 ->with('window')
                 ->first();

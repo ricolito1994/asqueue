@@ -2,64 +2,61 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\queue_session;
+use DB;
+use Exception;
+use App\Models\QueueSession;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class QueueSessionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function index(Request $request): JsonResponse
     {
-        //
+        try {
+            $sessionQuery = QueueSession::filter($request->all());
+
+            $sessionData = $request->filled('per_page') ? 
+                $sessionQuery->paginate($request->per_page) : 
+                $sessionQuery->get();
+
+            return response()->json($sessionData, 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'reason' => $e->getMessage(),
+                'message' => "Something went wrong."
+            ], 500);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(Request $request): JsonResponse
     {
-        //
+        try {
+            $session = QueueSession::create($request->all());
+
+            return response()->json($session->fresh(), 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'reason' => $e->getMessage(),
+                'message' => "Something went wrong."
+            ], 500);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function update(Request $request, QueueSession $session): JsonResponse
     {
-        //
+        try {
+            $session->update($request->all());
+            return response()->json($session->fresh(), 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Something went wrong',
+                'reason' => $e->getMessage(),
+                'success' => false,
+            ], 500);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(queue_session $queue_session)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(queue_session $queue_session)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, queue_session $queue_session)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(queue_session $queue_session)
-    {
-        //
-    }
 }

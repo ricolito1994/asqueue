@@ -29,6 +29,11 @@ class Window extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    public function sessions(): HasMany
+    {
+        return $this->hasMany(QueueSession::class);
+    }
+
     public function concerns (): BelongsToMany
     {
         return $this->belongsToMany(Concern::class, 'concern_window')
