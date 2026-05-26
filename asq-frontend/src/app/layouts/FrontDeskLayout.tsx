@@ -8,7 +8,7 @@ import AuthenticationService from '@services/AuthenticationService';
 
 import { QueueManagerService } from '@services/QueueManagerService';
 
-import { ArrowLeftToLine, FileText, Ship, ShipWheel, SquareUserRound } from 'lucide-react';
+import { ArrowLeftToLine, FileText, ShipWheel, SquareUserRound } from 'lucide-react';
 
 interface WindowType {
   id: number;
@@ -26,7 +26,7 @@ interface Service {
   windows?: WindowType[];
 }
 
-export default function FrontDeskLayout() {
+const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
   const [issuedTime, setIssuedTime] = useState<Date | null>(null);
 
@@ -635,3 +635,6 @@ export default function FrontDeskLayout() {
     </div>
   );
 }
+
+
+export default FrontDeskLayout;
