@@ -1,9 +1,10 @@
 import { AbstractApiService } from './AbstractApiService'
-import { AUTH } from '@constants/api'
+import { AUTH, USER } from '@constants/api'
 
 export default class AuthenticationService extends AbstractApiService {
 
     protected auth: any;
+    protected user: any;
 
     constructor (
         accessToken: string|undefined|null, 
@@ -13,6 +14,7 @@ export default class AuthenticationService extends AbstractApiService {
     ) {
         super (accessToken, baseURL, refreshToken, onAuthTokenUpdate)
         this.auth = AUTH;
+        this.user = USER;
     }
 
     async login <T=any> (data: any, config?: any) {
@@ -54,6 +56,15 @@ export default class AuthenticationService extends AbstractApiService {
     async department <T=any> (departmentId: number, data: any, config?: any) {
         try {
             let response = await this.requestV2<T>(this.auth.findDepartment(departmentId), data, config);
+            return response?.data
+        } catch (e: any) {
+            throw e;
+        }
+    }
+
+    async setActiveSession <T=any> (userId: number, data: any, config?: any) {
+        try {
+            let response = await this.requestV2<T>(this.user.setActiveUserSession(userId), data, config);
             return response?.data
         } catch (e: any) {
             throw e;

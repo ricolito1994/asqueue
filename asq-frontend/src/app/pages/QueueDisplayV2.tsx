@@ -115,7 +115,7 @@ const QueueDisplayV2: React.FC <any> = (): React.ReactElement => {
           setWindowData((prev: any) => ({
             ...prev,
             data: prev?.data?.map((item: any) =>
-              item.id === e?.data?.window_id
+              item.id === parseInt(e?.data?.window_id)
                 ? {
                     ...item,
                     is_active : e?.data?.session_type === 'active',

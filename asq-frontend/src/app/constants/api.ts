@@ -58,6 +58,8 @@ const USER: Object = {
     'create' : ()  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/user`, req: "get"}),    
     'update' : (userId: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/user/{userId}`, req: "patch"}), 
     'delete'  : (userId: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/user/${userId}`, req: "delete"}),   
+
+    'setActiveUserSession' : (userId: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/user/set-active-session/${userId}`, req: "post"}),   
 }
 
 const LOG: Object = {

@@ -32,6 +32,8 @@ Route::group([
         Route::patch('{user}', 'UserController@update');
         Route::get('{user}', 'UserController@find');
         Route::delete('{user}', 'UserController@delete');
+
+        Route::post('set-active-session/{user}', 'UserController@setActiveSession');
     });
 
 });
