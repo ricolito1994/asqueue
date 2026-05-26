@@ -559,7 +559,7 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
             </div>
 
-            <div className="bg-white rounded-2xl shadow-xl w-full min-w-[500px] overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-xl w-full min-w-125 overflow-hidden">
               <div className="h-2 bg-blue-400" />
 
               <div className="p-8 text-center">

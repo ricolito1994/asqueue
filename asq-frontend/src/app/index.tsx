@@ -40,6 +40,8 @@ import LoginLayout from './layouts/LoginLayout'
 import ConditionalRenderingLayout from '@layouts/ConditionalRenderingLayout'
 
 import FrontDeskLayout from './layouts/FrontDeskLayout'
+import ClerkLayout from './layouts/ClerkLayout'
+import ClerkDashboard from './layouts/clerk/ClerkDashboard'
 
 const App = (): React.ReactElement => {
 
@@ -114,9 +116,14 @@ const App = (): React.ReactElement => {
     return (<>
         <LoadingLayout isLoading={isLoading}>
             <Routes>
-                <Route element={renderLayout()} >
+                <Route element={<ClerkLayout />}>
+                    <Route path="/"  element={<ClerkDashboard />} />
+                    {/* <Route path="/clerk/queue-logs" element={<QueueLogsPage />} />  */}
+                    {/* <Route path="/clerk/settings"   element={<SettingsPage />} />  */}
+                </Route>
+                {/* <Route element={renderLayout()} >
                     <Route path='/' element={<Dashboard />} />
-                    
+
                     <Route path='/queues' element={<QueueLogsPage />} />
                     
                     <Route path='/settings' element={<SettingsLayout />}>
@@ -130,7 +137,7 @@ const App = (): React.ReactElement => {
                         : ''}
                     </Route>
                     
-                </Route>    
+                </Route>     */}
 
                 <Route path="*" element={<>Not found</>} />
            
