@@ -10,6 +10,13 @@ import { QueueManagerService } from '@services/QueueManagerService';
 
 import { ArrowLeftToLine, FileText, ShipWheel, SquareUserRound } from 'lucide-react';
 
+import { useClock } from "../hooks/useClock";
+
+import TicketScreen from "@components/frontdesk/TicketScreen";
+import WindowSelection  from "@components/frontdesk/WindowSelection";
+import ServiceSelection  from "@components/frontdesk//ServiceSelection";
+import ConditionalRenderingLayout from "./ConditionalRenderingLayout";
+
 interface WindowType {
   id: number;
   name: string;
@@ -303,6 +310,8 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
     setIssuedTime(new Date());
   };
 
+  const t = useClock();
+
   return (
     <div className="min-h-screen bg-[#F0F4FF] flex flex-col">
 
@@ -331,7 +340,12 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
         {/* RIGHT SIDE */}
         <p className="text-2xl font-mono text-black font-semibold">
-          {formatTime(currentTime)}
+          {t.time.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true,
+          })}
         </p>
 
       </header>
@@ -339,6 +353,7 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
       {/* MAIN */}
 
       <main className="flex-1 flex items-center justify-center p-6">
+<<<<<<< HEAD
 
         {/* SELECT SCREEN */}
 
@@ -620,6 +635,60 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
           </div>
         )}
 
+=======
+        <ConditionalRenderingLayout
+          condition={
+            screen === "select"
+          }
+          elseRender={''}
+        >
+          <ServiceSelection
+              animating={animating}
+              pagedServices={pagedServices}
+              handleServiceSelect={handleServiceSelect}
+
+              hasNextPage={hasNextPage}
+              hasPrevPage={hasPrevPage}
+
+              page={page}
+              totalPages={totalPages}
+
+              changePage={changePage}
+            />
+        </ConditionalRenderingLayout>
+
+        <ConditionalRenderingLayout
+          condition={
+            screen === "window"
+          }
+          elseRender={''}
+        >
+          <WindowSelection
+              animating={animating}
+              selectedService={selectedService}
+              handleWindowSelect={handleWindowSelect}
+              setScreen={(s: string) =>
+                setScreen(s as "select" | "window" | "ticket")
+              }
+            />
+        </ConditionalRenderingLayout>
+
+        <ConditionalRenderingLayout
+          condition={
+            screen === "ticket"
+          }
+          elseRender={''}
+        >
+          <TicketScreen
+              ticketNumber={ticketNumber}
+              selectedService={selectedService}
+              selectedWindow={selectedWindow}
+              issuedTime={issuedTime}
+              formatTime={formatTime}
+              handleNewTransaction={handleNewTransaction}
+            />
+        </ConditionalRenderingLayout>
+>>>>>>> ae3baedff7bae38ad2baedc0fd3e58f7add52dc1
       </main>
 
       {/* FOOTER */}
