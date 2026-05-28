@@ -111,8 +111,6 @@ class AuthenticationController extends Controller
 
             $now = Carbon::now();
 
-            # $window = $this->queueManagerService->windowAssignedTo($request, $user->id);
-
             $request->merge([
                 'session_type' => 'inactive',
                 'end_time' => $now->format('H:i:s'),
@@ -146,7 +144,11 @@ class AuthenticationController extends Controller
         ], 200);
     }
 
-    protected function respondWithToken(mixed $token, User $user = null, int|null $session_id = null): JsonResponse 
+    protected function respondWithToken(
+        mixed $token, 
+        User $user = null, 
+        int|null $session_id = null
+    ): JsonResponse 
     {
         if ($user) {
             $user->load(['company', 'department']);

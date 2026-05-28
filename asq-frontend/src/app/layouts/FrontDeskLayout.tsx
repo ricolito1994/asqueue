@@ -17,6 +17,10 @@ import WindowSelection  from "@components/frontdesk/WindowSelection";
 import ServiceSelection  from "@components/frontdesk//ServiceSelection";
 import ConditionalRenderingLayout from "./ConditionalRenderingLayout";
 
+import useQueue from "@hooks/useQueue";
+
+import useEcho from "@hooks/useEcho";
+
 interface WindowType {
   id: number;
   name: string;
@@ -83,7 +87,7 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
   );
 
   const [concernData, setConcernData] =
-    useState<any>(null);
+    useState<any>({});
 
   /*
     PAGINATION
@@ -108,57 +112,18 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
   const hasPrevPage = page > 0;
 
-  /*
-    CLOCK
-  */
+  const {enqueue} = useQueue({
+    options: {
+      delay: 1000
+    }
+  });
+
+  const ws = useEcho();
+
 
   useEffect(() => {
-
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-
-  }, []);
-
-  /*
-    DEPARTMENT
-  */
-
-  useEffect(() => {
-
-    const getDepartment = async () => {
-
-      try {
-
-        let dept =
-          await authService.current.department(
-            parseInt(departmentId ?? ''),
-            null
-          );
-
-        setDepartment(dept);
-
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    getDepartment();
-
-  }, []);
-
-  /*
-    FETCH CONCERNS
-  */
-
-  useEffect(() => {
-
     const fetchConcerns = async () => {
-
       try {
-
         setIsProcessing(true);
 
         let concernData =
@@ -173,26 +138,91 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
             }
           );
 
+        concernData = {
+          ...concernData, data: concernData?.data?.map((e: any) => ({
+            ...e, 
+            windows: e?.windows?.map((f: any) => ({
+              ...f,
+              'is_active': f.sessions.length > 0
+            }))
+          }))
+        }
+
         setConcernData(concernData);
 
       } catch (e) {
-
         console.error(e);
-
       } finally {
-
         setIsProcessing(false);
-
       }
     };
 
     fetchConcerns();
 
-    return () => {
+  }, [companyId, departmentId]);
 
+  useEffect(() => {
+    if (! concernData) return;
+
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    const getDepartment = async () => {
+      try {
+        let dept =
+          await authService.current.department(
+            parseInt(departmentId ?? ''),
+            null
+          );
+        setDepartment(dept);
+
+      } catch (e) {
+        console.error(e);
+      }
     };
 
-  }, [companyId, departmentId]);
+    getDepartment();
+    
+    let userActiveChannelUri = `update.user.active.department.${departmentId}.company.${companyId}`;
+
+    let userActiveChannel = ws.channel(userActiveChannelUri);
+
+    userActiveChannel.listen('.user.active-event', (e:any) => { 
+      e['cb'] = () => {
+        setConcernData((prev: any) => ({
+          ...prev, 
+          data: prev?.data?.map((f: any) => ({
+            ...f,
+            windows: f?.windows?.map((g: any) => (
+              g.id == e?.data?.window_id ? {
+                ...g,
+                is_active: e?.data?.session_type === 'active'
+              }: g
+            ))
+          }))
+        }));
+      }
+      enqueue(e)
+    })
+
+    return () => {
+      clearInterval(timer)
+      ws.leave(userActiveChannelUri)
+    };
+
+  }, []);
+
+  useEffect(() => {
+    if (! concernData) return;
+
+    let win = concernData?.data?.find((x: any) => x.name === selectedService?.name)?.windows;
+
+    setSelectedService((prev: any) => ({
+      ...prev,
+      windows : win
+    }));
+  }, [concernData])
 
   /*
     FORMAT TIME
@@ -226,46 +256,46 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
   */
 
   const handleWindowSelect = async (
-  window: WindowType
-) => {
+    window: WindowType
+  ) => {
 
-  try {
+    try {
 
-    setIsProcessing(true);
+      setIsProcessing(true);
 
-    const queueService =
-      new QueueManagerService(null);
+      const queueService =
+        new QueueManagerService(null);
 
-    const qt =
-      await queueService.createQueue({
-        company_id: companyId,
-        window_id: window.id,
-        department_id: departmentId,
-        is_priority: false,
-        processed_by: window.assigned_to,
-        concern_id: selectedService?.id
-      });
+      const qt =
+        await queueService.createQueue({
+          company_id: companyId,
+          window_id: window.id,
+          department_id: departmentId,
+          is_priority: false,
+          processed_by: window.assigned_to,
+          concern_id: selectedService?.id
+        });
 
-    setSelectedWindow(window);
+      setSelectedWindow(window);
 
-    setTicketNumber(qt?.queue_number);
+      setTicketNumber(qt?.queue_number);
 
-    setIssuedTime(
-      new Date(qt?.created_at)
-    );
+      setIssuedTime(
+        new Date(qt?.created_at)
+      );
 
-    setScreen("ticket");
+      setScreen("ticket");
 
-  } catch (e) {
+    } catch (e) {
 
-    console.error(e);
+      console.error(e);
 
-  } finally {
+    } finally {
 
-    setIsProcessing(false);
+      setIsProcessing(false);
 
-  }
-};
+    }
+  };
 
   /*
     RESET FLOW

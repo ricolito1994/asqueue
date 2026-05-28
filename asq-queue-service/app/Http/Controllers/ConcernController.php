@@ -6,6 +6,7 @@ use DB;
 use Exception;
 use App\Models\Concern;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ConcernController extends Controller
 {
@@ -13,7 +14,21 @@ class ConcernController extends Controller
     {
         try {
             $concernData = Concern::filter($request)
-                ->with('windows')
+                ->with(['windows' => function ($q) use ($request) {
+                    $q->with(['sessions' => function ($r) use ($request) {
+                        if (! isset($request->date)) {
+                            $request->merge([
+                                'date' => Carbon::now()->format('Y-m-d')
+                            ]);
+                        }
+                        if (! isset($request->session_type)) {
+                            $request->merge([
+                                'session_type' => 'active'
+                            ]);
+                        }
+                        $r->filter($request);
+                    }]);
+                }])
                 ->paginate(10);
             
             return response() -> json ($concernData, 200);
@@ -27,51 +42,4 @@ class ConcernController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Concern $concern)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Concern $concern)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Concern $concern)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Concern $concern)
-    {
-        //
-    }
 }
