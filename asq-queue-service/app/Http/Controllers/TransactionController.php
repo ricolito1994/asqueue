@@ -72,6 +72,16 @@ class TransactionController extends Controller
 
             $queueTransaction = DB::transaction(function () use ($only, $request) {
 
+                $isActiveSession = QueueSession::where('window_id', $only['window_id'])
+                    ->where ('session_type', 'active')
+                    ->whereDate ('date', Carbon::today())
+                    ->lockForUpdate()
+                    ->first();
+                
+                if (! $isActiveSession) {
+                    throw new \Exception ("Window not active at the moment.");
+                }
+
                 $latestTransaction = Transaction::filterByIds($only)
                     ->whereDate ('created_at', Carbon::today())
                     ->orderByDesc('queue_number')
