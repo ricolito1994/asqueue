@@ -1,13 +1,19 @@
 import { NavLink } from 'react-router-dom'
+import { LucideIcon } from "lucide-react"
 
 interface NavItemProps {
-  icon: string
+  icon: LucideIcon
   label: string
   to: string
   badge?: number
 }
 
-const NavItem: React.FC<NavItemProps> = ({ icon, label, to, badge }: NavItemProps): React.ReactElement => {
+const NavItem: React.FC<NavItemProps> = ({
+  icon: Icon,
+  label,
+  to,
+  badge
+}: NavItemProps): React.ReactElement => {
   return (
     <NavLink
       to={to}
@@ -24,8 +30,16 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, to, badge }: NavItemProp
           {isActive && (
             <span className="absolute -left-2 top-1/2 -translate-y-1/2 w-[3px] h-[55%] bg-blue-500 rounded-r-sm" />
           )}
-          <i className={`ti ti-${icon} text-[17px] shrink-0`} aria-hidden="true" />
-          <span className="flex-1">{label}</span>
+
+          <Icon
+            className="w-[17px] h-[17px] shrink-0"
+            aria-hidden="true"
+          />
+
+          <span className="flex-1">
+            {label}
+          </span>
+
           {badge && (
             <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-500/25 text-blue-300">
               {badge}

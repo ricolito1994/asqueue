@@ -1,5 +1,12 @@
 import NavItem from './NavItem'
 
+import { 
+  ShipWheel,
+  LayoutDashboard,
+  Logs,
+  Settings
+ } from 'lucide-react'
+
 const SideNav: React.FC<any> = (): React.ReactElement => {
   return (
     <aside className="w-52.5 min-w-52.5 h-full bg-[#0f2952] flex flex-col">
@@ -7,10 +14,10 @@ const SideNav: React.FC<any> = (): React.ReactElement => {
       {/* Brand */}
       <div className="flex items-center gap-2.5 px-4.5 py-4 border-b border-white/8">
         <div className="w-8.5 h-8.5 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
-          <i className="ti ti-stack-2 text-white text-[18px]" aria-hidden="true" />
+          <ShipWheel />
         </div>
         <div>
-          <span className="block text-sm font-medium text-white">JBLFMU</span>
+          <span className="block text-md font-bold text-white">JBLFMU</span>
           <span className="block text-[10px] text-white/40 uppercase tracking-widest mt-0.5">
             Queue System
           </span>
@@ -22,13 +29,13 @@ const SideNav: React.FC<any> = (): React.ReactElement => {
         <span className="block text-[10px] text-white/30 uppercase tracking-widest px-4.5 pt-4 pb-1.5">
           Main
         </span>
-        <NavItem icon="layout-dashboard" label="Dashboard"  to="/clerk/dashboard" />
-        <NavItem icon="list-details"     label="Queue Logs" to="/clerk/queue-logs" />
+        <NavItem icon={LayoutDashboard} label="Dashboard"  to="/clerk/dashboard" />
+        <NavItem icon={Logs}     label="Queue Logs" to="/clerk/queue-logs" />
 
         <span className="block text-[10px] text-white/30 uppercase tracking-widest px-4.5 pt-5 pb-1.5">
           System
         </span>
-        <NavItem icon="settings" label="Settings" to="/clerk/settings" />
+        <NavItem icon={Settings} label="Settings" to="/clerk/settings" />
       </nav>
 
       {/* Footer */}

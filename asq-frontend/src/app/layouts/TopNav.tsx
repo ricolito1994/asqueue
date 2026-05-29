@@ -1,12 +1,13 @@
 import { Bell, SquareArrowRightExit } from "lucide-react"
+import { Building } from 'lucide-react'
 
 const TopNav: React.FC<any> = (): React.ReactElement => {
   return (
     <header className="h-13.5 w-full bg-white border-b border-[#dde4ef] flex items-center px-6 gap-3 shrink-0">
 
       {/* Left — office label */}
-      <div className="flex items-center gap-1.5 text-[13px] text-[#5a7099]">
-        <i className="ti ti-map-pin text-[14px]" aria-hidden="true" />
+      <div className="flex items-center gap-1.5 text-[13px] text-black">
+        <Building />
         <span className="font-bold">Registrar Office</span>
       </div>
 
