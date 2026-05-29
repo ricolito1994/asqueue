@@ -161,7 +161,7 @@ class TransactionController extends Controller
                 
                 $nextQueue->update([
                     'status' => 'processed',
-                    'process_start_at' => Carbon::today()
+                    'process_start_at' => Carbon::now()
                 ]);
 
                 $request->merge([
