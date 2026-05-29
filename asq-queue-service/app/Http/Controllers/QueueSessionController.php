@@ -33,7 +33,7 @@ class QueueSessionController extends Controller
     public function create(Request $request): JsonResponse
     {
         try {
-            $session = QueueSession::create($request->all());
+            $session = QueueSession::lockForUpdate()->create($request->all());
 
             return response()->json($session->fresh(), 200);
         } catch (Exception $e) {
@@ -48,8 +48,17 @@ class QueueSessionController extends Controller
     public function update(Request $request, QueueSession $session): JsonResponse
     {
         try {
-            $session->update($request->all());
-            return response()->json($session->fresh(), 200);
+            $updated = DB::transaction(function () use ($session, $request) {
+                $lockedSession = QueueSession::where('id', $session->id)
+                    ->lockForUpdate()
+                    ->first();
+                
+                $lockedSession->update($request->all());
+
+                return $lockedSession->fresh();
+            });
+
+            return response()->json($updated, 200);
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Something went wrong',

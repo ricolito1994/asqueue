@@ -1,3 +1,7 @@
+import React, {
+  useEffect
+} from 'react'
+
 import {
   ArrowLeftToLine,
   SquareUserRound,
@@ -47,7 +51,7 @@ const WindowSelection : React.FC<WindowSelectionProps> = ({
               onClick={() =>
                 handleWindowSelect(window)
               }
-              className="bg-white border-2 border-[#D1D9F0] rounded-2xl p-6 text-left hover:border-blue-500 hover:bg-blue-50 transition"
+              className={`bg-white border-2 border-[#D1D9F0] rounded-2xl p-6 text-left hover:border-blue-500 hover:bg-blue-50 transition ${!window.is_active && `pointer-events-none opacity-50 cursor-not-allowed`}`}
             >
 
               <div className="flex items-center gap-4">
