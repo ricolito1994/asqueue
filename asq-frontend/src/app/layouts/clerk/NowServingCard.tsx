@@ -1,4 +1,9 @@
+import { useClock } from "@hooks/useClock";
+
 const NowServingCard: React.FC<any> = (): React.ReactElement => {
+
+  const t = useClock();
+
   return (
     <div className="flex flex-col bg-white border border-[#dde4ef] rounded-xl overflow-hidden h-full">
 
@@ -37,10 +42,19 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
       <div className="flex items-center justify-between px-4 py-3 mt-3 border-t border-[#dde4ef]">
         <div>
           <span className="block text-[20px] font-medium text-[#0f2952]">
-            13:44:53
+          {t.time.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true,
+          })}
           </span>
           <span className="block text-[11px] text-[#5a7099]">
-            26/05/2026
+          {t.time.toLocaleDateString([], {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
           </span>
         </div>
         <i className="ti ti-clock text-[20px] text-[#c8d6ee]" aria-hidden="true" />
