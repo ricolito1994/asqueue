@@ -1,8 +1,17 @@
+import React , {
+    useState,
+}
+from 'react';
+
 import { useClock } from "@hooks/useClock";
 
 const NowServingCard: React.FC<any> = (): React.ReactElement => {
 
   const t = useClock();
+
+  const [currentQueueNum, setCurrentQueueNum] = useState<number>(0);
+  
+  const [currentConcernName, setCurrentConcernName] = useState<any>("");
 
   return (
     <div className="flex flex-col bg-white border border-[#dde4ef] rounded-xl overflow-hidden h-full">
@@ -18,10 +27,10 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
       {/* Body */}
       <div className="flex flex-col items-center justify-center flex-1 px-4 py-6">
         <span className="text-[80px] font-medium text-[#0f2952] leading-none">
-          0
+          {currentQueueNum}
         </span>
         <span className="text-[12px] text-[#5a7099] mt-2">
-          No active queue
+          {currentConcernName}
         </span>
       </div>
 
