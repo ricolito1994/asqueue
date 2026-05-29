@@ -33,15 +33,16 @@ const useQueue =  <T=any> ({options} : UseFifoOptions<QueueOptions>)  => {
 
         try {
             while (queueEvent.current.length > 0) {
-                const currentEvent = queueEvent.current[0];
+                // const currentEvent = queueEvent.current[0];
+                const currentEvent = queueEvent.current.shift()
 
-                await currentEvent.cb?.();
+                await currentEvent?.cb?.();
 
                 await new Promise((resolve) =>
                     setTimeout(resolve, delay)
                 );
 
-                dequeue();
+                //dequeue();
 
                 await new Promise((resolve) =>
                     setTimeout(resolve, 0)

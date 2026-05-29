@@ -69,36 +69,50 @@ const QueueDisplayV2: React.FC <any> = (): React.ReactElement => {
             
       windowChannel.listen('.window.update-queue-number', (e:any) => {
         e['cb'] = async () => {
-          setWindowData((prev: any) => ({
-            ...prev,
-            data: prev?.data?.map((item: any) =>
-              item.id === e?.data?.window_id
-                ? {
-                    ...item,
-                    queue_number : e?.data?.queue_number,
-                  }
-                : item
-            )
-          }));
-          await tts.current.speak(e.message)
+          return new Promise <void> ( async (resolve, reject) => {
+            try {
+              setWindowData((prev: any) => ({
+                ...prev,
+                data: prev?.data?.map((item: any) =>
+                  item.id === e?.data?.window_id
+                    ? {
+                        ...item,
+                        queue_number : e?.data?.queue_number,
+                      }
+                    : item
+                )
+              }));
+              await tts.current.speak(e.message)
+              resolve();
+            } catch (e) {
+              reject(e)
+            }
+          });
         }
         enqueue(e)
       })
             
       windowChannel.listen('.window.recall-queue-number',  (e:any) => {
         e['cb'] = async () => {
-          setWindowData((prev: any) => ({
-            ...prev,
-            data: prev?.data?.map((item: any) =>
-              item.id === e?.data?.window_id
-                ? {
-                    ...item,
-                    queue_number : e?.data?.queue_number,
-                  }
-                : item
-            )
-          }));
-          await tts.current.speak(e.message)
+          return new Promise<void>(async (resolve, reject) => {
+            try {
+              setWindowData((prev: any) => ({
+                ...prev,
+                data: prev?.data?.map((item: any) =>
+                  item.id === e?.data?.window_id
+                    ? {
+                        ...item,
+                        queue_number : e?.data?.queue_number,
+                      }
+                    : item
+                )
+              }));
+              await tts.current.speak(e.message)
+              resolve()
+            } catch (e) {
+              reject(e)
+            }
+          });
         }
         enqueue(e)
       })
