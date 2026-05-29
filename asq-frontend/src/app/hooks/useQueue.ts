@@ -10,7 +10,8 @@ export type FifoEvent<T = any> = T & {
 };
 
 type QueueOptions = {
-    delay?: number
+    delay?: number,
+    maxRetries?: number
 }
 
 type UseFifoOptions <T> = {
@@ -20,6 +21,8 @@ type UseFifoOptions <T> = {
 const useQueue =  <T=any> ({options} : UseFifoOptions<QueueOptions>)  => {
 
     const delay = options?.delay ?? 4000;
+
+    const maxRetries = options?.maxRetries ?? 2;
 
     const queueEvent = useRef<FifoEvent<T>[]>([]);
 
@@ -33,28 +36,42 @@ const useQueue =  <T=any> ({options} : UseFifoOptions<QueueOptions>)  => {
 
         try {
             while (queueEvent.current.length > 0) {
-                // const currentEvent = queueEvent.current[0];
+
                 const currentEvent = queueEvent.current.shift()
 
-                await currentEvent?.cb?.();
+                if (! currentEvent?.cb) continue;
+                
+                let retry = 0;
 
-                await new Promise((resolve) =>
-                    setTimeout(resolve, delay)
-                );
+                while (retry <= maxRetries) {
+                    try {
+                        await currentEvent?.cb?.();
+                        break;
+                    } catch (e) {
+                        retry++;
+                        
+                        if (retry == maxRetries) {
+                            console.error (`Reached ${maxRetries} retries operation failed: ${e}`)
+                        }
 
-                //dequeue();
+                        const backOff = delay * Math.pow(2, retry)
 
-                await new Promise((resolve) =>
-                    setTimeout(resolve, 0)
-                );
+                        await sleep(backOff)
+                    }
+                }
+                await sleep(delay)
             }
-        } catch (e: any) {
-            console.error(e)
         } finally {
             processingRef.current = false;
         }
 
     }, [delay]);
+
+    const sleep = useCallback((ms: number) => {
+        return new Promise<void>((resolve) => {
+            setTimeout(resolve, ms)
+        });
+    }, [])
 
     const enqueue = useCallback((item: FifoEvent<T>) => {
         queueEvent.current.push(item)
