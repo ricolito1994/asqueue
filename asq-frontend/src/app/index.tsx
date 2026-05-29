@@ -9,7 +9,7 @@ import {
 import '@styles/main.css'
 
 import { Helmet } from 'react-helmet-async'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import { AppContext } from '@context/AppContext'
 import { useNavigate } from "react-router-dom"
 
@@ -118,8 +118,9 @@ const App = (): React.ReactElement => {
             <Routes>
 
                 {/* New Routing for Clerk */}
-                <Route element={renderLayout()}>
-                    <Route path="/"  element={<ClerkLayout />} />
+                <Route element={<ClerkLayout />}>
+                    <Route path="/"  element={<Navigate to="clerk/dashboard" replace />} />
+                    <Route path="/clerk/dashboard" element={<ClerkDashboard />} /> 
                     {/* <Route path="/clerk/queue-logs" element={<QueueLogsPage />} />  */}
                     {/* <Route path="/clerk/settings"   element={<SettingsPage />} />  */}
                 </Route>
