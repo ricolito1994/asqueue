@@ -118,10 +118,10 @@ const App = (): React.ReactElement => {
             <Routes>
 
                 {/* New Routing for Clerk */}
-                <Route element={<ClerkLayout />}>
+                <Route element={renderLayout()}>
                     <Route path="/"  element={<Navigate to="clerk/dashboard" replace />} />
                     <Route path="/clerk/dashboard" element={<ClerkDashboard />} /> 
-                    {/* <Route path="/clerk/queue-logs" element={<QueueLogsPage />} />  */}
+                    <Route path="/clerk/queue-logs" element={<QueueLogsPage />} /> 
                     {/* <Route path="/clerk/settings"   element={<SettingsPage />} />  */}
                 </Route>
 
