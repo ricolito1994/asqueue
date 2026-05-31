@@ -42,8 +42,9 @@
 ## FRONTEND
 - installation
     - open gitbash
-    - cd to as-queue/frontend
+    - cd to root project folder
     - type ./frontend.sh
+    - FE installation will commence.
 - for running locally / hot reload
     - npm run dev
 
