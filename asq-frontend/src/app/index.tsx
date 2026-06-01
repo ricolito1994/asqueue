@@ -118,15 +118,15 @@ const App = (): React.ReactElement => {
             <Routes>
 
                 {/* New Routing for Clerk */}
-                <Route element={renderLayout()}>
+                {/* <Route element={renderLayout()}>
                     <Route path="/"  element={<Navigate to="clerk/dashboard" replace />} />
                     <Route path="/clerk/dashboard" element={<ClerkDashboard />} /> 
                     <Route path="/clerk/queue-logs" element={<QueueLogsPage />} /> 
-                    {/* <Route path="/clerk/settings"   element={<SettingsPage />} />  */}
-                </Route>
+                    <Route path="/clerk/settings"   element={<SettingsPage />} /> 
+                </Route> */}
 
                 {/* Old Routing for Clerk */}
-                {/* <Route element={renderLayout()} >
+                <Route element={renderLayout()} >
                     <Route path='/' element={<Dashboard />} />
 
                     <Route path='/queues' element={<QueueLogsPage />} />
@@ -142,7 +142,7 @@ const App = (): React.ReactElement => {
                         : ''}
                     </Route>
                     
-                </Route>     */}
+                </Route>    
 
                 <Route path="*" element={<>Not found</>} />
            
