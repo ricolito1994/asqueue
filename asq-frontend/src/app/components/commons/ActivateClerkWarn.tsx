@@ -60,26 +60,18 @@ const ActivateClerkWarn: React.FC <any> = ({}): React.ReactElement => {
             condition={(activeWindow?.sessions.length === 0)}
             elseRender={''}
         >
-            <div style={{
-                backgroundColor: '#fff3cd',
-                color: '#856404',
-                border: '1px solid #ffeeba',
-                borderRadius: '6px',
-                width: '99%',
-                padding: '1%'
-            }}>
-                <b>Warning:</b> you are logged in but not an active clerk yet. Kindly press the button and activate.&nbsp;
-                <Button
-                    style={{
-                        fontSize : '15px',
-                        fontWeight: 'bold',
-                    }}
-                    color="purple"
-                    variant="solid" 
+            {/* Alert banner */}
+            <div className="flex items-center gap-2.5 px-4 py-2.5 bg-[#fefbe8] border border-[#e8d96a] rounded-lg text-[12.5px] text-[#7a6400]">
+                <i className="ti ti-alert-triangle text-[16px] text-[#c9a800] shrink-0" aria-hidden="true" />
+                <span>
+                <strong>Warning:</strong> You are logged in but not an active clerk yet. Kindly press the button to activate.
+                </span>
+                <button 
+                    className="ml-auto bg-blue-600 text-white text-[11.5px] font-medium px-3.5 py-1.5 rounded-lg hover:bg-blue-700 transition-colors shrink-0"
                     onClick={setActiveUserSession}
                 >
-                    ACTIVATE
-                </Button>
+                Activate
+                </button>
             </div>
         </ConditionalRenderingLayout>
     )

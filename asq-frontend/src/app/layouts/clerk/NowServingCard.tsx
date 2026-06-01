@@ -13,7 +13,9 @@ import { notification } from "antd";
 
 import { useClock } from "@hooks/useClock";
 
-  import { QueueManagerService } from '@services/QueueManagerService';
+import { QueueManagerService } from '@services/QueueManagerService';
+
+import AsConfirmModal from '@/app/components/modals/AsConfirmModal';
 
 const NowServingCard: React.FC<any> = (): React.ReactElement => {
 
@@ -54,64 +56,83 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
         onRefreshToken
     ));
 
-    const processNextQueueNumber = async (
-        next: boolean = true, 
-        isPriority: boolean = false
-    ) => {
-        try {
-            if (next) {
-                let params: any = {
-                    "company_id" : user?.user?.company_id,
-                    "department_id": user?.user?.department_id,
-                    "window_id" : userWindow.id,
-                    "is_priority" : isPriority
-                };
+   const processNextQueueNumber = async (
+          next: boolean = true, 
+          isPriority: boolean = false
+      ) => {
+          try {
+              if (next) {
+                  let params: any = {
+                      "company_id" : user?.user?.company_id,
+                      "department_id": user?.user?.department_id,
+                      "window_id" : userWindow?.id,
+                      "is_priority" : isPriority
+                  };
 
-                // if (isPriority) {
-                //     params = {...params, is_priority: isPriority}
-                // }
+                  // if (isPriority) {
+                  //     params = {...params, is_priority: isPriority}
+                  // }
 
-                let res = await qm.current.processQueueNumber(params)
-                
-                setCurrentQueueNum(res?.queue_number)
-                setCurrentConcernName(res?.concern.name)
-                setIsPriority(res?.is_priority)
-            } else {
-                await qm.current.recallQueueNumber(currentQueueNum, null, {
-                    params : {
-                        "company_id" : user?.user?.company_id,
-                        "department_id": user?.user?.department_id,
-                        "window_id" : userWindow.id
-                    }
-                })
-            }
+                  let res = await qm.current.processQueueNumber(params)
+                  
+                  setCurrentQueueNum(res?.queue_number)
+                  setCurrentConcernName(res?.concern.name)
+                  setIsPriority(res?.is_priority)
+              } else {
+                  await qm.current.recallQueueNumber(currentQueueNum, null, {
+                      params : {
+                          "company_id" : user?.user?.company_id,
+                          "department_id": user?.user?.department_id,
+                          "window_id" : userWindow.id
+                      }
+                  })
+              }
 
-            api.open({
-                title: "Success",
-                description: "success",
-                type: 'success'
-            })
-            
-        } catch (e: any) {
-            if (e.response) {
-                api.open({
-                    title: e.response.data.message,
-                    description: e.response.data.reason,
-                    type: 'error'
-                })
-            } else {
-                console.error(e)
-            }
-        } finally {
-            setIsOpenQueueActionModal(false)
-            setIsOpenPriorityQueueActionModal(false)
-            setIsQueueListLoading(true)
-        }
-    }
+              api.open({
+                  title: "Success",
+                  description: "success",
+                  type: 'success'
+              })
+              
+          } catch (e: any) {
+              if (e.response) {
+                  api.open({
+                      title: e.response.data.message,
+                      description: e.response.data.reason,
+                      type: 'error'
+                  })
+              } else {
+                  console.error(e)
+              }
+          } finally {
+              setIsOpenQueueActionModal(false)
+              setIsOpenPriorityQueueActionModal(false)
+              setIsQueueListLoading(true)
+          }
+      }
 
   return (
     <div className="flex flex-col bg-white border border-[#dde4ef] rounded-xl overflow-hidden h-full">
       {contextHolder}
+
+<AsConfirmModal 
+                title='Next'
+                content='What do you want to do?'
+                isOpen={isOpenQueueActionModal}
+                onOk={() => processNextQueueNumber(true, false)}
+                onDeny={()=> processNextQueueNumber(false)}
+                okText='Next Number'
+                denyText='Recall Number'
+            />
+            <AsConfirmModal 
+                title='Priority'
+                content='What do you want to do?'
+                isOpen={isOpenPriorityQueueActionModal}
+                onOk={() => processNextQueueNumber(true, true)}
+                onDeny={()=> processNextQueueNumber(false)}
+                okText='Next Number'
+                denyText='Recall Number'
+            />
       {/* Header */}
       <div className="flex items-center gap-2 px-4 py-3 border-b border-[#dde4ef]">
         <i className="ti ti-player-play text-[15px] text-blue-600" aria-hidden="true" />

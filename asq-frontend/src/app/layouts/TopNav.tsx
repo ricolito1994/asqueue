@@ -1,16 +1,79 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useRef } from 'react'
 
 import { AppContext } from '@context/AppContext'
 
 import { Bell, SquareArrowRightExit } from "lucide-react"
 import { Building } from 'lucide-react'
 
+import { notification } from 'antd'
+
+import AuthenticationService from '@services/AuthenticationService'
+import AsConfirmModal from '../components/modals/AsConfirmModal'
+
+
 const TopNav: React.FC<any> = (): React.ReactElement => {
 
-  const { user } = useContext(AppContext)
+  const [api, contextHolder] = notification.useNotification();
+
+  const { user, setUser, setIsProcessing, setUserWindow, userWindow } = useContext(AppContext)
+
+  const [displayConfirmLogout, setDisplayConfirmLogout] = useState<boolean>(false)
+
+    const onRefreshToken = (data: any) => {
+        setUser((prev: any) => ({
+            ...prev,
+            access_token: data.access_token,
+            refresh_token: data.refresh_token
+        }))
+    }
+
+    const logoutService = useRef(new AuthenticationService(
+        user?.access_token ?? null, 
+        null, 
+        user?.refresh_token,
+        onRefreshToken
+    ))
+
+    const logout = async () => {
+        try {
+            setIsProcessing(true)
+            await logoutService.current.logout({
+                "user_id" : user.user.id,
+                "session_id" : user?.session_id,
+                "window_id" : userWindow?.id
+            })
+            setUser(null)
+            setUserWindow(null)
+            localStorage.removeItem('user')
+            localStorage.removeItem('userWindow')
+        } catch (e:any) {
+            api.open({
+                message: e.response.data.message ?? "Failed",
+                description : e.response.data.reason ?? e.response.data.status,
+                type : "error"
+            })
+        } finally {
+            setIsProcessing(false)
+            setDisplayConfirmLogout(false)
+            localStorage.removeItem('user')
+            localStorage.removeItem('userWindow')
+        }
+    }
+
 
   return (
+
     <header className="h-13.5 w-full bg-white border-b border-[#dde4ef] flex items-center px-6 gap-3 shrink-0">
+      {contextHolder}
+      
+      <AsConfirmModal 
+        onOk={() => logout()}
+        okText='Yes'
+        onDeny={()=> setDisplayConfirmLogout(false)}
+        denyText='No'
+        title="Are you sure you want to sign out?"
+        isOpen={displayConfirmLogout}
+      />
 
       {/* Left — office label */}
       <div className="flex items-center gap-1.5 text-[13px] text-black">
@@ -52,7 +115,9 @@ const TopNav: React.FC<any> = (): React.ReactElement => {
         <div className="w-px h-4.5 bg-[#dde4ef] mx-1" aria-hidden="true" />
 
         {/* Logout */}
-        <button className="flex items-center gap-1.5 text-[12px] text-[#5a7099] px-3 py-1.5 rounded-lg border border-[#dde4ef] hover:bg-[#f0f4fa] hover:text-[#1a2952] transition-colors">
+        <button className="flex items-center gap-1.5 text-[12px] text-[#5a7099] px-3 py-1.5 rounded-lg border border-[#dde4ef] hover:bg-[#f0f4fa] hover:text-[#1a2952] transition-colors"
+          onClick={() => setDisplayConfirmLogout(true)}
+        >
           <SquareArrowRightExit className="w-4 h-4" />
           <span>Logout</span>
         </button>
