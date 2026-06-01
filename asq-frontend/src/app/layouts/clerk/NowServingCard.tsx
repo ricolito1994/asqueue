@@ -1,4 +1,4 @@
-import React , {
+import React, {
     useState,
     useRef,
     useContext
@@ -16,6 +16,7 @@ import { useClock } from "@hooks/useClock";
 import { QueueManagerService } from '@services/QueueManagerService';
 
 import AsConfirmModal from '@/app/components/modals/AsConfirmModal';
+import ConfirmDialog from '@components/commons/ConfirmDialog';
 
 const NowServingCard: React.FC<any> = (): React.ReactElement => {
 
@@ -24,16 +25,16 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
   const [api, contextHolder] = notification.useNotification();
 
   const [currentQueueNum, setCurrentQueueNum] = useState<number>(0);
-  
+
   const [currentConcernName, setCurrentConcernName] = useState<any>("");
 
-  const [isOpenQueueActionModal, setIsOpenQueueActionModal] = useState<boolean>(false)
+  const [isOpenRecallModal, setIsOpenRecallModal] = useState<boolean>(false)
 
   const [isPriority, setIsPriority] = useState<boolean>(false)
 
   const [isOpenPriorityQueueActionModal, setIsOpenPriorityQueueActionModal] = useState<boolean>(false)
 
-  const [isQueueListLoading, setIsQueueListLoading]  = useState<boolean>(true)
+  const [isQueueListLoading, setIsQueueListLoading] = useState<boolean>(true)
 
     const onRefreshToken = (data: any) => {
         setUser((prev: any) => ({
@@ -50,14 +51,14 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
     } = useContext(AppContext)
 
     const qm = useRef(new QueueManagerService(
-        user?.access_token ?? null, 
-        null, 
+        user?.access_token ?? null,
+        null,
         user?.refresh_token,
         onRefreshToken
     ));
 
    const processNextQueueNumber = async (
-          next: boolean = true, 
+          next: boolean = true,
           isPriority: boolean = false
       ) => {
           try {
@@ -69,12 +70,8 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
                       "is_priority" : isPriority
                   };
 
-                  // if (isPriority) {
-                  //     params = {...params, is_priority: isPriority}
-                  // }
-
                   let res = await qm.current.processQueueNumber(params)
-                  
+
                   setCurrentQueueNum(res?.queue_number)
                   setCurrentConcernName(res?.concern.name)
                   setIsPriority(res?.is_priority)
@@ -93,7 +90,7 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
                   description: "success",
                   type: 'success'
               })
-              
+
           } catch (e: any) {
               if (e.response) {
                   api.open({
@@ -105,7 +102,7 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
                   console.error(e)
               }
           } finally {
-              setIsOpenQueueActionModal(false)
+              setIsOpenRecallModal(false)
               setIsOpenPriorityQueueActionModal(false)
               setIsQueueListLoading(true)
           }
@@ -115,16 +112,7 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
     <div className="flex flex-col bg-white border border-[#dde4ef] rounded-xl overflow-hidden h-full">
       {contextHolder}
 
-<AsConfirmModal 
-                title='Next'
-                content='What do you want to do?'
-                isOpen={isOpenQueueActionModal}
-                onOk={() => processNextQueueNumber(true, false)}
-                onDeny={()=> processNextQueueNumber(false)}
-                okText='Next Number'
-                denyText='Recall Number'
-            />
-            <AsConfirmModal 
+            <AsConfirmModal
                 title='Priority'
                 content='What do you want to do?'
                 isOpen={isOpenPriorityQueueActionModal}
@@ -133,6 +121,17 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
                 okText='Next Number'
                 denyText='Recall Number'
             />
+
+            <ConfirmDialog
+                open={isOpenRecallModal}
+                onClose={() => setIsOpenRecallModal(false)}
+                onConfirm={() => processNextQueueNumber(false)}
+                title="Recall Number"
+                description={`Recall queue number ${currentQueueNum} to the display?`}
+                confirmLabel="Recall"
+                cancelLabel="Cancel"
+            />
+
       {/* Header */}
       <div className="flex items-center gap-2 px-4 py-3 border-b border-[#dde4ef]">
         <i className="ti ti-player-play text-[15px] text-blue-600" aria-hidden="true" />
@@ -151,20 +150,23 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
         </span>
       </div>
 
-      {/* Next button */}
+      {/* Buttons */}
       <div className="px-4 flex gap-2">
-        <button className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-[13px] font-medium py-3 rounded-lg transition-colors"
-        onClick={()=>setIsOpenQueueActionModal(true)}
+        <button
+          className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-[13px] font-medium py-3 rounded-lg transition-colors"
+          onClick={() => processNextQueueNumber(true, false)}
         >
           <ArrowRightToLine />
           Next Queue Number
         </button>
-        <button className="flex-1 flex items-center justify-center gap-2 bg-white hover:bg-[#f0f4fa] active:scale-[0.98] text-blue-600 text-[13px] font-medium py-3 rounded-lg border border-blue-600 transition-colors">
+        <button
+          className="flex-1 flex items-center justify-center gap-2 bg-white hover:bg-[#f0f4fa] active:scale-[0.98] text-blue-600 text-[13px] font-medium py-3 rounded-lg border border-blue-600 transition-colors"
+          onClick={() => setIsOpenRecallModal(true)}
+        >
           <Megaphone />
           Recall Number
         </button>
       </div>
-      
 
       {/* Footer */}
       <div className="flex items-center justify-between px-4 py-3 mt-3 border-t border-[#dde4ef]">
