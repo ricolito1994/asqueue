@@ -35,8 +35,10 @@ const TopNav: React.FC<any> = (): React.ReactElement => {
         onRefreshToken
     ))
 
-    const logout = async () => {
-        try {
+    const [logoutOpen, setLogoutOpen] = useState(false)
+
+    const handleLogout = async () => {
+      try {
             setIsProcessing(true)
             await logoutService.current.logout({
                 "user_id" : user.user.id,
@@ -59,13 +61,7 @@ const TopNav: React.FC<any> = (): React.ReactElement => {
             localStorage.removeItem('user')
             localStorage.removeItem('userWindow')
         }
-    }
 
-    const [logoutOpen, setLogoutOpen] = useState(false)
-
-    const handleLogout = () => {
-      // Step 4: replace with real auth logout
-      console.log('logging out...')
       setLogoutOpen(false)
     }
 
@@ -73,16 +69,7 @@ const TopNav: React.FC<any> = (): React.ReactElement => {
 
     <header className="h-13.5 w-full bg-white border-b border-[#dde4ef] flex items-center px-6 gap-3 shrink-0">
       {contextHolder}
-      
-      <AsConfirmModal 
-        onOk={() => logout()}
-        okText='Yes'
-        onDeny={()=> setDisplayConfirmLogout(false)}
-        denyText='No'
-        title="Are you sure you want to sign out?"
-        isOpen={displayConfirmLogout}
-      />
-
+    
       <ConfirmDialog
         open={logoutOpen}
         onClose={() => setLogoutOpen(false)}
