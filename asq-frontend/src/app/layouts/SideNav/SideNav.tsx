@@ -1,3 +1,7 @@
+import React, { useContext } from 'react'
+
+import { AppContext } from '@context/AppContext'
+
 import NavItem from './NavItem'
 
 import { 
@@ -8,6 +12,9 @@ import {
  } from 'lucide-react'
 
 const SideNav: React.FC<any> = (): React.ReactElement => {
+
+  const { user } = useContext(AppContext)
+
   return (
     <aside className="w-52.5 min-w-52.5 h-full bg-[#0f2952] flex flex-col">
 
@@ -29,8 +36,8 @@ const SideNav: React.FC<any> = (): React.ReactElement => {
         <span className="block text-[10px] text-white/30 uppercase tracking-widest px-4.5 pt-4 pb-1.5">
           Main
         </span>
-        <NavItem icon={LayoutDashboard} label="Dashboard"  to="/clerk/dashboard" />
-        <NavItem icon={Logs}     label="Queue Logs" to="/clerk/queue-logs" />
+        <NavItem icon={LayoutDashboard} label="Dashboard"  to="" />
+        <NavItem icon={Logs}     label="Queue Logs" to="/queue-logs" />
 
         <span className="block text-[10px] text-white/30 uppercase tracking-widest px-4.5 pt-5 pb-1.5">
           System
@@ -44,8 +51,8 @@ const SideNav: React.FC<any> = (): React.ReactElement => {
           GC
         </div>
         <div className="flex-1 overflow-hidden">
-          <p className="text-[12px] font-medium text-white/80 truncate">G. Cruz</p>
-          <p className="text-[11px] text-white/35">Administrator</p>
+          <p className="text-[12px] font-medium text-white/80 truncate">{user?.user?.firstname}</p>
+          <p className="text-[11px] text-white/35">{user?.user?.designation}</p>
         </div>
         <i className="ti ti-chevron-right text-[13px] text-white/25" aria-hidden="true" />
       </div>

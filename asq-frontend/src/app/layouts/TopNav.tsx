@@ -1,7 +1,14 @@
+import React, { useContext } from 'react'
+
+import { AppContext } from '@context/AppContext'
+
 import { Bell, SquareArrowRightExit } from "lucide-react"
 import { Building } from 'lucide-react'
 
 const TopNav: React.FC<any> = (): React.ReactElement => {
+
+  const { user } = useContext(AppContext)
+
   return (
     <header className="h-13.5 w-full bg-white border-b border-[#dde4ef] flex items-center px-6 gap-3 shrink-0">
 
@@ -35,8 +42,8 @@ const TopNav: React.FC<any> = (): React.ReactElement => {
             GC
           </div>
           <div>
-            <p className="text-[12.5px] font-medium text-[#1a2952] leading-tight">G. Cruz</p>
-            <p className="text-[11px] text-[#5a7099] leading-tight">Registrar · MAR-E Window</p>
+            <p className="text-[12.5px] font-medium text-[#1a2952] leading-tight">{user?.user?.firstname}</p>
+            <p className="text-[11px] text-[#5a7099] leading-tight">{user?.user?.designation}</p>
           </div>
           <i className="ti ti-chevron-down text-[12px] text-[#5a7099] ml-0.5" aria-hidden="true" />
         </div>

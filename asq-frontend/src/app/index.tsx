@@ -1,11 +1,8 @@
 import { 
-    useState, 
     useEffect,
     useContext
 } from 'react'
 
-//import '@styles/App.css'
-//import '@styles/index.css'
 import '@styles/main.css'
 
 import { Helmet } from 'react-helmet-async'
@@ -13,27 +10,14 @@ import { Route, Routes, Navigate } from 'react-router-dom'
 import { AppContext } from '@context/AppContext'
 import { useNavigate } from "react-router-dom"
 
-import QueueNumberLayout from '@layouts/QueueNumberLayout'
-import NewTransactionLayout from '@layouts/NewTransactionLayout'
 import LoadingLayout from '@layouts/LoadingLayout'
 import QueueScreenLayout from '@layouts/QueueScreenLayout'
 
 import TransactionWindow from '@pages/new-transaction/TransactionWindow'
-import TransactionConcern from '@pages/new-transaction/TransactionConcern'
-import WindowsChannelPage from '@pages/WindowsChannelPage'
+
 import QueueLogsPage from '@pages/main/QueueLogsPage'
-import ProfileSettings from '@pages/main/settings/ProfileSettings'
-import ConcernSettings from '@pages/main/settings/ConcernSettings'
-import UserSettings from '@pages/main/settings/UserSettings'
-import WindowSettings from '@pages/main/settings/WindowSettings'
 
 import QueueDisplayV2 from '@pages/QueueDisplayV2'
-
-import SettingsLayout from '@layouts/SettingsLayout'
-
-import MainLayout from '@layouts/MainLayout'
-
-import Dashboard from '@pages/main/Dashboard'
 
 import LoginLayout from './layouts/LoginLayout'
 
@@ -110,7 +94,7 @@ const App = (): React.ReactElement => {
 
         let parsed = auth ? JSON.parse(auth ?? '') : {};
 
-        return (parsed && parsed.user) ? <MainLayout /> : <LoginLayout />
+        return (parsed && parsed.user) ? <ClerkLayout /> : <LoginLayout />
     }
 
     return (<>
@@ -118,39 +102,16 @@ const App = (): React.ReactElement => {
             <Routes>
 
                 {/* New Routing for Clerk */}
-                {/* <Route element={renderLayout()}>
-                    <Route path="/"  element={<Navigate to="clerk/dashboard" replace />} />
-                    <Route path="/clerk/dashboard" element={<ClerkDashboard />} /> 
-                    <Route path="/clerk/queue-logs" element={<QueueLogsPage />} /> 
-                    <Route path="/clerk/settings"   element={<SettingsPage />} /> 
-                </Route> */}
-
-                {/* Old Routing for Clerk */}
-                <Route element={renderLayout()} >
-                    <Route path='/' element={<Dashboard />} />
-
-                    <Route path='/queues' element={<QueueLogsPage />} />
-                    
-                    <Route path='/settings' element={<SettingsLayout />}>
-                        <Route path='profile' element={<ProfileSettings />} />
-                        {user?.designation == 'admin' ? 
-                            <>
-                                <Route path='concern' element={<ConcernSettings />} />
-                                <Route path='window' element={<WindowSettings />} />
-                                <Route path='user' element={<UserSettings />} />
-                            </>
-                        : ''}
+                <Route element={renderLayout()}>
+                    <Route path="/" >
+                        <Route path="" element={<ClerkDashboard />} /> 
+                        <Route path="/queue-logs" element={<QueueLogsPage />} /> 
                     </Route>
-                    
+                    {/* <Route path="/clerk/settings"   element={<SettingsPage />} />  */}
                 </Route>    
 
                 <Route path="*" element={<>Not found</>} />
            
-                {/* <Route path='/new-transaction' element={<NewTransactionLayout />}>
-                    <Route path="company/:companyId/department/:departmentId/concerns" element={<TransactionConcern />} />
-                    <Route path="company/:companyId/department/:departmentId/concerns/:concernId/windows" element={<TransactionWindow />} />
-                </Route> */}
-
                 <Route path='/new-transaction'>
                     <Route path="company/:companyId/department/:departmentId/concerns" element={<FrontDeskLayout />} />
                     <Route path="company/:companyId/department/:departmentId/concerns/:concernId/windows" element={<TransactionWindow />} />
