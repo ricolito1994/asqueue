@@ -10,6 +10,7 @@ import { notification } from 'antd'
 import AuthenticationService from '@services/AuthenticationService'
 import AsConfirmModal from '../components/modals/AsConfirmModal'
 
+import ConfirmDialog from '@components/commons/ConfirmDialog'
 
 const TopNav: React.FC<any> = (): React.ReactElement => {
 
@@ -60,6 +61,13 @@ const TopNav: React.FC<any> = (): React.ReactElement => {
         }
     }
 
+    const [logoutOpen, setLogoutOpen] = useState(false)
+
+    const handleLogout = () => {
+      // Step 4: replace with real auth logout
+      console.log('logging out...')
+      setLogoutOpen(false)
+    }
 
   return (
 
@@ -74,6 +82,17 @@ const TopNav: React.FC<any> = (): React.ReactElement => {
         title="Are you sure you want to sign out?"
         isOpen={displayConfirmLogout}
       />
+
+      <ConfirmDialog
+        open={logoutOpen}
+        onClose={() => setLogoutOpen(false)}
+        onConfirm={handleLogout}
+        title="Confirm Logout"
+        description="Are you sure you want to log out of your current session?"
+        confirmLabel="Logout"
+        cancelLabel="Cancel"
+      />
+
 
       {/* Left — office label */}
       <div className="flex items-center gap-1.5 text-[13px] text-black">
@@ -116,7 +135,7 @@ const TopNav: React.FC<any> = (): React.ReactElement => {
 
         {/* Logout */}
         <button className="flex items-center gap-1.5 text-[12px] text-[#5a7099] px-3 py-1.5 rounded-lg border border-[#dde4ef] hover:bg-[#f0f4fa] hover:text-[#1a2952] transition-colors"
-          onClick={() => setDisplayConfirmLogout(true)}
+          onClick={() => setLogoutOpen(true)}
         >
           <SquareArrowRightExit className="w-4 h-4" />
           <span>Logout</span>
