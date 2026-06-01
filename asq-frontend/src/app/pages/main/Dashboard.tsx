@@ -110,7 +110,7 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                 let params: any = {
                     "company_id" : user?.user?.company_id,
                     "department_id": user?.user?.department_id,
-                    "window_id" : userWindow.id,
+                    "window_id" : userWindow?.id,
                     "is_priority" : isPriority
                 };
 
@@ -392,7 +392,7 @@ const Dashboard : React.FC <any> = ({}) : React.ReactElement => {
                                         params : {
                                             "company_id" : user?.user?.company_id,
                                             "department_id": user?.user?.department_id,
-                                            "window_id" : userWindow.id,
+                                            "window_id" : userWindow?.id,
                                             "is_priority": isSelectedPriority,
                                             "from_date" : now.format('YYYY-MM-DD'),
                                             "to_date" : now.format('YYYY-MM-DD'),
