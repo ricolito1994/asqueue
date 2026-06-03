@@ -13,6 +13,8 @@ export interface AsDataTableProps<TData> {
   pagination?: boolean;
   selectable?: boolean;
 
+  loading?:boolean;
+
   searchColumn?: string;
 
   page?: number;
