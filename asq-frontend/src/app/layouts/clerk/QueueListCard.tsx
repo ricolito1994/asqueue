@@ -7,6 +7,7 @@ import { QueueManagerService } from "@services/QueueManagerService";
 
 import { AppContext } from "@context/AppContext";
 
+// For Status styling - uncomment when needed
 // const statusStyles: Record<string, string> = {
 //   queue: "bg-blue-50 text-blue-800",
 //   serving: "bg-green-50 text-green-800",
