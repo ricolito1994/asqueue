@@ -3,6 +3,13 @@ import { ReactNode } from "react";
 
 export type DataTableMode = "client" | "server";
 
+export interface PaginationMeta {
+  currentPage: number;
+  perPage: number;
+  total: number;
+  lastPage: number;
+}
+
 export interface AsDataTableProps<TData> {
   columns: ColumnDef<TData>[];
   data: TData[];
@@ -13,7 +20,9 @@ export interface AsDataTableProps<TData> {
   pagination?: boolean;
   selectable?: boolean;
 
-  loading?:boolean;
+  paginationMeta?: PaginationMeta;
+
+  loading?: boolean;
 
   searchColumn?: string;
 

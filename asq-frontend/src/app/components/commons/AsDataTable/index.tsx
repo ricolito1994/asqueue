@@ -17,13 +17,18 @@ import {
   TableRow,
 } from "../../ui/table";
 
+import DataTablePagination from "./DataTablePagination";
+
 import { AsDataTableProps } from "./types";
 
 export default function AsDataTable<TData>({
   data,
   columns,
+  pagination,
+  paginationMeta,
+  onPageChange,
+  loading = false,
 }: AsDataTableProps<TData>) {
-
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
@@ -40,11 +45,8 @@ export default function AsDataTable<TData>({
     getSortedRowModel: getSortedRowModel(),
   });
 
-  
-  
-
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border overflow-hidden">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -61,10 +63,11 @@ export default function AsDataTable<TData>({
                         header.column.columnDef.header,
                         header.getContext(),
                       )}
-                      {{
-                        asc: " ↑",
-                        desc: " ↓",
-                      }[header.column.getIsSorted() as string] ?? null}
+
+                  {{
+                    asc: " ↑",
+                    desc: " ↓",
+                  }[header.column.getIsSorted() as string] ?? null}
                 </TableHead>
               ))}
             </TableRow>
@@ -72,7 +75,13 @@ export default function AsDataTable<TData>({
         </TableHeader>
 
         <TableBody>
-          {table.getRowModel().rows.length ? (
+          {loading ? (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="text-center h-24">
+                Loading...
+              </TableCell>
+            </TableRow>
+          ) : table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
@@ -91,6 +100,15 @@ export default function AsDataTable<TData>({
           )}
         </TableBody>
       </Table>
+
+      {pagination && paginationMeta && (
+        <div className="border-t border-[#dde4ef] px-4 py-2.5">
+          <DataTablePagination
+            paginationMeta={paginationMeta}
+            onPageChange={onPageChange}
+          />
+        </div>
+      )}
     </div>
   );
 }
