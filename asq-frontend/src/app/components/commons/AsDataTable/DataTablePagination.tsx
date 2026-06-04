@@ -1,5 +1,7 @@
 import { PaginationMeta } from "./types";
 
+import { ChevronRight, ChevronLeft } from "lucide-react";
+
 interface DataTablePaginationProps {
   paginationMeta: PaginationMeta;
   onPageChange?: (page: number) => void;
@@ -21,10 +23,7 @@ export default function DataTablePagination({
           onClick={() => onPageChange?.(currentPage - 1)}
           className="w-6.5 h-6.5 flex items-center justify-center rounded-lg border border-[#dde4ef] hover:bg-[#f0f4fa] transition-colors disabled:opacity-50"
         >
-          <i
-            className="ti ti-chevron-left text-[13px] text-[#5a7099]"
-            aria-hidden="true"
-          />
+          <ChevronLeft size={16} />
         </button>
 
         <button className="w-6.5 h-6.5 flex items-center justify-center rounded-lg bg-blue-600 text-white text-[12px] font-medium">
@@ -36,10 +35,7 @@ export default function DataTablePagination({
           onClick={() => onPageChange?.(currentPage + 1)}
           className="w-6.5 h-6.5 flex items-center justify-center rounded-lg border border-[#dde4ef] hover:bg-[#f0f4fa] transition-colors disabled:opacity-50"
         >
-          <i
-            className="ti ti-chevron-right text-[13px] text-[#5a7099]"
-            aria-hidden="true"
-          />
+          <ChevronRight size={16} />
         </button>
       </div>
     </div>

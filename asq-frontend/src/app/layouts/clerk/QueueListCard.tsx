@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 
 import AsDataTable from "@components/commons/AsDataTable";
+import { PaginationMeta } from "@components/commons/AsDataTable/types";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { QueueManagerService } from "@services/QueueManagerService";
@@ -41,6 +42,15 @@ const QueueListCard: React.FC<any> = (): React.ReactElement => {
 
   const { user, userWindow, setUser } = useContext(AppContext);
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>({
+    currentPage: 1,
+    perPage: 10,
+    total: 0,
+    lastPage: 1,
+  });
+
   const onRefreshToken = (data: any) => {
     setUser((prev: any) => ({
       ...prev,
@@ -72,7 +82,7 @@ const QueueListCard: React.FC<any> = (): React.ReactElement => {
       setLoading(true);
 
       const res = await fetchQueueLogsService.current.indexTransactions(
-        1,
+        currentPage,
         null,
         {
           params: {
@@ -85,6 +95,12 @@ const QueueListCard: React.FC<any> = (): React.ReactElement => {
       );
 
       setQueueData(res?.data ?? []);
+      setPaginationMeta({
+        currentPage: res.current_page,
+        perPage: res.per_page,
+        total: res.total,
+        lastPage: res.last_page,
+      });
     } catch (err) {
       console.error(err);
     } finally {
@@ -94,7 +110,9 @@ const QueueListCard: React.FC<any> = (): React.ReactElement => {
 
   useEffect(() => {
     fetchQueue();
-  }, []);
+  }, [currentPage]);
+
+
 
   return (
     <div className="flex flex-col bg-white border border-[#dde4ef] rounded-xl overflow-hidden h-full">
@@ -118,14 +136,9 @@ const QueueListCard: React.FC<any> = (): React.ReactElement => {
           columns={columns}
           loading={loading}
           pagination
-          paginationMeta={{
-            currentPage: 1,
-            perPage: 10,
-            total: 11,
-            lastPage: 2,
-          }}
+          paginationMeta={paginationMeta}
           onPageChange={(page) => {
-            console.log("Page:", page);
+            setCurrentPage(page);
           }}
         />
       </div>
