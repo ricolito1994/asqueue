@@ -94,7 +94,6 @@ const QueueListCard: React.FC<any> = (): React.ReactElement => {
 
       // adjust depending on API shape
       setQueueData(res?.data ?? []);
-      // setQueueData(res?.data?.data ?? []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -105,6 +104,7 @@ const QueueListCard: React.FC<any> = (): React.ReactElement => {
   useEffect(() => {
     fetchQueue();
   }, []);
+  
 
   return (
     <div className="flex flex-col bg-white border border-[#dde4ef] rounded-xl overflow-hidden h-full">
