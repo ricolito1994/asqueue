@@ -8,6 +8,8 @@ import { QueueManagerService } from "@services/QueueManagerService";
 
 import { AppContext } from "@context/AppContext";
 
+import dayjs from 'dayjs';
+
 type QueueRow = {
   queue_number: number;
   status: string;
@@ -43,6 +45,9 @@ const QueueListCard: React.FC<any> = (): React.ReactElement => {
   const { user, userWindow, setUser } = useContext(AppContext);
 
   const [currentPage, setCurrentPage] = useState(1);
+
+  const now = dayjs()
+  
 
   const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>({
     currentPage: 1,
@@ -90,7 +95,10 @@ const QueueListCard: React.FC<any> = (): React.ReactElement => {
             department_id: user?.user?.department_id,
             window_id: userWindow?.id,
             status: "all",
-          },
+
+            from_date: now.format("YYYY-MM-DD"),
+            to_date: now.format("YYYY-MM-DD"),
+        },
         },
       );
 
@@ -109,8 +117,10 @@ const QueueListCard: React.FC<any> = (): React.ReactElement => {
   };
 
   useEffect(() => {
-    fetchQueue();
-  }, [currentPage]);
+  if (!userWindow?.id) return;
+
+  fetchQueue();
+}, [currentPage, userWindow?.id]);
 
 
 
