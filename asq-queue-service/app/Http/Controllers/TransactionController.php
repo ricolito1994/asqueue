@@ -99,6 +99,10 @@ class TransactionController extends Controller
                     'pre_process_log' => 'Queued successfully',
                 ];
 
+                $request->merge([
+                    'queue_number' => $queueNumber
+                ]);
+
                 $this->notifService->updateQueList($request, $only['window_id'], $only['company_id']);
 
                 return Transaction::create(array_merge($insertData, $only));

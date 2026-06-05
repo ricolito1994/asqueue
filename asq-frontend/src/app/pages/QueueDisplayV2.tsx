@@ -117,7 +117,7 @@ const QueueDisplayV2: React.FC <any> = (): React.ReactElement => {
         enqueue(e)
       })
     
-      windowChannel.listen('.window.update-queue-list',  (e:any) => {
+      windowChannel.listen('UpdateQueueListEvent',  (e:any) => {
         e['cb'] = () => {
           setIsUpdateWaitingList(true)
         }

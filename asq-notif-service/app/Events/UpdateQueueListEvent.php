@@ -38,15 +38,18 @@ class UpdateQueueListEvent implements ShouldBroadcast, ShouldQueue
         ];
     }
 
-    public function broadcastOn(): Channel
+    public function broadcastOn(): array
     {
-        return new Channel("window.update.department.{$this->params['department_id']}.company.{$this->params['company_id']}");
+        return [
+            new Channel("window.update.department.{$this->params['department_id']}.company.{$this->params['company_id']}"),
+            new Channel("dashboard.update.department.{$this->params['department_id']}.company.{$this->params['company_id']}"),
+        ];
     }
 
-    public function broadcastAs () : string
+    /*public function broadcastAs () : string
     {
         return 'window.update-queue-list';
-    }
+    }*/
 
     public function broadcastWith () : array 
     {

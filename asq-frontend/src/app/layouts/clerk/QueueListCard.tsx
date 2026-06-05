@@ -10,6 +10,10 @@ import { AppContext } from "@context/AppContext";
 
 import dayjs from 'dayjs';
 
+import useEcho from "@hooks/useEcho";
+
+import useQueue from "@hooks/useQueue"
+
 type QueueRow = {
   queue_number: number;
   status: string;
@@ -39,6 +43,14 @@ const columns: ColumnDef<QueueRow>[] = [
 ];
 
 const QueueListCard: React.FC<any> = (): React.ReactElement => {
+  const sock = useEcho();
+
+  const { enqueue } = useQueue({
+    options: {
+      delay: 1000,
+    }
+  })
+
   const [queueData, setQueueData] = useState<QueueRow[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -122,6 +134,25 @@ const QueueListCard: React.FC<any> = (): React.ReactElement => {
   fetchQueue();
 }, [currentPage, userWindow?.id]);
 
+useEffect(() => {
+  const channel = `dashboard.update.department.${user?.user?.department_id}.company.${user?.user?.company_id}`;
+
+  let dashboardChannel = sock.channel(channel);
+
+  dashboardChannel.listen('UpdateQueueListEvent', (e:any) => {
+    e['cb'] = (): Promise <void> => {
+      return new Promise((resolve) => {
+        // implement your logic to update queuelist here
+        resolve();
+      })
+    }
+    enqueue(e)
+  })
+        
+  return () => {
+    sock.leave(channel);
+  }
+}, [])
 
 
   return (
