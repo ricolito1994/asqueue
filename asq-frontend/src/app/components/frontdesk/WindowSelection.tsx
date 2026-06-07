@@ -10,6 +10,7 @@ import {
 interface WindowSelectionProps {
   animating: boolean;
   selectedService: any;
+  isLoading?: boolean;
   handleWindowSelect: (window: any) => void;
   setScreen: (screen: string) => void;
 }
@@ -17,6 +18,7 @@ interface WindowSelectionProps {
 const WindowSelection : React.FC<WindowSelectionProps> = ({
   animating,
   selectedService,
+  isLoading = false,
   handleWindowSelect,
   setScreen,
 }: WindowSelectionProps) => {
@@ -51,7 +53,7 @@ const WindowSelection : React.FC<WindowSelectionProps> = ({
               onClick={() =>
                 handleWindowSelect(window)
               }
-              className={`bg-white border-2 border-[#D1D9F0] rounded-2xl p-6 text-left hover:border-blue-500 hover:bg-blue-50 transition ${!window.is_active && `pointer-events-none opacity-50 cursor-not-allowed`}`}
+              className={`bg-white border-2 border-[#D1D9F0] rounded-2xl p-6 text-left hover:border-blue-500 hover:bg-blue-50 transition ${(!window.is_active || isLoading) && `pointer-events-none opacity-50 cursor-not-allowed`}`}
             >
 
               <div className="flex items-center gap-4">
@@ -84,7 +86,8 @@ const WindowSelection : React.FC<WindowSelectionProps> = ({
           onClick={() =>
             setScreen("select")
           }
-          className="bg-gray-200 text-gray-700 rounded-2xl p-6 text-left hover:bg-blue-400 hover:text-white transition"
+          className={`bg-gray-200 text-gray-700 rounded-2xl p-6 text-left hover:bg-blue-400 hover:text-white transition 
+            ${(isLoading) && `pointer-events-none opacity-50 cursor-not-allowed`}`}
         >
 
           <div className="flex items-center gap-4">
