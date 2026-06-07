@@ -21,6 +21,8 @@ import useQueue from "@hooks/useQueue";
 
 import useEcho from "@hooks/useEcho";
 
+import { notification } from 'antd';
+
 interface WindowType {
   id: number;
   name: string;
@@ -38,6 +40,10 @@ interface Service {
 }
 
 const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
+
+  const [api, contextHolder] = notification.useNotification();
+
+  const [isLoadingFrontDesk, setIsLoadingFrontDesk] = useState<boolean>(false);
 
   const [issuedTime, setIssuedTime] = useState<Date | null>(null);
 
@@ -150,7 +156,12 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
         setConcernData(concernData);
 
-      } catch (e) {
+      } catch (e: any) {
+        api.open({
+          message: e?.response.data.message,
+          description: e?.response.data.reason,
+          type: 'error'
+        })
         console.error(e);
       } finally {
         setIsProcessing(false);
@@ -261,7 +272,7 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
     try {
 
-      setIsProcessing(true);
+      setIsLoadingFrontDesk(true);
 
       const queueService =
         new QueueManagerService(null);
@@ -286,13 +297,17 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
       setScreen("ticket");
 
-    } catch (e) {
-
+    } catch (e: any) {
+      api.open({
+        message: e?.response.data.message,
+        description: e?.response.data.reason,
+        type: 'error'
+      })
       console.error(e);
 
     } finally {
 
-      setIsProcessing(false);
+      setIsLoadingFrontDesk(false);
 
     }
   };
@@ -344,7 +359,7 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
   return (
     <div className="min-h-screen bg-[#F0F4FF] flex flex-col">
-
+      {contextHolder}
       {/* HEADER */}
 
       <header className="bg-white border-b border-[#D1D9F0] p-4 flex items-center justify-between">
@@ -414,6 +429,7 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
               animating={animating}
               selectedService={selectedService}
               handleWindowSelect={handleWindowSelect}
+              isLoading={isLoadingFrontDesk}
               setScreen={(s: string) =>
                 setScreen(s as "select" | "window" | "ticket")
               }
