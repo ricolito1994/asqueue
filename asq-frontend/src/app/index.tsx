@@ -92,7 +92,7 @@ const App = (): React.ReactElement => {
     const renderLayout: any = (): React.ReactElement => {
         let auth = localStorage.getItem('user');
 
-        let parsed = auth ? JSON.parse(auth ?? '') : {};
+        let parsed = (auth ? JSON.parse(auth) : (user ? user: {} ));
 
         return (parsed && parsed.user) ? <ClerkLayout /> : <LoginLayout />
     }
