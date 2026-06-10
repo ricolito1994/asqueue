@@ -23,9 +23,13 @@ import LoginLayout from './layouts/LoginLayout'
 
 import ConditionalRenderingLayout from '@layouts/ConditionalRenderingLayout'
 
+import SettingsLayout from '@layouts/SettingsLayout'
+
 import FrontDeskLayout from './layouts/FrontDeskLayout'
 import ClerkLayout from './layouts/ClerkLayout'
 import ClerkDashboard from './layouts/clerk/ClerkDashboard'
+
+import ProfileSettings from '@pages/main/settings/ProfileSettings'
 
 const App = (): React.ReactElement => {
 
@@ -106,6 +110,9 @@ const App = (): React.ReactElement => {
                     <Route path="/" >
                         <Route path="" element={<ClerkDashboard />} /> 
                         <Route path="/queue-logs" element={<QueueLogsPage />} /> 
+                        <Route path="/settings" element={<SettingsLayout />} >
+                            <Route path="" element={<ProfileSettings />} />
+                        </Route>
                     </Route>
                     {/* <Route path="/clerk/settings"   element={<SettingsPage />} />  */}
                 </Route>    

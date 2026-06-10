@@ -42,7 +42,7 @@ const SideNav: React.FC<any> = (): React.ReactElement => {
         <span className="block text-[10px] text-white/30 uppercase tracking-widest px-4.5 pt-5 pb-1.5">
           System
         </span>
-        <NavItem icon={Settings} label="Settings" to="/clerk/settings" />
+        <NavItem icon={Settings} label="Settings" to="/settings" />
       </nav>
 
       {/* Footer */}

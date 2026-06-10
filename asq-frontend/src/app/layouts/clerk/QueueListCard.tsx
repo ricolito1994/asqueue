@@ -128,7 +128,7 @@ const QueueListCard: React.FC<any> = (): React.ReactElement => {
     }
   };
 
-  useEffect(() => {
+useEffect(() => {
   if (!userWindow?.id) return;
 
   fetchQueue();
@@ -141,9 +141,15 @@ useEffect(() => {
 
   dashboardChannel.listen('UpdateQueueListEvent', (e:any) => {
     e['cb'] = (): Promise <void> => {
-      return new Promise((resolve) => {
-        // implement your logic to update queuelist here
-        resolve();
+      return new Promise(async(resolve, reject) => {
+        try {
+          // implement your logic to update queuelist here
+          await fetchQueue()
+          resolve();
+        } catch (e) {
+          console.error(e)
+          reject(e)
+        }
       })
     }
     enqueue(e)
@@ -171,7 +177,7 @@ useEffect(() => {
       </div>
 
       {/* Table */}
-      <div className="rounded-md overflow-hidden">
+      <div className="rounded-md overflow-hidden p-4">
         <AsDataTable
           data={queueData}
           columns={columns}
