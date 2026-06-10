@@ -1,4 +1,5 @@
 import React, {
+    useEffect,
     useState,
     useRef,
     useContext
@@ -107,6 +108,24 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
               setIsQueueListLoading(true)
           }
       }
+
+  useEffect (() => {
+    const fetchCurrentQueueNumber = async () => {
+      try {
+        const queueNumObject = await qm.current.findWindowByAssignedTo(user?.user?.id, null, {
+          params: {
+            "company_id" : user?.user?.company_id,
+            "depatment_id": user?.user?.department_id,
+          }
+        })
+        setCurrentQueueNum(queueNumObject?.transactions[0].queue_number)
+        setCurrentConcernName(queueNumObject?.transactions[0].concern.name)
+      } catch (e:any) {
+        console.error(e)
+      }
+    }
+    fetchCurrentQueueNumber()
+  }, [])
 
   return (
     <div className="flex flex-col bg-white border border-[#dde4ef] rounded-xl overflow-hidden h-full">
