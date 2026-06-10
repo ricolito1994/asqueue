@@ -43,7 +43,8 @@ class TransactionController extends Controller
                 ->status($request->input('status'), $request->input('is_done'))
                 ->dateBetweenCreated($createdDates)
                 ->with('concern')
-                ->orderBy('process_end_at', 'ASC')
+                ->orderBy('status', 'DESC')
+                ->orderBy('created_at', 'ASC')
                 ->paginate($request->input('per_page', 10));
                 
             return response()->json ($transactions, 200);
@@ -98,6 +99,10 @@ class TransactionController extends Controller
                     'queue_session_id' => 0,
                     'pre_process_log' => 'Queued successfully',
                 ];
+
+                $request->merge([
+                    'queue_number' => $queueNumber
+                ]);
 
                 $this->notifService->updateQueList($request, $only['window_id'], $only['company_id']);
 

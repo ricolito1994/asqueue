@@ -1,0 +1,136 @@
+import React, { useContext, useState, useRef } from 'react'
+
+import { AppContext } from '@context/AppContext'
+
+import { Bell, SquareArrowRightExit } from "lucide-react"
+import { Building } from 'lucide-react'
+
+import { notification } from 'antd'
+
+import AuthenticationService from '@services/AuthenticationService'
+import AsConfirmModal from '../components/modals/AsConfirmModal'
+
+import ConfirmDialog from '@components/commons/ConfirmDialog'
+
+const TopNav: React.FC<any> = (): React.ReactElement => {
+
+  const [api, contextHolder] = notification.useNotification();
+
+  const { user, setUser, setIsProcessing, setUserWindow, userWindow } = useContext(AppContext)
+
+  const [displayConfirmLogout, setDisplayConfirmLogout] = useState<boolean>(false)
+
+    const onRefreshToken = (data: any) => {
+        setUser((prev: any) => ({
+            ...prev,
+            access_token: data.access_token,
+            refresh_token: data.refresh_token
+        }))
+    }
+
+    const logoutService = useRef(new AuthenticationService(
+        user?.access_token ?? null, 
+        null, 
+        user?.refresh_token,
+        onRefreshToken
+    ))
+
+    const [logoutOpen, setLogoutOpen] = useState(false)
+
+    const handleLogout = async () => {
+      try {
+            setIsProcessing(true)
+            await logoutService.current.logout({
+                "user_id" : user.user.id,
+                "session_id" : user?.session_id,
+                "window_id" : userWindow?.id
+            })
+            setUser(null)
+            setUserWindow(null)
+            localStorage.removeItem('user')
+            localStorage.removeItem('userWindow')
+        } catch (e:any) {
+            api.open({
+                message: e.response.data.message ?? "Failed",
+                description : e.response.data.reason ?? e.response.data.status,
+                type : "error"
+            })
+        } finally {
+            setIsProcessing(false)
+            setDisplayConfirmLogout(false)
+            localStorage.removeItem('user')
+            localStorage.removeItem('userWindow')
+        }
+
+      setLogoutOpen(false)
+    }
+
+  return (
+
+    <header className="h-13.5 w-full bg-white border-b border-[#dde4ef] flex items-center px-6 gap-3 shrink-0">
+      {contextHolder}
+    
+      <ConfirmDialog
+        open={logoutOpen}
+        onClose={() => setLogoutOpen(false)}
+        onConfirm={handleLogout}
+        title="Confirm Logout"
+        description="Are you sure you want to log out of your current session?"
+        confirmLabel="Logout"
+        cancelLabel="Cancel"
+      />
+
+
+      {/* Left — office label */}
+      <div className="flex items-center gap-1.5 text-[13px] text-black">
+        <Building />
+        <span className="font-bold">Registrar Office</span>
+      </div>
+
+      {/* Spacer */}
+      <div className="flex-1" />
+
+      {/* Right */}
+      <div className="flex items-center gap-1">
+
+        {/* Notification bell */}
+        <button
+          className="relative w-8 h-8 flex items-center justify-center rounded-lg text-[#5a7099] hover:bg-[#f0f4fa] transition-colors"
+          aria-label="Notifications"
+        >
+          <Bell className="w-4 h-4"/>
+          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-blue-600 rounded-full border-[1.5px] border-white" aria-hidden="true" />
+        </button>
+
+        {/* Divider */}
+        <div className="w-px h-4.5 bg-[#dde4ef] mx-1" aria-hidden="true" />
+
+        {/* User chip */}
+        <div className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-full cursor-pointer hover:bg-[#f0f4fa] transition-colors">
+          <div className="w-7.5 h-7.5 rounded-full bg-blue-600 flex items-center justify-center text-[11px] font-medium text-white shrink-0">
+            GC
+          </div>
+          <div>
+            <p className="text-[12.5px] font-medium text-[#1a2952] leading-tight">{user?.user?.firstname}</p>
+            <p className="text-[11px] text-[#5a7099] leading-tight">{user?.user?.designation}</p>
+          </div>
+          <i className="ti ti-chevron-down text-[12px] text-[#5a7099] ml-0.5" aria-hidden="true" />
+        </div>
+
+        {/* Divider */}
+        <div className="w-px h-4.5 bg-[#dde4ef] mx-1" aria-hidden="true" />
+
+        {/* Logout */}
+        <button className="flex items-center gap-1.5 text-[12px] text-[#5a7099] px-3 py-1.5 rounded-lg border border-[#dde4ef] hover:bg-[#f0f4fa] hover:text-[#1a2952] transition-colors"
+          onClick={() => setLogoutOpen(true)}
+        >
+          <SquareArrowRightExit className="w-4 h-4" />
+          <span>Logout</span>
+        </button>
+
+      </div>
+    </header>
+  )
+}
+
+export default TopNav

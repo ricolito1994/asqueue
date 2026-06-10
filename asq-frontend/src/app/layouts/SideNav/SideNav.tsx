@@ -1,0 +1,64 @@
+import React, { useContext } from 'react'
+
+import { AppContext } from '@context/AppContext'
+
+import NavItem from './NavItem'
+
+import { 
+  ShipWheel,
+  LayoutDashboard,
+  Logs,
+  Settings
+ } from 'lucide-react'
+
+const SideNav: React.FC<any> = (): React.ReactElement => {
+
+  const { user } = useContext(AppContext)
+
+  return (
+    <aside className="w-52.5 min-w-52.5 h-full bg-[#0f2952] flex flex-col">
+
+      {/* Brand */}
+      <div className="flex items-center gap-2.5 px-4.5 py-4 border-b border-white/8">
+        <div className="w-8.5 h-8.5 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
+          <ShipWheel />
+        </div>
+        <div>
+          <span className="block text-md font-bold text-white">JBLFMU</span>
+          <span className="block text-[10px] text-white/40 uppercase tracking-widest mt-0.5">
+            Queue System
+          </span>
+        </div>
+      </div>
+
+      {/* Nav */}
+      <nav className="flex-1 pt-2">
+        <span className="block text-[10px] text-white/30 uppercase tracking-widest px-4.5 pt-4 pb-1.5">
+          Main
+        </span>
+        <NavItem icon={LayoutDashboard} label="Dashboard"  to="" />
+        <NavItem icon={Logs}     label="Queue Logs" to="/queue-logs" />
+
+        <span className="block text-[10px] text-white/30 uppercase tracking-widest px-4.5 pt-5 pb-1.5">
+          System
+        </span>
+        <NavItem icon={Settings} label="Settings" to="/settings" />
+      </nav>
+
+      {/* Footer */}
+      <div className="flex items-center gap-2.5 px-4.5 py-3.5 border-t border-white/8">
+        <div className="w-7.5 h-7.5 rounded-full bg-blue-600 flex items-center justify-center text-[11px] font-medium text-white shrink-0">
+          GC
+        </div>
+        <div className="flex-1 overflow-hidden">
+          <p className="text-[12px] font-medium text-white/80 truncate">{user?.user?.firstname}</p>
+          <p className="text-[11px] text-white/35">{user?.user?.designation}</p>
+        </div>
+        <i className="ti ti-chevron-right text-[13px] text-white/25" aria-hidden="true" />
+      </div>
+
+    </aside>
+  )
+}
+
+export default SideNav
