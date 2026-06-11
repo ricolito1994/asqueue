@@ -161,10 +161,10 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
 
       {/* Body */}
       <div className="flex flex-col items-center justify-center flex-1 px-4 py-6">
-        <span className="text-[80px] font-medium text-[#0f2952] leading-none">
+        <span className="text-[200px] font-medium text-[#0f2952] leading-none">
           {currentQueueNum}
         </span>
-        <span className="text-[12px] text-[#5a7099] mt-2">
+        <span className="text-[40px] text-[#5a7099] mt-2">
           {currentConcernName}
         </span>
       </div>
