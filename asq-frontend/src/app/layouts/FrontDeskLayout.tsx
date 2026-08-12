@@ -1,4 +1,10 @@
-import { useState, useEffect, useMemo, useRef, useContext } from "react";
+import { 
+  useState, 
+  useEffect, 
+  useMemo, 
+  useRef, 
+  useContext 
+} from "react";
 
 import { AppContext } from '@context/AppContext';
 
@@ -8,7 +14,12 @@ import AuthenticationService from '@services/AuthenticationService';
 
 import { QueueManagerService } from '@services/QueueManagerService';
 
-import { ArrowLeftToLine, FileText, ShipWheel, SquareUserRound } from 'lucide-react';
+import { 
+  ArrowLeftToLine, 
+  FileText, 
+  ShipWheel, 
+  SquareUserRound
+} from 'lucide-react';
 
 import { useClock } from "../hooks/useClock";
 
@@ -17,11 +28,14 @@ import WindowSelection  from "@components/frontdesk/WindowSelection";
 import ServiceSelection  from "@components/frontdesk//ServiceSelection";
 import ConditionalRenderingLayout from "./ConditionalRenderingLayout";
 
+import QZPrintService from "@services/QzPrintService";
+
 import useQueue from "@hooks/useQueue";
 
 import useEcho from "@hooks/useEcho";
 
 import { notification } from 'antd';
+import { connect } from "http2";
 
 interface WindowType {
   id: number;
@@ -81,6 +95,8 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
   const [department, setDepartment] =
     useState<any>(null);
+
+  const printService = useRef(new QZPrintService())
 
   const {
     isProcessing,
@@ -216,6 +232,13 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
       }
       enqueue(e)
     })
+
+    const connectQz = async () => {
+      await printService.current.connect()
+      console.log("connected")
+    }
+
+    connectQz()
 
     return () => {
       clearInterval(timer)
@@ -449,6 +472,8 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
               issuedTime={issuedTime}
               formatTime={formatTime}
               handleNewTransaction={handleNewTransaction}
+              department={department}
+              printService={printService.current}
             />
         </ConditionalRenderingLayout>
       </main>

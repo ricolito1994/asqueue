@@ -63,7 +63,7 @@ sleep 2
 
 echo 'Plotting urls to .env ...'
 
-sed -i "s|VITE_APP_BASE_URL=.*|VITE_APP_BASE_URL=http://$myip/api|g" $ENVFILE
+sed -i "s|VITE_APP_BASE_URL=.*|VITE_APP_BASE_URL=http://$myip/asq/api|g" $ENVFILE
 
 sed -i "s|VITE_APP_REVERB_HOST=.*|VITE_APP_REVERB_HOST=$myip|g" $ENVFILE
 
@@ -83,4 +83,4 @@ npm run build
 
 echo "DONE BUILDING!"
 echo "--------------------------"
-echo "front end can be accessed using http://localhost or http://$myip"
+echo "front end can be accessed using http://localhost/asqueue or http://$myip/asqueue"

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-    'prefix' => 'api/queue',
+    'prefix' => 'queue',
     'namespace' => 'App\Http\Controllers'
 ], function () {
 

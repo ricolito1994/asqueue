@@ -177,7 +177,7 @@ class BaseService
 
             $errorCode = $statusCode;
             
-            $errorMessage = 'Service Failed '.  $body ?: $e->getMessage();
+            $errorMessage = $body ?: $e->getMessage();
             
         }
 

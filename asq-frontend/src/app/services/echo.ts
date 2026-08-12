@@ -10,9 +10,11 @@ export const getEcho = () => {
     echo = new Echo({
       broadcaster: 'reverb',
       key: 'local',
-      wsHost: import.meta.env.VITE_APP_REVERB_HOST,
+      //wsHost: import.meta.env.VITE_APP_REVERB_HOST,
+      wsHost: window.location.hostname,
       wsPort: 80, // Ensure this matches your Nginx port
       forceTLS: false,
+      wsPath: '/asq/ws',
       disableStats: true,
       enabledTransports: ['ws'],
     });
