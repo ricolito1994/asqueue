@@ -6,11 +6,10 @@ use Illuminate\Http\Request;
 
 class NotifService extends BaseService 
 {
-    const QUEUE_NOTIF_MICROSERVICE_URL = 'http://nginx/api/notif/queue';
+    const QUEUE_NOTIF_MICROSERVICE_URL = 'http://asq-nginx/notif/queue';
 
-    const QUEUE_NOTIF_MICROSERVICE_URL_UNGROUPED = 'http://nginx/api/notif';
+    const QUEUE_NOTIF_MICROSERVICE_URL_UNGROUPED = 'http://asq-nginx/notif';
  
-
     public function processNextQueueNumber (Request $request): array
     {
         return $this->asyncRequest([

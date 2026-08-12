@@ -36,13 +36,13 @@ const SideNav: React.FC<any> = (): React.ReactElement => {
         <span className="block text-[10px] text-white/30 uppercase tracking-widest px-4.5 pt-4 pb-1.5">
           Main
         </span>
-        <NavItem icon={LayoutDashboard} label="Dashboard"  to="" />
-        <NavItem icon={Logs}     label="Queue Logs" to="/queue-logs" />
+        <NavItem icon={LayoutDashboard} label="Dashboard"  to="asqueue" page="/"/>
+        <NavItem icon={Logs}     label="Queue Logs" to="/asqueue/queue-logs" page="queue-logs"/>
 
         <span className="block text-[10px] text-white/30 uppercase tracking-widest px-4.5 pt-5 pb-1.5">
           System
         </span>
-        <NavItem icon={Settings} label="Settings" to="/settings" />
+        <NavItem icon={Settings} label="Settings" to="/asqueue/settings" page="settings"/>
       </nav>
 
       {/* Footer */}

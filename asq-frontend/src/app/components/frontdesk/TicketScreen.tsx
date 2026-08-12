@@ -1,3 +1,8 @@
+import {
+  useEffect
+} from 'react';
+
+import QZPrintService from '@/app/services/QzPrintService';
 interface TicketScreenProps {
   ticketNumber: string;
   selectedService: any;
@@ -5,6 +10,8 @@ interface TicketScreenProps {
   issuedTime: Date | null;
   formatTime: (time: Date) => string;
   handleNewTransaction: () => void;
+  department?: any,
+  printService?: QZPrintService
 }
 
 const TicketScreen: React.FC<TicketScreenProps> = ({
@@ -14,7 +21,35 @@ const TicketScreen: React.FC<TicketScreenProps> = ({
   issuedTime,
   formatTime,
   handleNewTransaction,
+  department,
+  printService
 }: TicketScreenProps) => {
+
+  const printQueueNumber = async (
+    ticketNumber: any, 
+    department: any,
+    selectedService: any, 
+    selectedWindow: any
+  ) => {
+    await printService?.printQueue(
+      "POS-58",
+      ticketNumber,
+      "JBLFMU",
+      department?.name,
+      selectedWindow?.name,
+      selectedService?.name
+    );
+  }
+
+  useEffect(() => {
+    if (! ticketNumber) return;
+    printQueueNumber(
+      ticketNumber, 
+      department,
+      selectedService, 
+      selectedWindow
+    )
+  }, [ticketNumber])
 
   return (
     <div className="flex flex-col items-center">

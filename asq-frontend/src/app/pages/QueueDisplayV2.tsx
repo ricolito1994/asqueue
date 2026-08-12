@@ -93,6 +93,7 @@ const QueueDisplayV2: React.FC <any> = (): React.ReactElement => {
       })
             
       windowChannel.listen('.window.recall-queue-number',  (e:any) => {
+        console.log(e)
         e['cb'] = async () => {
           return new Promise<void>(async (resolve, reject) => {
             try {

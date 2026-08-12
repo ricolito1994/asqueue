@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 # use Illuminate\Support\Facades\Redis;
 
 Route::group([
-    'prefix' => 'api/notif',
+    'prefix' => 'notif',
     'namespace' => 'App\Http\Controllers',
 ], function () {
     Route::group([

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-    'prefix' => 'api/auth',
+    'prefix' => 'auth',
     'namespace' => 'App\Http\Controllers'
 ], function () {
     

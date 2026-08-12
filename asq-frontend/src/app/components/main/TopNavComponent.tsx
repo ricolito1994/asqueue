@@ -87,10 +87,10 @@ const TopNavComponent: React.FC <any> = () => {
                 "session_id" : user?.session_id,
                 "window_id" : userWindow?.id
             })
-            setUser(null)
+            /*setUser(null)
             setUserWindow(null)
             localStorage.removeItem('user')
-            localStorage.removeItem('userWindow')
+            localStorage.removeItem('userWindow')*/
         } catch (e:any) {
             api.open({
                 message: e.response.data.message ?? "Failed",
@@ -100,6 +100,8 @@ const TopNavComponent: React.FC <any> = () => {
         } finally {
             setIsProcessing(false)
             setDisplayConfirmLogout(false)
+            setUser(null)
+            setUserWindow(null)
             localStorage.removeItem('user')
             localStorage.removeItem('userWindow')
         }

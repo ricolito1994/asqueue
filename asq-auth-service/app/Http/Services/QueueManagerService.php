@@ -5,11 +5,11 @@ use Illuminate\Http\Request;
 
 class QueueManagerService extends BaseService 
 {
-    const QUEUE_MANAGER_SERVICE_Q_SESH_URL = "http://nginx/api/queue/session";
+    const QUEUE_MANAGER_SERVICE_Q_SESH_URL = "http://asq-nginx/queue/session";
 
-    const QUEUE_MANAGER_SERVICE_W_URL = "http://nginx/api/queue/windows";
+    const QUEUE_MANAGER_SERVICE_W_URL = "http://asq-nginx/queue/windows";
 
-    const NOTIF_MANAGER_SERVICE_URL = "http://nginx/api/notif";
+    const NOTIF_MANAGER_SERVICE_URL = "http://asq-nginx/notif";
 
     public function createQueueSession (Request $request)
     {

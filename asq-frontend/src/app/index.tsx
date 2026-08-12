@@ -107,24 +107,24 @@ const App = (): React.ReactElement => {
 
                 {/* New Routing for Clerk */}
                 <Route element={renderLayout()}>
-                    <Route path="/" >
+                    <Route path="/asqueue">
                         <Route path="" element={<ClerkDashboard />} /> 
-                        <Route path="/queue-logs" element={<QueueLogsPage />} /> 
-                        <Route path="/settings" element={<SettingsLayout />} >
+                        <Route path="queue-logs" element={<QueueLogsPage />} /> 
+                        <Route path="settings" element={<SettingsLayout />} >
                             <Route path="" element={<ProfileSettings />} />
                         </Route>
                     </Route>
                     {/* <Route path="/clerk/settings"   element={<SettingsPage />} />  */}
                 </Route>    
 
-                <Route path="*" element={<>Not found</>} />
+                <Route path="*" element={<>404 Page Not found</>} />
            
-                <Route path='/new-transaction'>
+                <Route path='/asqueue/new-transaction'>
                     <Route path="company/:companyId/department/:departmentId/concerns" element={<FrontDeskLayout />} />
                     <Route path="company/:companyId/department/:departmentId/concerns/:concernId/windows" element={<TransactionWindow />} />
                 </Route>
 
-                <Route path='/windows' element={<QueueScreenLayout />} >
+                <Route path='/asqueue/windows' element={<QueueScreenLayout />} >
                     <Route path='company/:companyId/department/:departmentId' element={<QueueDisplayV2 />} />
                 </Route>
             </Routes>
