@@ -15,6 +15,7 @@
 - laravel echo (websockets)
 - redis (queue/cache manager)
 - mysql DB
+- qztray <code>for silent printing</code>
 
 <hr />
 
@@ -52,6 +53,9 @@
     - FE installation will commence.
 - for running locally / hot reload
     - npm run dev
+ 
+## QZ Tray
+<p>This is an external application used for silent printing. Download it here https://qz.io/download/</p>
 
 ## TEST
 - open git bash
