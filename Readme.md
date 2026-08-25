@@ -32,6 +32,10 @@
 
 <h2>Installation</h2>
 <ol>
+  <li>First setup as server -> use this repository: <a href='https://github.com/ricolito1994/as-server'>as-server></a></li>
+</ol>
+
+<ol>
   <li>clone the repository</li>
   <li>cd to as-queue <code>cd as-queue</code></li>
   <li>run <code>docker compose build --no-cache</code></li>
