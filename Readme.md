@@ -54,6 +54,9 @@
 - for running locally / hot reload
     - npm run dev
  
+## Development
+- When new api endpoints created/modified inside web.php/api.php, to apply changes <code>php artisan optimize</code> or <code>php artisan route:clear</code>
+ 
 ## QZ Tray
 <p>This is an external application used for silent printing. Download it here https://qz.io/download/</p>
 
