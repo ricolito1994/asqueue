@@ -32,7 +32,7 @@
 
 <h2>Installation</h2>
 <ol>
-  <li>First setup as server -> use this repository: <a href='https://github.com/ricolito1994/as-server'>as-server></a></li>
+  <li>First setup as server -> use this repository: <a href="https://github.com/ricolito1994/as-server">as-server></a></li>
 </ol>
 
 <ol>
@@ -48,6 +48,7 @@
     - open gitbash
     - cd to root project folder
     - type ./frontend.sh
+    - choose 1 for local/development installation / 2 for production - this will get the static ip address of the server
     - FE installation will commence.
 - for running locally / hot reload
     - npm run dev
