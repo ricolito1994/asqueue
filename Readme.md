@@ -53,9 +53,19 @@
     - FE installation will commence.
 - for running locally / hot reload
     - npm run dev
+      - cd asqueue/asq-frontend
+      - npm run dev
+      - access thru <code>localhost:5173/asqueue</code>
  
 ## Development
+- SSH inside container
+  - either run in cli <code>docker exec -it <container_name> bash
+  - or open docker desktop, go to the container/service then click the <code>Exec</code> tab
 - When new api endpoints created/modified inside web.php/api.php, to apply changes <code>php artisan optimize</code> or <code>php artisan route:clear</code>
+
+## DATABASE
+- Install MySQL workbench / DB beaver or any MySQL viewer
+- DB Credentials found in .env.example / .env
  
 ## QZ Tray
 <p>This is an external application used for silent printing. Download it here https://qz.io/download/</p>
