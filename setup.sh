@@ -30,7 +30,10 @@ do
     docker exec $SERVICE cp .env.example .env
   fi
 
-  docker exec $SERVICE sh -c "composer install"
+  if ! docker exec $SERVICE sh -c "composer install"; then
+    echo "Trying composer update ... ";
+    docker exec $SERVICE sh -c "composer update"
+  fi
 
   # if docker exec $SERVICE sh -c "[ -f .env ]"; then
   #  export $(docker exec $SERVICE sh -c "$(grep -v '^#' .env | xargs)")
@@ -93,6 +96,9 @@ do
 
   echo "Optimize services..."
   docker exec $SERVICE php artisan optimize
+
+  echo "Restarting $SERVICE ..."
+  docker restart $SERVICE
   
 done
 
