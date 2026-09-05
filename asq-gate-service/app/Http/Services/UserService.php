@@ -32,7 +32,7 @@ class UserService extends BaseService {
         ]);
     }
 
-    public function create(): mixed
+    public function create(Request $request): mixed
     {
         return $this->asyncRequest([
             [

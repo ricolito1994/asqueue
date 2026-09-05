@@ -5,6 +5,8 @@ import React, {
     useRef,
 } from 'react'
 
+import { useNavigate } from "react-router-dom";
+
 import {
     Form,
     Button,
@@ -43,6 +45,8 @@ const LoginLayout: React.FC <any> = (): React.ReactElement => {
     }
     = useContext(AppContext)
 
+    const navigate = useNavigate();
+
     const auth = useRef(new AuthenticationService(null));
 
     const qmService = useRef(new QueueManagerService(null));
@@ -50,21 +54,50 @@ const LoginLayout: React.FC <any> = (): React.ReactElement => {
     const authenticate = async (values: ProcessAuthenticationModel) => {
         try {
             setProcessLogin(true);
-            let loginData = await auth.current.login<any>(values)
-            let userWindow = await qmService.current.findWindowByAssignedTo(loginData.user.id, null, {
-                params : {
-                    company_id : loginData.user.company.id,
-                    department_id: loginData.user.department.id,
-                }
-            })
-            setUser(loginData)
-            setUserWindow(userWindow)
+
+            const loginData = await auth.current.login<any>(values);
+
+            let userWindow = null;
+
+            // Admins and assigned users can proceed with the
+            // existing window lookup.
+            if (
+                loginData.user.designation === 'admin' ||
+                (
+                    loginData.user.company &&
+                    loginData.user.department
+                )
+            ) {
+                userWindow = await qmService.current.findWindowByAssignedTo(
+                    loginData.user.id,
+                    null,
+                    {
+                        params: {
+                            company_id: loginData.user.company.id,
+                            department_id: loginData.user.department.id,
+                        }
+                    }
+                );
+            }
+
+            setUser(loginData);
+            setUserWindow(userWindow);
+
+            
+            if (loginData.user.designation === "admin") {
+            navigate("/asqueue/admin");
+            } else if (!loginData.user.company_id || !loginData.user.department_id) {
+            navigate("/asqueue");
+            } else {
+            navigate("/asqueue");
+            }
+
         } catch (e: any) {
             api.open({
-                message: e?.response.data.message,
-                description: e?.response.data.reason,
+                message: e?.response?.data?.message,
+                description: e?.response?.data?.reason,
                 type: 'error'
-            })
+            });
         } finally {
             setProcessLogin(false);
         }

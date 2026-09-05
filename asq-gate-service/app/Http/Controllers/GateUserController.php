@@ -14,25 +14,25 @@ class GateUserController extends Controller
         protected readonly UserService $userService
     ){}
 
-    public function index(): JsonResponse|Response
+    public function index(Request $request): JsonResponse|Response
     {
         try {
-            $request = $request->all();
             $res = $this->userService->index($request);
+
             return response()->json($res['data'] ?? $res);
         } catch (\Exception $e) {
-           return $this->processException($e);
+            return $this->processException($e);
         }
     }
     
-    public function create(): JsonResponse|Response
+    public function create(Request $request): JsonResponse|Response
     {
         try {
-            $request = $request->all();
-            $res = $this->userService->index($request);
+            $res = $this->userService->create($request);
+
             return response()->json($res['data'] ?? $res);
         } catch (\Exception $e) {
-           return $this->processException($e);
+            return $this->processException($e);
         }
     }
 

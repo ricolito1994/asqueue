@@ -28,8 +28,11 @@ import SettingsLayout from '@layouts/SettingsLayout'
 import FrontDeskLayout from './layouts/FrontDeskLayout'
 import ClerkLayout from './layouts/ClerkLayout'
 import ClerkDashboard from './layouts/clerk/ClerkDashboard'
+import AdminDashboardLayout from './layouts/admin/AdminDashboardLayout'
 
 import ProfileSettings from '@pages/main/settings/ProfileSettings'
+import UsersPage from './layouts/admin/users/UserPage'
+import UnassignedUserPage from "@pages/UnassignedUserPage";
 
 const App = (): React.ReactElement => {
 
@@ -93,44 +96,72 @@ const App = (): React.ReactElement => {
         }
     }, [user, userWindow])
     
-    const renderLayout: any = (): React.ReactElement => {
-        let auth = localStorage.getItem('user');
+      const renderLayout: any = (): React.ReactElement => {
+        let auth = localStorage.getItem("user");
 
-        let parsed = (auth ? JSON.parse(auth) : (user ? user: {} ));
+        let parsed = auth ? JSON.parse(auth) : user ? user : {};
 
-        return (parsed && parsed.user) ? <ClerkLayout /> : <LoginLayout />
-    }
+        if (!parsed?.user) {
+          return <LoginLayout />;
+        }
 
-    return (<>
+        const currentUser = parsed.user;
+
+        if (currentUser.designation === "admin") {
+          return <AdminDashboardLayout />;
+        }
+
+        if (!currentUser.company_id || !currentUser.department_id) {
+          return <UnassignedUserPage />;
+        }
+
+        return <ClerkLayout />;
+      };
+
+    return (
+      <>
         <LoadingLayout isLoading={isLoading}>
-            <Routes>
-
-                {/* New Routing for Clerk */}
-                <Route element={renderLayout()}>
-                    <Route path="/asqueue">
-                        <Route path="" element={<ClerkDashboard />} /> 
-                        <Route path="queue-logs" element={<QueueLogsPage />} /> 
-                        <Route path="settings" element={<SettingsLayout />} >
-                            <Route path="" element={<ProfileSettings />} />
-                        </Route>
-                    </Route>
-                    {/* <Route path="/clerk/settings"   element={<SettingsPage />} />  */}
-                </Route>    
-
-                <Route path="*" element={<>404 Page Not found</>} />
-           
-                <Route path='/asqueue/new-transaction'>
-                    <Route path="company/:companyId/department" element={<FrontDeskLayout />} />
-                    <Route path="company/:companyId/department/:departmentId/concerns" element={<FrontDeskLayout />} />
-                    <Route path="company/:companyId/department/:departmentId/concerns/:concernId/windows" element={<TransactionWindow />} />
+          <Routes>
+            {/* New Routing for Clerk */}
+            <Route element={renderLayout()}>
+              <Route path="/asqueue">
+                <Route path="" element={<ClerkDashboard />} />
+                <Route path="queue-logs" element={<QueueLogsPage />} />
+                <Route path="settings" element={<SettingsLayout />}>
+                  <Route path="" element={<ProfileSettings />} />
                 </Route>
+              </Route>
+              {/* <Route path="/clerk/settings"   element={<SettingsPage />} />  */}
+            </Route>
 
-                <Route path='/asqueue/windows' element={<QueueScreenLayout />} >
-                    <Route path='company/:companyId/department/:departmentId' element={<QueueDisplayV2 />} />
-                </Route>
-            </Routes>
+            <Route path="*" element={<>404 Page Not found</>} />
+
+            <Route path="/asqueue/new-transaction">
+              <Route
+                path="company/:companyId/department/:departmentId/concerns"
+                element={<FrontDeskLayout />}
+              />
+              <Route
+                path="company/:companyId/department/:departmentId/concerns/:concernId/windows"
+                element={<TransactionWindow />}
+              />
+            </Route>
+
+            <Route path="/asqueue/windows" element={<QueueScreenLayout />}>
+              <Route
+                path="company/:companyId/department/:departmentId"
+                element={<QueueDisplayV2 />}
+              />
+            </Route>
+
+            {/* Admin Dashboard */}
+            <Route path="/asqueue/admin" element={<AdminDashboardLayout />}>
+              <Route path="users" element={<UsersPage />} />
+            </Route>
+          </Routes>
         </LoadingLayout>
-    </>);
+      </>
+    );
 }
 
 export default App;

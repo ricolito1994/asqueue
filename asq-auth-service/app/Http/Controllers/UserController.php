@@ -76,10 +76,44 @@ class UserController extends Controller
         }
     }
 
-    public function create (Request $request): JsonResponse 
-    {
+public function create (Request $request): JsonResponse 
+{
+    try {
+        // Original validation rules before making fields nullable
         
+        // $validated = $request->validate([
+        //     'firstname' => 'nullable|string',
+        //     'lastname' => 'nullable|string',
+        //     'designation' => 'required|string',
+        //     'email' => 'required|email|unique:users,email',
+        //     'username' => 'required|string|unique:users,username',
+        //     'password' => 'required|string|min:6',
+        //     'title' => 'nullable|string',
+        //     'window_id' => 'nullable|integer',
+        //     'company_id' => 'required|integer',
+        //     'department_id' => 'required|integer',
+        // ]);
+
+        $validated = $request->validate([
+            'firstname' => 'required|string',
+            'lastname' => 'required|string',
+            'email' => 'required|email|unique:users,email',
+            'username' => 'required|string|unique:users,username',
+            'password' => 'required|string|min:6',
+        ]);
+
+        $user = User::create($validated);
+
+        return response()->json($user, 201);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'reason' => $e->getMessage(),
+            'message' => 'Something went wrong',
+            'success' => false
+        ], 500);
     }
+}
 
     public function update (Request $request, User $user): JsonResponse 
     {

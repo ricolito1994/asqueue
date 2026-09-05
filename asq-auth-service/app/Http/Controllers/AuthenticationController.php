@@ -41,20 +41,31 @@ class AuthenticationController extends Controller
 
             $window = $this->queueManagerService->windowAssignedTo($request, $user->id);
 
-            $request->merge([
-                'session_type' => 'active',
-                'created_by' => $user->id, 
-                'department_id' => $user->department_id,
-                'window_id' => $window['data']['id'] ,
-                'date' => $now->toDateString(),
-                'start_time' => $now->format('H:i:s'),
-                'company_id' => $user->company_id,
-                'last_queue_number' => 0
-            ]);
+            $session = null;
 
-            $session = $this->queueManagerService->createQueueSession($request);
+            if (!empty($window['data']['id'])) {
 
-            return $this->respondWithToken($token, $user, $session[0]['id']);
+                $request->merge([
+                    'session_type' => 'active',
+                    'created_by' => $user->id, 
+                    'department_id' => $user->department_id,
+                    'window_id' => $window['data']['id'],
+                    'date' => $now->toDateString(),
+                    'start_time' => $now->format('H:i:s'),
+                    'company_id' => $user->company_id,
+                    'last_queue_number' => 0
+                ]);
+
+                $session = $this->queueManagerService->createQueueSession($request);
+            }
+
+            return $this->respondWithToken(
+                $token,
+                $user,
+                $session ? $session[0]['id'] : null
+            );
+
+
         } catch (\Exception $e) {
             return response()->json([
                 "message" => "Login failed.",
