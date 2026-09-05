@@ -79,6 +79,16 @@ class GateUserController extends Controller
         }
     }
 
+    public function departmentIndex (Request $request): JsonResponse|Response
+    {
+        try {
+            $res = $this->userService->departmentIndex($request);
+            return response()->json($res['data'] ?? $res);
+        } catch (\Exception $e) {
+            return $this->processException($e);
+        }
+    }
+
     public function departmentFind (Request $request, int $deptId): JsonResponse|Response
     {
         try {

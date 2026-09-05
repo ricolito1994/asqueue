@@ -62,6 +62,15 @@ export default class AuthenticationService extends AbstractApiService {
         }
     }
 
+    async departmentIndex <T=any> (data: any, config?: any) {
+        try {
+            let response = await this.requestV2<T>(this.auth.departmentIndex(), data, config);
+            return response?.data
+        } catch (e: any) {
+            throw e;
+        }
+    }
+
     async setActiveSession <T=any> (userId: number, data: any, config?: any) {
         try {
             let response = await this.requestV2<T>(this.user.setActiveUserSession(userId), data, config);

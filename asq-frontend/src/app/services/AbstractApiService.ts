@@ -49,6 +49,8 @@ export abstract class AbstractApiService implements HTTPRequestableInterface
     public methodMap: Record<HTTPMethod, Function>;
     public onAuthTokenUpdate: Function | undefined | null;
 
+    public static forceLogoutHandler: (() => void) | null;
+
     public constructor(
         accessToken: string|undefined|null, 
         baseURL? : string|undefined|null, 
@@ -83,6 +85,7 @@ export abstract class AbstractApiService implements HTTPRequestableInterface
 
                     } catch (e) {
                         console.log(e)
+                        AbstractApiService.forceLogout();
                         return Promise.reject(e)
                     }
                 }
@@ -283,5 +286,17 @@ export abstract class AbstractApiService implements HTTPRequestableInterface
 
     public delete <T = any> (url: string, config?: any) : Promise<AxiosResponse <T>> {
         return this.apiClient.delete(url, config)
+    }
+
+    // static - force logout handler for expired refresh tokens
+    
+    public static setForceLogoutHandler(handler: (() => void) | null ): void
+    {
+        AbstractApiService.forceLogoutHandler = handler;
+    }
+
+    private static forceLogout(): void
+    {
+        AbstractApiService.forceLogoutHandler?.();
     }
 }

@@ -81,9 +81,12 @@ class AuthenticationController extends Controller
                 ->first();
             
             if (! $refreshToken) {
+                $this->signOut($request);
                 return response()->json([
-                    "message" => "Refresh token is expired or not found. You need to reauthenticate.",
+                    "message" => "Refresh token is expired or not found. You need to reauthenticate. Signing out.",
                     "success" => false,
+                    "sign_out" => true,
+                    "expired_refresh_token" => true,
                 ], 422);
             }
 
@@ -107,21 +110,7 @@ class AuthenticationController extends Controller
     public function logout(Request $request): JsonResponse
     {
         try {
-            $user = auth()->user();
-
-            $now = Carbon::now();
-
-            $request->merge([
-                'session_type' => 'inactive',
-                'end_time' => $now->format('H:i:s'),
-                'department_id' => $user->department_id,
-                'company_id' => $user->company_id,
-                'window_id' => $request->input('window_id', 0)
-            ]);
-
-            $this->queueManagerService->updateQueueSession($request, $request->input('session_id', 0));
-            
-            auth()->logout();
+            $this->signOut($request);
 
             return response()->json([
                 "message" => "User logged out successfully.",
@@ -162,6 +151,32 @@ class AuthenticationController extends Controller
             'user' => $user ?? null,
             'session_id' => $session_id ?? null
         ], 200);
+    }
+
+    private function signOut(Request $request): void
+    {
+        try {
+            $user = auth()->user();
+
+            $now = Carbon::now();
+
+            $windowId =  $request->has('window_id') ? $request->window_id : 
+                $this->queueManagerService->windowAssignedTo($request, $user->id)['data']['id'];
+
+            $request->merge([
+                'session_type' => 'inactive',
+                'end_time' => $now->format('H:i:s'),
+                'department_id' => $user->department_id,
+                'company_id' => $user->company_id,
+                'window_id' => $windowId
+            ]);
+
+            $this->queueManagerService->updateQueueSession($request, $windowId);
+            
+            auth()->logout();
+        } catch (\Throwable $e) {
+            throw $e;
+        }
     }
 
     public function findUser(User $user): JsonResponse 

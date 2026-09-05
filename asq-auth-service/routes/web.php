@@ -13,6 +13,7 @@ Route::group([
     Route::group([
         'prefix' => 'department'
     ], function () {
+        Route::get('', 'DepartmentController@index');
         Route::get('{department}', 'DepartmentController@find');
     });
 

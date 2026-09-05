@@ -41,8 +41,20 @@ const TicketScreen: React.FC<TicketScreenProps> = ({
     );
   }
 
+  const connectToQz = async () => {
+    try {
+      await printService?.connect()
+      console.log("Connected to QZ successfully.");
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   useEffect(() => {
     if (! ticketNumber) return;
+
+    connectToQz()
+
     printQueueNumber(
       ticketNumber, 
       department,

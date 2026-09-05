@@ -118,8 +118,8 @@ const NowServingCard: React.FC<any> = (): React.ReactElement => {
             "depatment_id": user?.user?.department_id,
           }
         })
-        setCurrentQueueNum(queueNumObject?.transactions[0].queue_number)
-        setCurrentConcernName(queueNumObject?.transactions[0].concern.name)
+        setCurrentQueueNum(queueNumObject?.transactions[0]?.queue_number ?? 0)
+        setCurrentConcernName(queueNumObject?.transactions[0]?.concern.name ?? '  ')
       } catch (e:any) {
         console.error(e)
       }

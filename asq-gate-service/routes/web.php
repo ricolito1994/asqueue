@@ -40,6 +40,7 @@ Route::group([
         Route::group([
             'prefix' => 'department'
         ],function () {
+            Route::get('', 'GateUserController@departmentIndex');
             Route::get('{deptId}', 'GateUserController@departmentFind');
         });
     });

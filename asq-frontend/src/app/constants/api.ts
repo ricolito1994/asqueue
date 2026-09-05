@@ -47,7 +47,7 @@ const AUTH: Object = {
     'refresh'   : () :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/refresh`,    req: "post"}), 
     'me'        : () :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/me`,         req: "post"}),
 
-    
+    'departmentIndex' : (): HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/department`, req: "get"}),
     'findDepartment' : (departmentId: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/department/${departmentId}`, req: "get"}),    
     'findCompany' : (companyId: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/company/${companyId}`, req: "get"}),    
 }

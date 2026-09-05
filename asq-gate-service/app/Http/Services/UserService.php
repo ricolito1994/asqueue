@@ -102,6 +102,20 @@ class UserService extends BaseService {
         ]);
     }
 
+    public function departmentIndex(Request $request): mixed
+    {
+        return $this->asyncRequest([
+            [
+                'method' => 'GET',
+                'url' => self::ASQ_AUTH_DEPT_BASE_URL,
+                'headers' => [
+                    'Authorization' => "Bearer {$request->bearerToken()}"
+                ],
+                'options' => $request->all()
+            ],
+        ]);
+    }
+
     public function departmentFind(Request $request, int $deptId): mixed
     {
         return $this->asyncRequest([
