@@ -120,6 +120,7 @@ const App = (): React.ReactElement => {
                 <Route path="*" element={<>404 Page Not found</>} />
            
                 <Route path='/asqueue/new-transaction'>
+                    <Route path="company/:companyId/department" element={<FrontDeskLayout />} />
                     <Route path="company/:companyId/department/:departmentId/concerns" element={<FrontDeskLayout />} />
                     <Route path="company/:companyId/department/:departmentId/concerns/:concernId/windows" element={<TransactionWindow />} />
                 </Route>

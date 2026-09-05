@@ -10,6 +10,8 @@ import { AppContext } from '@context/AppContext';
 
 import { useParams } from 'react-router-dom';
 
+import { useSearchParams } from "react-router-dom";
+
 import AuthenticationService from '@services/AuthenticationService';
 
 import { QueueManagerService } from '@services/QueueManagerService';
@@ -27,6 +29,7 @@ import TicketScreen from "@components/frontdesk/TicketScreen";
 import WindowSelection  from "@components/frontdesk/WindowSelection";
 import ServiceSelection  from "@components/frontdesk//ServiceSelection";
 import ConditionalRenderingLayout from "./ConditionalRenderingLayout";
+import GenericSelection from "@components/frontdesk/GenericSelection";
 
 import QZPrintService from "@services/QzPrintService";
 
@@ -35,8 +38,6 @@ import useQueue from "@hooks/useQueue";
 import useEcho from "@hooks/useEcho";
 
 import { notification } from 'antd';
-import { connect } from "http2";
-
 interface WindowType {
   id: number;
   name: string;
@@ -62,7 +63,7 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
   const [issuedTime, setIssuedTime] = useState<Date | null>(null);
 
   const [screen, setScreen] = useState<
-    "select" | "window" | "ticket"
+    "select" | "window" | "ticket" | "department"
   >("select");
 
   const [selectedService, setSelectedService] =
@@ -81,6 +82,9 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
   const [animating, setAnimating] =
     useState(false);
+  
+  const [departments, setDepartments] = 
+    useState<any>([]);
 
   const PAGE_SIZE = 8;
 
@@ -100,7 +104,8 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
   const {
     isProcessing,
-    setIsProcessing
+    setIsProcessing,
+    setIsLoading
   } = useContext(AppContext);
 
   const queueService = useMemo(
@@ -141,6 +146,25 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
   });
 
   const ws = useEcho();
+
+  const [searchParams] = useSearchParams();
+
+  const fetchDepartments = async (page?: number) => {
+    try {
+      setIsProcessing(true)
+      const result = await authService.current.departmentIndex(null, {
+        params: {
+          company_id: companyId,
+          page: page
+        }
+      });
+      setDepartments(result)
+    } catch (e:any) {
+      console.error(e)
+    } finally {
+      setIsProcessing(false)
+    }
+  }
 
 
   useEffect(() => {
@@ -184,12 +208,16 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
       }
     };
 
-    fetchConcerns();
+    if (departmentId)
+      fetchConcerns();
 
   }, [companyId, departmentId]);
 
   useEffect(() => {
-    if (! concernData) return;
+    if (! departmentId)
+      setScreen("department")
+
+    if (!concernData && !departmentId) return;
 
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -209,7 +237,11 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
       }
     };
 
-    getDepartment();
+    if (departmentId)
+      getDepartment();
+
+    if(!departmentId)
+      fetchDepartments()
     
     let userActiveChannelUri = `update.user.active.department.${departmentId}.company.${companyId}`;
 
@@ -233,12 +265,12 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
       enqueue(e)
     })
 
-    const connectQz = async () => {
+    /*const connectQz = async () => {
       await printService.current.connect()
       console.log("connected")
     }
 
-    connectQz()
+    connectQz()*/
 
     return () => {
       clearInterval(timer)
@@ -385,8 +417,7 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
       {contextHolder}
       {/* HEADER */}
 
-      <header className="bg-white border-b border-[#D1D9F0] p-4 flex items-center justify-between">
-
+      <header className="bg-white border-b border-[#D1D9F0] p-3 flex items-center justify-between">
         {/* LEFT SIDE */}
         <div className="flex items-center gap-3">
 
@@ -396,25 +427,53 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
 
           <div>
             <h1 className="text-2xl font-bold text-blue-600 leading-tight">
-              {department?.name}
+              {department?.name ?? `Select Department`}
             </h1>
 
             <p className="text-sm text-gray-950">
-              {department?.company?.name}
+              {department?.company?.name ?? '-'}
             </p>
           </div>
 
         </div>
 
         {/* RIGHT SIDE */}
-        <p className="text-2xl font-mono text-black font-semibold">
-          {t.time.toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true,
-          })}
-        </p>
+        <div className="flex items-center gap-9">
+
+          <ConditionalRenderingLayout
+            condition={searchParams.get("from_dept") === "true"}
+            elseRender={''}
+          >
+            <button 
+              className="bg-linear-to-br from-[#ccc] to-[#cccc] text-white rounded-2xl p-4 text-left"
+              onClick = {() => {window.location.href = `/asqueue/new-transaction/company/${companyId}/department`}}
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-blue-300 rounded-xl flex items-center justify-center">
+                   <ArrowLeftToLine className="text-white" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-800">
+                    Back to Department
+                  </h2>
+                  <p className="text-gray-500">
+                  </p>
+                </div>
+
+              </div>
+            </button>
+          </ConditionalRenderingLayout>
+
+          <p className="text-2xl font-mono text-black font-semibold">
+            {t.time.toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: true,
+            })}
+          </p>
+
+        </div>
 
       </header>
 
@@ -476,16 +535,35 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
               printService={printService.current}
             />
         </ConditionalRenderingLayout>
+        <ConditionalRenderingLayout
+          condition={
+            screen === "department"
+          }
+          elseRender={''}
+        >
+          <GenericSelection 
+            selectionData={departments}
+            next = {(d: any) => {window.location.href = (`/asqueue/new-transaction/company/1/department/${d.id}/concerns?from_dept=true`)}}
+            nextPage = {(page: number) => {fetchDepartments(page)}}
+            prevPage = {(page: number) => {fetchDepartments(page)}}
+          >
+            <div className="text-center mb-10 mt-10 px-4">
+                <h1 className="text-4xl font-bold text-gray-800 mb-2">
+                    Welcome!
+                </h1>
+                <p className="text-gray-500 text-lg">
+                    Select A Department
+                </p>
+            </div>
+          </GenericSelection>
+        </ConditionalRenderingLayout>
       </main>
-
+     
       {/* FOOTER */}
-
       <footer className="bg-white border-t p-4 text-center text-sm text-gray-500">
-
         <p className="italic">
           Having trouble? Please feel free approach the counter for assistance.
         </p>
-
       </footer>
 
     </div>

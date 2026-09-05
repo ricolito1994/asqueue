@@ -2,17 +2,12 @@ import { FileText } from 'lucide-react';
 
 interface ServiceSelectionProps {
   animating: boolean;
-
   pagedServices: any[];
-
   handleServiceSelect: (service: any) => void;
-
   hasNextPage: boolean;
   hasPrevPage: boolean;
-
   page: number;
   totalPages: number;
-
   changePage: (page: number) => void;
 }
 
@@ -20,13 +15,10 @@ const ServiceSelection : React.FC<ServiceSelectionProps> = ({
   animating,
   pagedServices,
   handleServiceSelect,
-
   hasNextPage,
   hasPrevPage,
-
   page,
   totalPages,
-
   changePage,
 }: ServiceSelectionProps) => {
   return (
@@ -78,8 +70,6 @@ const ServiceSelection : React.FC<ServiceSelectionProps> = ({
                   </h2>
 
                   <p className="text-gray-500">
-                    Description:
-                    {" "}
                     {data.description}
                   </p>
 

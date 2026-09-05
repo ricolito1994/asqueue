@@ -88,14 +88,14 @@ do
   echo "DB connection OK for $SERVICE"
 
   echo "Running migrations..."
-  docker exec $SERVICE php artisan migrate:fresh #should only run in local environment!
-  # docker exec $SERVICE php artisan migrate --force
+  # docker exec $SERVICE php artisan migrate:fresh #should only run in local environment!
+  docker exec $SERVICE php artisan migrate --force
 
   echo "Running seeders..."
   docker exec $SERVICE php artisan db:seed
 
   echo "Optimize services..."
-  docker exec $SERVICE php artisan optimize
+  docker exec $SERVICE php artisan optimize:clear
 
   echo "Restarting $SERVICE ..."
   docker restart $SERVICE
