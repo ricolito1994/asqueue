@@ -29,6 +29,7 @@ import FrontDeskLayout from './layouts/FrontDeskLayout'
 import ClerkLayout from './layouts/ClerkLayout'
 import ClerkDashboard from './layouts/clerk/ClerkDashboard'
 import AdminDashboardLayout from './layouts/admin/AdminDashboardLayout'
+import DepartmentPage from "./layouts/admin/departments/DepartmentPage";
 
 import ProfileSettings from '@pages/main/settings/ProfileSettings'
 import UsersPage from './layouts/admin/users/UserPage'
@@ -157,6 +158,7 @@ const App = (): React.ReactElement => {
             {/* Admin Dashboard */}
             <Route path="/asqueue/admin" element={<AdminDashboardLayout />}>
               <Route path="users" element={<UsersPage />} />
+              <Route path="departments" element={<DepartmentPage />} />
             </Route>
           </Routes>
         </LoadingLayout>

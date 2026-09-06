@@ -98,5 +98,27 @@ class GateUserController extends Controller
             return $this->processException($e);
         }
     }
+    
+    public function departmentCreate(Request $request): JsonResponse|Response
+    {
+        try {
+            $res = $this->userService->departmentCreate($request);
+
+            return response()->json($res['data'] ?? $res);
+        } catch (\Exception $e) {
+            return $this->processException($e);
+        }
+    }
+
+    public function departmentUpdate(Request $request, int $deptId): JsonResponse|Response
+    {
+        try {
+            $res = $this->userService->departmentUpdate($request, $deptId);
+
+            return response()->json($res['data'] ?? $res);
+        } catch (\Exception $e) {
+            return $this->processException($e);
+        }
+    }
 
 }

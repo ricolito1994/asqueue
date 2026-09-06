@@ -39,9 +39,11 @@ Route::group([
 
         Route::group([
             'prefix' => 'department'
-        ],function () {
+        ], function () {
             Route::get('', 'GateUserController@departmentIndex');
+            Route::post('', 'GateUserController@departmentCreate');
             Route::get('{deptId}', 'GateUserController@departmentFind');
+            Route::patch('{deptId}', 'GateUserController@departmentUpdate');
         });
     });
     

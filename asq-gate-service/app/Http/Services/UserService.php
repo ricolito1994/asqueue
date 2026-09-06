@@ -129,4 +129,32 @@ class UserService extends BaseService {
             ]
         ]);
     }
+
+    public function departmentCreate(Request $request): mixed
+    {
+        return $this->asyncRequest([
+            [
+                'method' => 'POST',
+                'url' => self::ASQ_AUTH_DEPT_BASE_URL,
+                'headers' => [
+                    'Authorization' => "Bearer {$request->bearerToken()}"
+                ],
+                'options' => $request->all()
+            ],
+        ]);
+    }
+
+    public function departmentUpdate(Request $request, int $deptId): mixed
+    {
+        return $this->asyncRequest([
+            [
+                'method' => 'PATCH',
+                'url' => self::ASQ_AUTH_DEPT_BASE_URL . "/{$deptId}",
+                'headers' => [
+                    'Authorization' => "Bearer {$request->bearerToken()}"
+                ],
+                'options' => $request->all()
+            ],
+        ]);
+    }
 }

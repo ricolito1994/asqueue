@@ -64,10 +64,41 @@ export default class AuthenticationService extends AbstractApiService {
     }
   }
 
-  async departmentIndex<T = any>(data: any, config?: any) {
+  async departmentIndex<T = any>(page: number, data?: any, config?: any) {
     try {
       let response = await this.requestV2<T>(
-        this.auth.departmentIndex(),
+        this.auth.departmentIndex(page),
+        data,
+        config,
+      );
+
+      return response?.data;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+
+  async createDepartment<T = any>(data: any, config?: any) {
+    try {
+      let response = await this.requestV2<T>(
+        this.auth.createDepartment(),
+        data,
+        config,
+      );
+      return response?.data;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+
+  async updateDepartment<T = any>(
+    departmentId: number,
+    data: any,
+    config?: any,
+  ) {
+    try {
+      let response = await this.requestV2<T>(
+        this.auth.updateDepartment(departmentId),
         data,
         config,
       );
@@ -102,7 +133,7 @@ export default class AuthenticationService extends AbstractApiService {
       throw e;
     }
   }
-  
+
   async createUser<T = any>(data: any, config?: any) {
     try {
       const response = await this.requestV2<T>(

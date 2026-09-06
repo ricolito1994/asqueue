@@ -14,7 +14,9 @@ Route::group([
         'prefix' => 'department'
     ], function () {
         Route::get('', 'DepartmentController@index');
+        Route::post('', 'DepartmentController@create');
         Route::get('{department}', 'DepartmentController@find');
+        Route::patch('{department}', 'DepartmentController@update');
     });
 
     Route::group([

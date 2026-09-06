@@ -10,6 +10,7 @@ import {
   Users,
   X,
   ShipWheel,
+  Building2,
 } from "lucide-react";
 
 import { Link, useLocation } from "react-router-dom";
@@ -52,6 +53,11 @@ import AuthenticationService from "@services/AuthenticationService";
       label: "Users",
       href: "/asqueue/admin/users",
       icon: Users,
+    },
+    {
+      label: "Departments",
+      href: "/asqueue/admin/departments",
+      icon: Building2,
     },
     {
       label: "Windows",
