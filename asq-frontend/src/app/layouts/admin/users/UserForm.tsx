@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
 
 interface UserFormData {
@@ -9,16 +9,26 @@ interface UserFormData {
   password: string;
 }
 
+interface User {
+  id: number;
+  firstname: string;
+  lastname: string;
+  username: string;
+  email: string;
+}
+
 interface UserFormProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (data: UserFormData) => Promise<void>;
+  user?: User | null;
 }
 
 const UserForm: React.FC<UserFormProps> = ({
   open,
   onClose,
   onSubmit,
+  user,
 }): React.ReactElement | null => {
   const [formData, setFormData] = useState<UserFormData>({
     firstname: "",
@@ -30,6 +40,30 @@ const UserForm: React.FC<UserFormProps> = ({
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        firstname: user.firstname,
+        lastname: user.lastname,
+        username: user.username,
+        email: user.email,
+        password: "",
+      });
+    } else {
+      setFormData({
+        firstname: "",
+        lastname: "",
+        username: "",
+        email: "",
+        password: "",
+      });
+    }
+
+    setError(null);
+  }, [user]);
+
+  const isEditMode = !!user;
 
   if (!open) {
     return null;
@@ -94,10 +128,14 @@ const UserForm: React.FC<UserFormProps> = ({
         {/* Header */}
         <div className="flex items-start justify-between border-b px-6 py-5">
           <div>
-            <h2 className="text-lg font-semibold">Add User</h2>
+            <h2 className="text-lg font-semibold">
+              {isEditMode ? "Edit User" : "Add User"}
+            </h2>
 
             <p className="mt-1 text-sm text-muted-foreground">
-              Create a new user account.
+              {isEditMode
+                ? "Update the user's account information."
+                : "Create a new user account."}
             </p>
           </div>
 
@@ -211,7 +249,7 @@ const UserForm: React.FC<UserFormProps> = ({
                 value={formData.password}
                 onChange={handleChange}
                 minLength={6}
-                required
+                required={!isEditMode}
                 disabled={submitting}
                 className="h-9 w-full rounded-md border bg-background px-3 text-sm outline-none focus:border-ring focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               />
@@ -238,7 +276,13 @@ const UserForm: React.FC<UserFormProps> = ({
               disabled={submitting}
               className="h-9 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:pointer-events-none disabled:opacity-50"
             >
-              {submitting ? "Creating..." : "Create User"}
+              {isEditMode
+                ? submitting
+                  ? "Updating..."
+                  : "Update User"
+                : submitting
+                  ? "Creating..."
+                  : "Create User"}
             </button>
           </div>
         </form>

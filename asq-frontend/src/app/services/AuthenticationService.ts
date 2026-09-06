@@ -102,10 +102,25 @@ export default class AuthenticationService extends AbstractApiService {
       throw e;
     }
   }
+  
   async createUser<T = any>(data: any, config?: any) {
     try {
       const response = await this.requestV2<T>(
         this.user.create(),
+        data,
+        config,
+      );
+
+      return response?.data;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+
+  async updateUser<T = any>(userId: number, data: any, config?: any) {
+    try {
+      const response = await this.requestV2<T>(
+        this.user.update(userId),
         data,
         config,
       );

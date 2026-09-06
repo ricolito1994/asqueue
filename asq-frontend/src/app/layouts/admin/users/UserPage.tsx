@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import UserToolbar from "./UserToolbar";
 import UserTable from "./UserTable";
 import UserForm from "./UserForm";
+import UserView from "./UserView";
 
 import AuthenticationService from "@services/AuthenticationService";
 
@@ -15,6 +16,11 @@ interface User {
   full_name: string;
   username: string;
   email: string;
+  designation: string | null;
+  title: string | null;
+  window_id: number | null;
+  company_id: number | null;
+  department_id: number | null;
   created_at: string;
 }
 
@@ -28,10 +34,12 @@ interface PaginationMeta {
 const UsersPage: React.FC = (): React.ReactElement => {
   const { user, setUser } = useContext(AppContext);
 
-  const [showUserForm, setShowUserForm] = useState<boolean>(false);
-
-  const [users, setUsers] = useState<User[]>([]);
+ const [showUserForm, setShowUserForm] = useState<boolean>(false);
+ const [selectedUser, setSelectedUser] = useState<User | null>(null);
+ const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [showUserView, setShowUserView] = useState<boolean>(false);
 
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -79,20 +87,44 @@ const UsersPage: React.FC = (): React.ReactElement => {
     }
   };
 
+  const handleEditUser = (selectedUser: User) => {
+    setSelectedUser(selectedUser);
+    setShowUserForm(true);
+  };
+
+  const handleViewUser = (selectedUser: User) => {
+    setSelectedUser(selectedUser);
+    setShowUserView(true);
+  };
+
   const handleCreateUser = async (data: any) => {
     try {
       setSuccessMessage(null);
 
-      const response = await auth.current.createUser(data);
+      let response;
 
-      console.log("CREATE USER RESPONSE:", response);
+      if (selectedUser) {
+        response = await auth.current.updateUser(selectedUser.id, data);
+
+        console.log("UPDATE USER RESPONSE:", response);
+      } else {
+        response = await auth.current.createUser(data);
+
+        console.log("CREATE USER RESPONSE:", response);
+      }
 
       await fetchUsers(1);
 
       setShowUserForm(false);
-      setSuccessMessage("User created successfully.");
+      setSelectedUser(null);
+
+      setSuccessMessage(
+        selectedUser
+          ? "User updated successfully."
+          : "User created successfully.",
+      );
     } catch (error) {
-      console.error("Failed to create user:", error);
+      console.error("Failed to save user:", error);
 
       throw error;
     }
@@ -115,9 +147,9 @@ const UsersPage: React.FC = (): React.ReactElement => {
   }, [successMessage]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5">
       {/* Page Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight">Users</h1>
 
@@ -155,6 +187,8 @@ const UsersPage: React.FC = (): React.ReactElement => {
         loading={loading}
         paginationMeta={paginationMeta}
         onPageChange={fetchUsers}
+        onEdit={handleEditUser}
+        onView={handleViewUser}
       />
 
       {/* Add User Sheet */}
@@ -162,6 +196,13 @@ const UsersPage: React.FC = (): React.ReactElement => {
         open={showUserForm}
         onClose={() => setShowUserForm(false)}
         onSubmit={handleCreateUser}
+        user={selectedUser}
+      />
+
+      <UserView
+        open={showUserView}
+        onClose={() => setShowUserView(false)}
+        user={selectedUser}
       />
     </div>
   );

@@ -39,11 +39,11 @@ class GateUserController extends Controller
     public function update(Request $request, int $userId): JsonResponse|Response
     {
         try {
-            $request = $request->all();
-            $res = $this->userService->index($request, $userId);
+            $res = $this->userService->update($request, $userId);
+
             return response()->json($res['data'] ?? $res);
         } catch (\Exception $e) {
-           return $this->processException($e);
+            return $this->processException($e);
         }
     }
 

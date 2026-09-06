@@ -26,6 +26,8 @@ interface UserTableProps {
   loading?: boolean;
   paginationMeta?: PaginationMeta;
   onPageChange?: (page: number) => void;
+  onEdit?: (user: User) => void;
+  onView?: (user: User) => void;
 }
 
 const UserTable: React.FC<UserTableProps> = ({
@@ -33,6 +35,8 @@ const UserTable: React.FC<UserTableProps> = ({
   loading = false,
   paginationMeta,
   onPageChange,
+  onEdit,
+  onView,
 }) => {
   const columns: ColumnDef<User>[] = [
     {
@@ -122,7 +126,13 @@ const UserTable: React.FC<UserTableProps> = ({
       id: "actions",
       header: () => <span className="sr-only">Actions</span>,
       enableSorting: false,
-      cell: ({ row }) => <UserActions user={row.original} />,
+      cell: ({ row }) => (
+        <UserActions 
+        user={row.original} 
+        onEdit={(user) => onEdit?.(user)}
+        onView={(user) => onView?.(user)}
+        />
+      ),
     },
   ];
 

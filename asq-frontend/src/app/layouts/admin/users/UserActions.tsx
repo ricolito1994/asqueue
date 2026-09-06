@@ -3,9 +3,15 @@ import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react";
 
 interface UserActionsProps {
   user: any;
+  onEdit: (user: any) => void;
+  onView: (user: any) => void;
 }
 
-const UserActions: React.FC<any> = ({ user }): React.ReactElement => {
+const UserActions: React.FC<UserActionsProps> = ({
+  user,
+  onEdit,
+  onView,
+}): React.ReactElement => {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
@@ -24,6 +30,7 @@ const UserActions: React.FC<any> = ({ user }): React.ReactElement => {
         <div className="absolute right-0 top-full z-20 mt-1 w-40 rounded-md border bg-background p-1 shadow-md">
           <button
             type="button"
+            onClick={() => onView(user)}
             className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-muted"
           >
             <Eye className="size-4" />
@@ -32,6 +39,7 @@ const UserActions: React.FC<any> = ({ user }): React.ReactElement => {
 
           <button
             type="button"
+            onClick={() => onEdit(user)}
             className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-muted"
           >
             <Edit className="size-4" />

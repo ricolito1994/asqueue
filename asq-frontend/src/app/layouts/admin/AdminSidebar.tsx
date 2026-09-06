@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+
 import {
   ChevronLeft,
   ChevronRight,
@@ -8,59 +9,84 @@ import {
   Settings,
   Users,
   X,
+  ShipWheel,
 } from "lucide-react";
+
 import { Link, useLocation } from "react-router-dom";
 
-interface NavigationItem {
-  label: string;
-  href: string;
-  icon: React.ComponentType<{
-    className?: string;
-  }>;
-}
+import { AppContext } from "@context/AppContext";
+import AuthenticationService from "@services/AuthenticationService";
 
-interface AdminSidebarProps {
-  open: boolean;
-  mobile?: boolean;
-  onToggle?: () => void;
-  onClose?: () => void;
-}
+  interface NavigationItem {
+    label: string;
+    href: string;
+    icon: React.ComponentType<{
+      className?: string;
+    }>;
+  }
 
-const MIN_WIDTH: number = 220;
-const DEFAULT_WIDTH: number = 260;
-const MAX_WIDTH: number = 400;
-const COLLAPSED_WIDTH: number = 64;
+  interface AdminSidebarProps {
+    open: boolean;
+    mobile?: boolean;
+    onToggle?: () => void;
+    onClose?: () => void;
+  }
 
-const STORAGE_KEY: string = "admin-sidebar-width";
+  const MIN_WIDTH: number = 220;
+  const DEFAULT_WIDTH: number = 260;
+  const MAX_WIDTH: number = 400;
+  const COLLAPSED_WIDTH: number = 64;
 
-const mainNavigation: NavigationItem[] = [
-  {
-    label: "Dashboard",
-    href: "/asqueue/admin",
-    icon: LayoutDashboard,
-  },
-];
+  const STORAGE_KEY: string = "admin-sidebar-width";
 
-const managementNavigation: NavigationItem[] = [
-  {
-    label: "Users",
-    href: "/asqueue/admin/users",
-    icon: Users,
-  },
-  {
-    label: "Windows",
-    href: "/asqueue/admin/windows",
-    icon: Monitor,
-  },
-];
+  const mainNavigation: NavigationItem[] = [
+    {
+      label: "Dashboard",
+      href: "/asqueue/admin",
+      icon: LayoutDashboard,
+    },
+  ];
 
-const AdminSidebar: React.FC<any> = ({
-  open,
-  mobile = false,
-  onToggle,
-  onClose,
-}): React.ReactElement => {
-  const location = useLocation();
+  const managementNavigation: NavigationItem[] = [
+    {
+      label: "Users",
+      href: "/asqueue/admin/users",
+      icon: Users,
+    },
+    {
+      label: "Windows",
+      href: "/asqueue/admin/windows",
+      icon: Monitor,
+    },
+  ];
+
+  const AdminSidebar: React.FC<any> = ({
+    open,
+    mobile = false,
+    onToggle,
+    onClose,
+  }): React.ReactElement => {
+    const { user, setUser } = useContext(AppContext);
+
+    const location = useLocation();
+
+    const handleLogout = async (): Promise<void> => {
+      try {
+        const auth = new AuthenticationService(
+          user?.access_token ?? null,
+          null,
+          user?.refresh_token,
+        );
+
+        await auth.logout({});
+      } catch (error) {
+        console.error("Logout failed:", error);
+      } finally {
+        localStorage.removeItem("user");
+        setUser(null);
+        window.location.href = "/";
+      }
+  };
 
   const [width, setWidth] = useState<number>(() => {
     if (typeof window === "undefined") {
@@ -87,18 +113,12 @@ const AdminSidebar: React.FC<any> = ({
   const resizeStartX = useRef<number>(0);
   const resizeStartWidth = useRef<number>(width);
 
-  /*
-   * Save sidebar width.
-   */
   useEffect(() => {
     if (!mobile) {
       window.localStorage.setItem(STORAGE_KEY, String(width));
     }
   }, [width, mobile]);
 
-  /*
-   * Handle sidebar resizing.
-   */
   useEffect(() => {
     if (!isResizing) {
       return;
@@ -138,9 +158,6 @@ const AdminSidebar: React.FC<any> = ({
     };
   }, [isResizing]);
 
-  /*
-   * Start resizing.
-   */
   const handleResizeStart = (
     event: React.PointerEvent<HTMLDivElement>,
   ): void => {
@@ -154,16 +171,10 @@ const AdminSidebar: React.FC<any> = ({
     setIsResizing(true);
   };
 
-  /*
-   * Reset sidebar width.
-   */
   const resetWidth = (): void => {
     setWidth(DEFAULT_WIDTH);
   };
 
-  /*
-   * Keyboard resizing.
-   */
   const handleResizeKeyDown = (
     event: React.KeyboardEvent<HTMLDivElement>,
   ): void => {
@@ -203,9 +214,6 @@ const AdminSidebar: React.FC<any> = ({
     setWidth(Math.min(Math.max(newWidth, MIN_WIDTH), MAX_WIDTH));
   };
 
-  /*
-   * Determine active navigation item.
-   */
   const isActive = (href: string): boolean => {
     if (href === "/asqueue/admin") {
       return location.pathname === href;
@@ -225,7 +233,7 @@ const AdminSidebar: React.FC<any> = ({
   return (
     <aside
       className={[
-        "relative flex h-screen shrink-0 flex-col border-r bg-background",
+        "relative flex h-screen shrink-0 flex-col bg-[#0f2952]",
         !isResizing && "transition-[width] duration-200 ease-in-out",
       ]
         .filter(Boolean)
@@ -234,29 +242,31 @@ const AdminSidebar: React.FC<any> = ({
         width: `${sidebarWidth}px`,
       }}
     >
-      {/* Sidebar Header */}
-      <div className="flex h-14 shrink-0 items-center border-b px-3">
+      {/* Brand */}
+      <div className="flex h-14 shrink-0 items-center gap-2.5 border-b border-white/8 px-4.5">
         <Link
           to="/asqueue/admin"
           onClick={mobile ? onClose : undefined}
           className={[
-            "flex min-w-0 flex-1 items-center rounded-md",
-            open ? "gap-2 px-1" : "justify-center",
+            "flex min-w-0 items-center",
+            open ? "gap-2.5" : "justify-center",
           ].join(" ")}
         >
           {/* Application Logo */}
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
-            A
+          <div className="flex size-8.5 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
+            <ShipWheel className="size-5" />
           </div>
 
           {/* Application Name */}
           {open && (
             <div className="min-w-0">
-              <div className="truncate text-sm font-semibold">Admin Panel</div>
+              <span className="block truncate text-md font-bold text-white">
+                JBLFMU
+              </span>
 
-              <div className="truncate text-xs text-muted-foreground">
-                Administrator
-              </div>
+              <span className="mt-0.5 block truncate text-[10px] uppercase tracking-widest text-white/40">
+                Queue System
+              </span>
             </div>
           )}
         </Link>
@@ -266,7 +276,7 @@ const AdminSidebar: React.FC<any> = ({
           <button
             type="button"
             onClick={onClose}
-            className="ml-2 inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="ml-auto inline-flex size-8 shrink-0 items-center justify-center rounded-md text-white/50 hover:bg-white/6 hover:text-white"
           >
             <X className="size-4" />
 
@@ -276,8 +286,8 @@ const AdminSidebar: React.FC<any> = ({
       </div>
 
       {/* Navigation */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden px-3 py-4">
-        {/* Main Navigation */}
+      <div className="flex-1 overflow-y-auto overflow-x-hidden pt-2">
+        {/* Main */}
         <SidebarSection label="Main" open={open}>
           {mainNavigation.map((item: NavigationItem) => (
             <SidebarItem
@@ -290,8 +300,8 @@ const AdminSidebar: React.FC<any> = ({
           ))}
         </SidebarSection>
 
-        {/* Management Navigation */}
-        <SidebarSection label="Management" open={open} className="mt-6">
+        {/* Management */}
+        <SidebarSection label="Management" open={open} className="mt-5">
           {managementNavigation.map((item: NavigationItem) => (
             <SidebarItem
               key={item.href}
@@ -304,15 +314,15 @@ const AdminSidebar: React.FC<any> = ({
         </SidebarSection>
       </div>
 
-      {/* Sidebar Footer */}
-      <div className="shrink-0 border-t p-3">
+      {/* Footer */}
+      <div className="shrink-0 border-t border-white/8 px-4.5 py-3.5">
         <SidebarItem
           item={{
             label: "Settings",
-            href: "/admin/settings",
+            href: "/asqueue/admin/settings",
             icon: Settings,
           }}
-          active={isActive("/admin/settings")}
+          active={isActive("/asqueue/admin/settings")}
           open={open}
           onClick={mobile ? onClose : undefined}
         />
@@ -320,9 +330,10 @@ const AdminSidebar: React.FC<any> = ({
         {/* Logout */}
         <button
           type="button"
+          onClick={handleLogout}
           title={!open ? "Logout" : undefined}
           className={[
-            "mt-1 flex h-9 w-full items-center rounded-md text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
+            "mt-1 flex h-9 w-full items-center rounded-md text-sm font-medium text-white/50 transition-colors hover:bg-white/6 hover:text-white/80",
             open ? "gap-3 px-3" : "justify-center px-2",
           ].join(" ")}
         >
@@ -368,9 +379,9 @@ const AdminSidebar: React.FC<any> = ({
           onKeyDown={handleResizeKeyDown}
           className={[
             "absolute right-0 top-0 z-10 h-full w-1 cursor-col-resize outline-none",
-            "hover:bg-border",
+            "hover:bg-white/10",
             "focus-visible:bg-ring",
-            isResizing && "bg-border",
+            isResizing && "bg-white/10",
           ]
             .filter(Boolean)
             .join(" ")}
@@ -400,12 +411,12 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
   return (
     <section className={className}>
       {open && (
-        <h2 className="mb-2 px-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <h2 className="px-4.5 pt-4 pb-1.5 text-[10px] uppercase tracking-widest text-white/30">
           {label}
         </h2>
       )}
 
-      <nav className="space-y-1">{children}</nav>
+      <nav>{children}</nav>
     </section>
   );
 };
@@ -436,16 +447,20 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       title={!open ? item.label : undefined}
       aria-current={active ? "page" : undefined}
       className={[
-        "group flex h-9 items-center rounded-md text-sm font-medium transition-colors",
-        open ? "gap-3 px-3" : "justify-center px-2",
+        "relative mx-2 flex h-9 items-center rounded-lg text-sm transition-colors duration-150",
+        open ? "gap-2.5 px-3" : "justify-center px-2",
         active
-          ? "bg-muted text-foreground"
-          : "text-muted-foreground hover:bg-muted hover:text-foreground",
+          ? "bg-blue-500/20 text-blue-300"
+          : "text-white/50 hover:bg-white/6 hover:text-white/80",
       ].join(" ")}
     >
-      <Icon className="size-4 shrink-0" />
+      {active && (
+        <span className="absolute -left-2 top-1/2 h-[55%] w-0.75 -translate-y-1/2 rounded-r-sm bg-blue-500" />
+      )}
 
-      {open && <span className="truncate">{item.label}</span>}
+      <Icon className="size-4.25 shrink-0" aria-hidden="true" />
+
+      {open && <span className="flex-1 truncate">{item.label}</span>}
     </Link>
   );
 };

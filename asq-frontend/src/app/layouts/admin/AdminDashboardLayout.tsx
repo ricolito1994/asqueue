@@ -57,8 +57,8 @@ const AdminDashboardLayout: React.FC<any> = (): React.ReactElement => {
             onMobileMenuToggle={openMobileSidebar}
           />
 
-          <main className="min-w-0 flex-1 overflow-auto">
-            <div className="mx-auto w-full max-w-400 px-6 py-8">
+          <main className="min-w-0 flex-1 overflow-auto bg-[#f4f7fb]">
+            <div className="mx-auto w-full max-w-400 px-5 py-5">
               <Outlet />
             </div>
           </main>

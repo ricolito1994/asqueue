@@ -56,7 +56,7 @@ const USER: Object = {
     'find'  : (userId: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/user/${userId}`, req: "get"}),    
     'index' : (page: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/user?page=${page}`, req: "get"}),  
     'create' : ()  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/user`, req: "post"}),    
-    'update' : (userId: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/user/{userId}`, req: "patch"}), 
+    'update' : (userId: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/user/${userId}`, req: "patch"}), 
     'delete'  : (userId: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/user/${userId}`, req: "delete"}),   
 
     'setActiveUserSession' : (userId: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/user/set-active-session/${userId}`, req: "post"}),   
