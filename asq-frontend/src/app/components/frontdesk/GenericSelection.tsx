@@ -23,17 +23,19 @@ const GenericSelection: React.FC<GenericSelectionInterface> = ({
     children
 }): React.ReactElement => {
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [hasNext, setHasNext] = useState(false);
-    const [hasPrev, setHasPrev] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [hasNext, setHasNext] = useState<boolean>(false);
+    const [hasPrev, setHasPrev] = useState<boolean>(false);
 
     useEffect (() => {
+        if (! selectionData || selectionData.length == 0) 
+            return
         setHasNext(selectionData.prev_page_url!==null)
         setHasPrev(selectionData.next_page_url!==null)
-        setCurrentPage(selectionData.current_page)
     }, [selectionData]);
 
     useEffect(() => {
+        if (currentPage === 0) return;
         if (currentPage + 1 > currentPage)
             nextPage(currentPage)
         else if (currentPage - 1 < currentPage)
