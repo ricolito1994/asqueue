@@ -34,6 +34,7 @@ import DepartmentPage from "./layouts/admin/departments/DepartmentPage";
 import ProfileSettings from '@pages/main/settings/ProfileSettings'
 import UsersPage from './layouts/admin/users/UserPage'
 import UnassignedUserPage from "@pages/UnassignedUserPage";
+import WindowPage from './layouts/admin/windows/WindowPage'
 
 const App = (): React.ReactElement => {
 
@@ -159,6 +160,7 @@ const App = (): React.ReactElement => {
             <Route path="/asqueue/admin" element={<AdminDashboardLayout />}>
               <Route path="users" element={<UsersPage />} />
               <Route path="departments" element={<DepartmentPage />} />
+              <Route path="windows" element={<WindowPage />} />
             </Route>
           </Routes>
         </LoadingLayout>

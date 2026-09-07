@@ -106,6 +106,34 @@ class QueueService extends BaseService
         ]);
     }
 
+    public function windowCreate(Request $request): mixed
+    {
+        return $this->asyncRequest([
+            [
+                'method' => 'POST',
+                'url' => self::ASQ_W_QUEUE_BASE_URL . "",
+                'headers' => [
+                    'Authorization' => "Bearer {$request->bearerToken()}"
+                ],
+                'options' => $request->all()
+            ]
+        ]);
+    }
+
+    public function windowUpdate(Request $request, int $window): mixed
+    {
+        return $this->asyncRequest([
+            [
+                'method' => 'PATCH',
+                'url' => self::ASQ_W_QUEUE_BASE_URL . "/{$window}",
+                'headers' => [
+                    'Authorization' => "Bearer {$request->bearerToken()}"
+                ],
+                'options' => $request->all()
+            ]
+        ]);
+    }
+
     public function windowAssignedTo(Request $request, int $userId):mixed
     {
         return $this->asyncRequest([

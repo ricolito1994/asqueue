@@ -157,4 +157,18 @@ class UserService extends BaseService {
             ],
         ]);
     }
+    
+    public function departmentAll(Request $request): mixed
+    {
+        return $this->asyncRequest([
+            [
+                'method' => 'GET',
+                'url' => self::ASQ_AUTH_DEPT_BASE_URL . '/all',
+                'headers' => [
+                    'Authorization' => "Bearer {$request->bearerToken()}"
+                ],
+                'options' => $request->all()
+            ],
+        ]);
+    }
 }

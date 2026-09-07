@@ -317,6 +317,7 @@ import AuthenticationService from "@services/AuthenticationService";
               onClick={mobile ? onClose : undefined}
             />
           ))}
+
         </SidebarSection>
       </div>
 

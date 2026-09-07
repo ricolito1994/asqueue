@@ -31,6 +31,8 @@ Route::group([
         'prefix' => 'windows',
     ], function () {
         Route::get('', 'WindowController@index');
+        Route::post('', 'WindowController@create');
+        Route::patch('/{window}', 'WindowController@update');
         Route::get('/assignedto/{user_id}', 'WindowController@findByAssignedTo');
     });
 

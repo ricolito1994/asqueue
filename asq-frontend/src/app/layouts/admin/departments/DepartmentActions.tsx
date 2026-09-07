@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react";
 
-interface UserActionsProps {
-  user: any;
-  onEdit: (user: any) => void;
-  onView: (user: any) => void;
+interface DepartmentActionsProps {
+  department: any;
+  onEdit: (department: any) => void;
+  onView?: (department: any) => void;
 }
 
-const UserActions: React.FC<UserActionsProps> = ({
-  user,
+const DepartmentActions: React.FC<DepartmentActionsProps> = ({
+  department,
   onEdit,
   onView,
 }): React.ReactElement => {
@@ -47,12 +47,12 @@ const UserActions: React.FC<UserActionsProps> = ({
 
   const handleView = () => {
     setOpen(false);
-    onView(user);
+    onView?.(department);
   };
 
   const handleEdit = () => {
     setOpen(false);
-    onEdit(user);
+    onEdit(department);
   };
 
   const handleDelete = () => {
@@ -68,7 +68,7 @@ const UserActions: React.FC<UserActionsProps> = ({
       >
         <MoreHorizontal className="size-4" />
 
-        <span className="sr-only">Open actions for {user.name}</span>
+        <span className="sr-only">Open actions for {department.name}</span>
       </button>
 
       {open && (
@@ -107,4 +107,4 @@ const UserActions: React.FC<UserActionsProps> = ({
   );
 };
 
-export default UserActions;
+export default DepartmentActions;

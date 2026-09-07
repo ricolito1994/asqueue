@@ -42,6 +42,7 @@ Route::group([
         ], function () {
             Route::get('', 'GateUserController@departmentIndex');
             Route::post('', 'GateUserController@departmentCreate');
+            Route::get('all', 'GateUserController@departmentAll');
             Route::get('{deptId}', 'GateUserController@departmentFind');
             Route::patch('{deptId}', 'GateUserController@departmentUpdate');
         });
@@ -68,6 +69,8 @@ Route::group([
             'prefix' => 'windows'
         ],function () {
             Route::get('', 'GateQueueController@windowIndex');
+            Route::post('', 'GateQueueController@windowCreate');
+            Route::patch('/{window}', 'GateQueueController@windowUpdate');
             Route::get('/assignedto/{user_id}', 'GateQueueController@windowAssignedTo');
         });
         Route::group([

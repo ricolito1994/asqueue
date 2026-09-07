@@ -4,6 +4,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import AsDataTable from "@components/commons/AsDataTable";
 import { PaginationMeta } from "@components/commons/AsDataTable/types";
 
+import DepartmentActions from "./DepartmentActions";
+
 interface Department {
   id: number;
   name: string;
@@ -58,13 +60,10 @@ const DepartmentTable: React.FC<DepartmentTableProps> = ({
       header: () => <span className="sr-only">Actions</span>,
       enableSorting: false,
       cell: ({ row }) => (
-        <button
-          type="button"
-          className="text-sm font-medium text-primary hover:underline"
-          onClick={() => onEdit?.(row.original)}
-        >
-          Edit
-        </button>
+        <DepartmentActions
+          department={row.original}
+          onEdit={(department) => onEdit?.(department)}
+        />
       ),
     },
   ];

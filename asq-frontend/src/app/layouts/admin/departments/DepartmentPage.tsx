@@ -3,6 +3,7 @@ import { AppContext } from "@context/AppContext";
 import { Plus } from "lucide-react";
 
 import DepartmentTable from "./DepartmentTable";
+import DepartmentForm from "./DepartmentForm";
 
 import AuthenticationService from "@services/AuthenticationService";
 
@@ -73,6 +74,35 @@ const DepartmentPage: React.FC = (): React.ReactElement => {
     }
   };
 
+  const [showDepartmentForm, setShowDepartmentForm] = useState<boolean>(false);
+  const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
+
+  const handleSaveDepartment = async (data: { name: string }) => {
+    try {
+      if (selectedDepartment) {
+        await auth.current.updateDepartment(selectedDepartment.id, data);
+      } else {
+        await auth.current.createDepartment(data);
+      }
+
+      await fetchDepartments(1);
+
+      setShowDepartmentForm(false);
+      setSelectedDepartment(null);
+    } catch (error) {
+      console.error("Failed to save department:", error);
+
+      throw error;
+    }
+  };
+
+  const handleEditDepartment = (department: Department) => {
+    setSelectedDepartment(department);
+    setShowDepartmentForm(true);
+  };
+
+  
+
   useEffect(() => {
     fetchDepartments(1);
   }, []);
@@ -91,6 +121,10 @@ const DepartmentPage: React.FC = (): React.ReactElement => {
 
         <button
           type="button"
+          onClick={() => {
+            setSelectedDepartment(null);
+            setShowDepartmentForm(true);
+          }}
           className="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm hover:bg-primary/90"
         >
           <Plus className="size-4" />
@@ -104,6 +138,18 @@ const DepartmentPage: React.FC = (): React.ReactElement => {
         loading={loading}
         paginationMeta={paginationMeta}
         onPageChange={fetchDepartments}
+        onEdit={handleEditDepartment}
+      />
+
+      {/* Department Form */}
+      <DepartmentForm
+        open={showDepartmentForm}
+        onClose={() => {
+          setShowDepartmentForm(false);
+          setSelectedDepartment(null);
+        }}
+        onSubmit={handleSaveDepartment}
+        department={selectedDepartment}
       />
     </div>
   );

@@ -15,6 +15,7 @@ Route::group([
     ], function () {
         Route::get('', 'DepartmentController@index');
         Route::post('', 'DepartmentController@create');
+        Route::get('all', 'DepartmentController@all');
         Route::get('{department}', 'DepartmentController@find');
         Route::patch('{department}', 'DepartmentController@update');
     });

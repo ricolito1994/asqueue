@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\window;
+use App\Models\Window;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Carbon\Carbon;
+use Exception;
 
 class WindowController extends Controller
 {
@@ -59,6 +61,60 @@ class WindowController extends Controller
                 'success' => false,
                 'message' => 'Something went wrong',
                 'reason' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function create(Request $request): JsonResponse
+    {
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'department_id' => 'required|integer',
+            ]);
+
+            $window = Window::create([
+                'name' => $validated['name'],
+                'description' => $validated['description'] ?? null,
+                'department_id' => $validated['department_id'],
+                'company_id' => 1,
+                'assigned_to' => null,
+            ]);
+
+            return response()->json($window->fresh(), 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'reason' => $e->getMessage(),
+                'message' => 'Something went wrong.',
+            ], 500);
+        }
+    }
+
+    public function update(Request $request, int $window): JsonResponse
+    {
+        try {
+            $windowData = Window::findOrFail($window);
+
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'department_id' => 'required|integer',
+            ]);
+
+            $windowData->update([
+                'name' => $validated['name'],
+                'description' => $validated['description'] ?? null,
+                'department_id' => $validated['department_id'],
+            ]);
+
+            return response()->json($windowData->fresh(), 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'reason' => $e->getMessage(),
+                'message' => 'Something went wrong.',
             ], 500);
         }
     }

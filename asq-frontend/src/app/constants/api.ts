@@ -48,6 +48,7 @@ const AUTH: Object = {
     'me'        : () :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/me`,         req: "post"}),
 
     'departmentIndex': (page: number): HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/department?page=${page}`,req: "get"}),
+    'departmentAll': (): HTTPEnpointType => ({ endpoint: `${BASE_URL}/auth/department/all`, req: "get" }),
     'findDepartment' : (departmentId: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/department/${departmentId}`, req: "get"}), createDepartment: () => ({endpoint: `${BASE_URL}/auth/department`,req: "post"}),
     'updateDepartment': (departmentId: number) => ({endpoint: `${BASE_URL}/auth/department/${departmentId}`,req: "patch"}),   
     'findCompany' : (companyId: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/company/${companyId}`, req: "get"}),    
@@ -79,6 +80,8 @@ const QUEUE_MANAGER: Object = {
     'delete'  : (id: Number, userId: Number) :   HTTPEnpointType => ({endpoint: `${BASE_URL}/queue/transaction/${id}/${userId}`, req: "delete"}),
     
     'windows' : (page: Number): HTTPEnpointType => ({endpoint: `${BASE_URL}/queue/windows?page=${page}`,  req: "get"}),
+    'create-window': (): HTTPEnpointType => ({endpoint: `${BASE_URL}/queue/windows`,req: "post"}),
+    'update-window': (windowId: Number): HTTPEnpointType => ({endpoint: `${BASE_URL}/queue/windows/${windowId}`,req: "patch"}),
     'concerns' : (page: Number): HTTPEnpointType => ({endpoint: `${BASE_URL}/queue/concerns?page=${page}`,  req: "get"}),
     'window-assigned-to' : (userId: Number): HTTPEnpointType => ({endpoint: `${BASE_URL}/queue/windows/assignedto/${userId}`,  req: "get"}),
 

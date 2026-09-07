@@ -26,6 +26,27 @@ class DepartmentController extends Controller
         }
     }
 
+    public function all(): JsonResponse
+    {
+        try {
+            $departments = Department::query()
+                ->orderBy('name')
+                ->get([
+                    'id',
+                    'name',
+                ]);
+
+            return response()->json($departments, 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Something went wrong.',
+                'success' => false,
+                'reason' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function find(int $department): JsonResponse
     {
         try {

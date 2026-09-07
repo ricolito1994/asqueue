@@ -1,9 +1,10 @@
 import { AbstractApiService } from './AbstractApiService'
-import { AUTH, USER } from '@constants/api'
+import { AUTH, USER, QUEUE_MANAGER } from "@constants/api";
 
 export default class AuthenticationService extends AbstractApiService {
   protected auth: any;
   protected user: any;
+  protected queueManager: any;
 
   constructor(
     accessToken: string | undefined | null,
@@ -14,6 +15,7 @@ export default class AuthenticationService extends AbstractApiService {
     super(accessToken, baseURL, refreshToken, onAuthTokenUpdate);
     this.auth = AUTH;
     this.user = USER;
+    this.queueManager = QUEUE_MANAGER;
   }
   async login<T = any>(data: any, config?: any) {
     try {
@@ -108,6 +110,20 @@ export default class AuthenticationService extends AbstractApiService {
     }
   }
 
+  async departmentAll<T = any>(data?: any, config?: any) {
+    try {
+      let response = await this.requestV2<T>(
+        this.auth.departmentAll(),
+        data,
+        config,
+      );
+
+      return response?.data;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+
   async setActiveSession<T = any>(userId: number, data: any, config?: any) {
     try {
       let response = await this.requestV2<T>(
@@ -161,4 +177,47 @@ export default class AuthenticationService extends AbstractApiService {
       throw e;
     }
   }
+
+  async windowIndex<T = any>(page: number, data?: any, config?: any) {
+    try {
+      let response = await this.requestV2<T>(
+        this.queueManager.windows(page),
+        data,
+        config,
+      );
+
+      return response?.data;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+
+  async createWindow<T = any>(data: any, config?: any) {
+    try {
+      const response = await this.requestV2<T>(
+        this.queueManager["create-window"](),
+        data,
+        config,
+      );
+
+      return response?.data;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+
+  async updateWindow<T = any>(windowId: number, data: any, config?: any) {
+    try {
+      const response = await this.requestV2<T>(
+        this.queueManager["update-window"](windowId),
+        data,
+        config,
+      );
+
+      return response?.data;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+  
 }
