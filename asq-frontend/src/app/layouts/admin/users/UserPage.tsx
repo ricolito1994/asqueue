@@ -19,6 +19,10 @@ interface User {
   designation: string | null;
   title: string | null;
   window_id: number | null;
+  window?: {
+    id: number;
+    name: string;
+  } | null;
   company_id: number | null;
   department_id: number | null;
   created_at: string;
@@ -34,9 +38,9 @@ interface PaginationMeta {
 const UsersPage: React.FC = (): React.ReactElement => {
   const { user, setUser } = useContext(AppContext);
 
- const [showUserForm, setShowUserForm] = useState<boolean>(false);
- const [selectedUser, setSelectedUser] = useState<User | null>(null);
- const [users, setUsers] = useState<User[]>([]);
+  const [showUserForm, setShowUserForm] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [showUserView, setShowUserView] = useState<boolean>(false);
@@ -72,7 +76,30 @@ const UsersPage: React.FC = (): React.ReactElement => {
 
       console.log("USERS API RESPONSE:", response);
 
-      setUsers(response.data);
+      const usersWithWindows = await Promise.all(
+        response.data.map(async (user: User) => {
+          try {
+            const window = await auth.current.windowAssignedTo(user.id);
+
+            return {
+              ...user,
+              window: window ?? null,
+            };
+          } catch (error) {
+            console.error(
+              `Failed to fetch window for user ${user.id}:`,
+              error,
+            );
+
+            return {
+              ...user,
+              window: null,
+            };
+          }
+        }),
+      );
+
+      setUsers(usersWithWindows);
 
       setPaginationMeta({
         currentPage: response.current_page,

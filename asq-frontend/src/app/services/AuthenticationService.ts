@@ -192,6 +192,20 @@ export default class AuthenticationService extends AbstractApiService {
     }
   }
 
+  async windowAssignedTo<T = any>(userId: number, data?: any, config?: any) {
+    try {
+      const response = await this.requestV2<T>(
+        this.queueManager["window-assigned-to"](userId),
+        data,
+        config,
+      );
+
+      return response?.data;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+
   async createWindow<T = any>(data: any, config?: any) {
     try {
       const response = await this.requestV2<T>(

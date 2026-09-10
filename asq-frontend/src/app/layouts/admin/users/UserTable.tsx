@@ -16,6 +16,10 @@ interface User {
   designation: string | null;
   title: string | null;
   window_id: number | null;
+  window?: {
+    id: number;
+    name: string;
+  } | null;
   company_id: number | null;
   department_id: number | null;
   created_at: string;
@@ -79,11 +83,11 @@ const UserTable: React.FC<UserTableProps> = ({
       ),
     },
     {
-      accessorKey: "window_id",
-      header: "Window ID",
+      accessorKey: "window",
+      header: "Window",
       cell: ({ row }) => (
         <span className="text-muted-foreground">
-          {row.original.window_id ?? "-"}
+          {row.original.window?.name ?? "-"}
         </span>
       ),
     },
@@ -127,10 +131,10 @@ const UserTable: React.FC<UserTableProps> = ({
       header: () => <span className="sr-only">Actions</span>,
       enableSorting: false,
       cell: ({ row }) => (
-        <UserActions 
-        user={row.original} 
-        onEdit={(user) => onEdit?.(user)}
-        onView={(user) => onView?.(user)}
+        <UserActions
+          user={row.original}
+          onEdit={(user) => onEdit?.(user)}
+          onView={(user) => onView?.(user)}
         />
       ),
     },
