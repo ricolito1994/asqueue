@@ -32,6 +32,20 @@ class UserService extends BaseService {
         ]);
     }
 
+    public function all(Request $request): mixed
+    {
+        return $this->asyncRequest([
+            [
+                'method' => 'GET',
+                'url' => self::ASQ_AUTH_USER_BASE_URL . "/all",
+                'headers' => [
+                    'Authorization' => "Bearer {$request->bearerToken()}"
+                ],
+                'options' => $request->all()
+            ]
+        ]);
+    }
+
     public function create(Request $request): mixed
     {
         return $this->asyncRequest([

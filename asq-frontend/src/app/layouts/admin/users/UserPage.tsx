@@ -135,7 +135,10 @@ const UsersPage: React.FC = (): React.ReactElement => {
 
         console.log("UPDATE USER RESPONSE:", response);
       } else {
-        response = await auth.current.createUser(data);
+          response = await auth.current.createUser({
+            ...data,
+            company_id: 1,
+          });
 
         console.log("CREATE USER RESPONSE:", response);
       }

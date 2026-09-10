@@ -47,6 +47,29 @@ class UserController extends Controller
         }
     }
 
+    public function all(): JsonResponse
+    {
+        try {
+            $users = User::query()
+                ->orderBy('firstname')
+                ->orderBy('lastname')
+                ->get([
+                    'id',
+                    'firstname',
+                    'lastname',
+                ]);
+
+            return response()->json($users, 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'reason' => $e->getMessage(),
+                'message' => 'Something went wrong',
+                'success' => false
+            ], 500);
+        }
+    }
+
     public function setActiveSession(Request $request, User $user): JsonResponse
     {
         try {
@@ -86,6 +109,7 @@ class UserController extends Controller
                 'email' => 'required|email|unique:users,email',
                 'username' => 'required|string|unique:users,username',
                 'password' => 'required|string|min:6',
+                'company_id' => 'required|integer',
             ]);
 
             $user = User::create($validated);

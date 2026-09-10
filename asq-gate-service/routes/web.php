@@ -30,6 +30,7 @@ Route::group([
             'prefix' => 'user',
         ], function () {
             Route::get('', 'GateUserController@index');
+            Route::get('all', 'GateUserController@all');
             Route::post('', 'GateUserController@create');
             Route::patch('{userId}', 'GateUserController@update');
             Route::get('{userId}', 'GateUserController@find');

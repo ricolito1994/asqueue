@@ -32,6 +32,8 @@ Route::group([
         'middleware' => ['jwt.auth.middleware']
     ], function () {
         Route::get('', 'UserController@index');
+         Route::get('all', 'UserController@all');
+         
         Route::post('', 'UserController@create');
         Route::patch('{user}', 'UserController@update');
         Route::get('{user}', 'UserController@find');

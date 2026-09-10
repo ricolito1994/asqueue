@@ -98,11 +98,11 @@ const AssignmentPage: React.FC = (): React.ReactElement => {
 
       setDepartments(departmentResponse);
 
-      const userResponse = await auth.current.userIndex(1);
+      const userResponse = await auth.current.userAll();
 
       console.log("ASSIGNMENT USERS:", userResponse);
 
-      setUsers(userResponse.data);
+      setUsers(userResponse);
     } catch (error) {
       console.error("Failed to fetch assignment data:", error);
     } finally {

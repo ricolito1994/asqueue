@@ -24,6 +24,17 @@ class GateUserController extends Controller
             return $this->processException($e);
         }
     }
+
+    public function all(Request $request): JsonResponse|Response
+    {
+        try {
+            $res = $this->userService->all($request);
+
+            return response()->json($res['data'] ?? $res);
+        } catch (\Exception $e) {
+            return $this->processException($e);
+        }
+    }
     
     public function create(Request $request): JsonResponse|Response
     {

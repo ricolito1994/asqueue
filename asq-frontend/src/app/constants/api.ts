@@ -55,6 +55,7 @@ const AUTH: Object = {
 }
 
 const USER: Object = {
+    'all': () => ({ endpoint: `${BASE_URL}/auth/user/all`, req: "get", }),
     'find'  : (userId: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/user/${userId}`, req: "get"}),    
     'index' : (page: number)  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/user?page=${page}`, req: "get"}),  
     'create' : ()  :   HTTPEnpointType => ({endpoint: `${BASE_URL}/auth/user`, req: "post"}),    
