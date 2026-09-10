@@ -356,7 +356,7 @@ import AuthenticationService from "@services/AuthenticationService";
           type="button"
           onClick={onToggle}
           title={open ? "Collapse sidebar" : "Expand sidebar"}
-          className="absolute -right-3 top-[4.25rem] z-20 flex size-6 items-center justify-center rounded-full border bg-background shadow-sm transition-colors hover:bg-muted"
+          className="absolute -right-3 top-17 z-20 flex size-6 items-center justify-center rounded-full border bg-background shadow-sm transition-colors hover:bg-muted"
         >
           {open ? (
             <ChevronLeft className="size-3.5" />
