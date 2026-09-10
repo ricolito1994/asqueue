@@ -241,7 +241,7 @@ const FrontDeskLayout: React.FC <any> = (): React.ReactElement => {
       getDepartment();
 
     if(!departmentId)
-      fetchDepartments()
+      fetchDepartments(1)
     
     let userActiveChannelUri = `update.user.active.department.${departmentId}.company.${companyId}`;
 
