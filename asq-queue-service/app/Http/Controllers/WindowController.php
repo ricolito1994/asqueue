@@ -119,4 +119,40 @@ class WindowController extends Controller
         }
     }
 
+    public function assign(Request $request, int $window): JsonResponse
+    {
+        try {
+            $windowData = Window::findOrFail($window);
+
+            $validated = $request->validate([
+                'user_id' => 'nullable|integer',
+            ]);
+
+            if ($validated['user_id'] !== null) {
+                $alreadyAssigned = Window::where('assigned_to', $validated['user_id'])
+                    ->where('id', '!=', $window)
+                    ->exists();
+
+                if ($alreadyAssigned) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'This user is already assigned to another window.',
+                    ], 422);
+                }
+            }
+
+            $windowData->update([
+                'assigned_to' => $validated['user_id'],
+            ]);
+
+            return response()->json($windowData->fresh(), 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'reason' => $e->getMessage(),
+                'message' => 'Something went wrong.',
+            ], 500);
+        }
+    }
+
 }

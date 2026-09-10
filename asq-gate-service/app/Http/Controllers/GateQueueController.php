@@ -97,6 +97,17 @@ class GateQueueController extends Controller
         }
     }
 
+    public function windowAssign(Request $request, int $window)
+    {
+        try {
+            $res = $this->queueService->windowAssign($request, $window);
+
+            return response()->json($res['data'] ?? $res);
+        } catch (\Exception $e) {
+            return $this->processException($e);
+        }
+    }
+
     public function sessionCreate(Request $request): Response|JsonResponse
     {
         try {

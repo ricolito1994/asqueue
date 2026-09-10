@@ -71,6 +71,7 @@ Route::group([
             Route::get('', 'GateQueueController@windowIndex');
             Route::post('', 'GateQueueController@windowCreate');
             Route::patch('/{window}', 'GateQueueController@windowUpdate');
+            Route::patch('/{window}/assign', 'GateQueueController@windowAssign');
             Route::get('/assignedto/{user_id}', 'GateQueueController@windowAssignedTo');
         });
         Route::group([

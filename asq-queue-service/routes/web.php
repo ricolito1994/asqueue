@@ -33,6 +33,7 @@ Route::group([
         Route::get('', 'WindowController@index');
         Route::post('', 'WindowController@create');
         Route::patch('/{window}', 'WindowController@update');
+        Route::patch('/{window}/assign', 'WindowController@assign');
         Route::get('/assignedto/{user_id}', 'WindowController@findByAssignedTo');
     });
 

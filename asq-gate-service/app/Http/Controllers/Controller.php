@@ -18,8 +18,9 @@ abstract class Controller
     {
         $message = json_decode($e->getMessage(), true);
 
+        // Changed so it returns the original error code
         if (json_last_error() === JSON_ERROR_NONE) {
-            return response()->json($message, 500);
+            return response()->json($message, $e->getCode());
         }
 
         $message = $e->getMessage();

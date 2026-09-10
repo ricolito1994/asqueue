@@ -134,6 +134,20 @@ class QueueService extends BaseService
         ]);
     }
 
+    public function windowAssign(Request $request, int $window): mixed
+    {
+        return $this->asyncRequest([
+            [
+                'method' => 'PATCH',
+                'url' => self::ASQ_W_QUEUE_BASE_URL . "/{$window}/assign",
+                'headers' => [
+                    'Authorization' => "Bearer {$request->bearerToken()}"
+                ],
+                'options' => $request->all()
+            ]
+        ]);
+    }
+
     public function windowAssignedTo(Request $request, int $userId):mixed
     {
         return $this->asyncRequest([

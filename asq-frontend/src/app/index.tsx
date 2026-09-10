@@ -9,6 +9,7 @@ import { Helmet } from 'react-helmet-async'
 import { Route, Routes, Navigate } from 'react-router-dom'
 import { AppContext } from '@context/AppContext'
 import { useNavigate } from "react-router-dom"
+import { Toaster } from "sonner";
 
 import LoadingLayout from '@layouts/LoadingLayout'
 import QueueScreenLayout from '@layouts/QueueScreenLayout'
@@ -35,6 +36,7 @@ import ProfileSettings from '@pages/main/settings/ProfileSettings'
 import UsersPage from './layouts/admin/users/UserPage'
 import UnassignedUserPage from "@pages/UnassignedUserPage";
 import WindowPage from './layouts/admin/windows/WindowPage'
+import AssignmentPage from "./layouts/admin/assignments/AssignmentPage";
 
 const App = (): React.ReactElement => {
 
@@ -122,6 +124,8 @@ const App = (): React.ReactElement => {
 
     return (
       <>
+        <Toaster />
+
         <LoadingLayout isLoading={isLoading}>
           <Routes>
             {/* New Routing for Clerk */}
@@ -161,6 +165,7 @@ const App = (): React.ReactElement => {
               <Route path="users" element={<UsersPage />} />
               <Route path="departments" element={<DepartmentPage />} />
               <Route path="windows" element={<WindowPage />} />
+              <Route path="assignments" element={<AssignmentPage />} />
             </Route>
           </Routes>
         </LoadingLayout>

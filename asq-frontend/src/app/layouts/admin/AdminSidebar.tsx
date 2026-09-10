@@ -11,6 +11,7 @@ import {
   X,
   ShipWheel,
   Building2,
+  ArrowLeftRight,
 } from "lucide-react";
 
 import { Link, useLocation } from "react-router-dom";
@@ -317,7 +318,20 @@ import AuthenticationService from "@services/AuthenticationService";
               onClick={mobile ? onClose : undefined}
             />
           ))}
+        </SidebarSection>
 
+        {/* Assignments */}
+        <SidebarSection label="Assignments" open={open} className="mt-5">
+          <SidebarItem
+            item={{
+              label: "Assignments",
+              href: "/asqueue/admin/assignments",
+              icon: ArrowLeftRight,
+            }}
+            active={isActive("/asqueue/admin/assignments")}
+            open={open}
+            onClick={mobile ? onClose : undefined}
+          />
         </SidebarSection>
       </div>
 

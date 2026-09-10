@@ -129,8 +129,4 @@ class UserController extends Controller
         }
     }
 
-    public function delete (User $user): JsonResponse 
-    {
-        
-    }
 }
