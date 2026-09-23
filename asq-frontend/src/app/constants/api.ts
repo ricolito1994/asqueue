@@ -85,6 +85,7 @@ const QUEUE_MANAGER: Object = {
     'update-window': (windowId: Number): HTTPEnpointType => ({endpoint: `${BASE_URL}/queue/windows/${windowId}`,req: "patch"}),
     'assign-window': (windowId: Number): HTTPEnpointType => ({ endpoint: `${BASE_URL}/queue/windows/${windowId}/assign`, req: "patch" }),
     'concerns' : (page: Number): HTTPEnpointType => ({endpoint: `${BASE_URL}/queue/concerns?page=${page}`,  req: "get"}),
+    'admin-concerns': (page: Number): HTTPEnpointType => ({  endpoint: `${BASE_URL}/queue/concerns/admin?page=${page}`,  req: "get" }),
     'window-assigned-to' : (userId: Number): HTTPEnpointType => ({endpoint: `${BASE_URL}/queue/windows/assignedto/${userId}`,  req: "get"}),
 
     'process-queue-number'  : ():   HTTPEnpointType => ({endpoint: `${BASE_URL}/queue/transaction/process`,req: "post"}),

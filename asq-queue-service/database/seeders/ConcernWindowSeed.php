@@ -158,8 +158,14 @@ class ConcernWindowSeed extends Seeder
             ],
         ];
 
-        foreach ($concernWindowData as $concernWindow):
-            ConcernWindow::create($concernWindow);
-        endforeach;
+        foreach ($concernWindowData as $concernWindow) {
+            ConcernWindow::firstOrCreate(
+                [
+                    'window_id' => $concernWindow['window_id'],
+                    'concern_id' => $concernWindow['concern_id'],
+                ],
+                $concernWindow
+            );
+        }
     }
 }

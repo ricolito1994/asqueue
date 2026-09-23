@@ -12,6 +12,7 @@ import {
   ShipWheel,
   Building2,
   ArrowLeftRight,
+  ClipboardList,
 } from "lucide-react";
 
 import { Link, useLocation } from "react-router-dom";
@@ -64,6 +65,11 @@ import AuthenticationService from "@services/AuthenticationService";
       label: "Windows",
       href: "/asqueue/admin/windows",
       icon: Monitor,
+    },
+    {
+      label: "Concerns",
+      href: "/asqueue/admin/concerns",
+      icon: ClipboardList,
     },
   ];
 

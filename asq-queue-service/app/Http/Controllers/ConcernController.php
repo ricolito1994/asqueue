@@ -42,4 +42,45 @@ class ConcernController extends Controller
         }
     }
 
+    public function adminIndex(Request $request)
+    {
+        try {
+            $concernData = Concern::filter($request)
+                ->with([
+                    'windows' => function ($q) {
+                        $q->select([
+                            'windows.id',
+                            'windows.name',
+                        ]);
+                    }
+                ])
+                ->paginate(10);
+
+            return response()->json($concernData, 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong',
+                'reason' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function update(Request $request, Concern $concern)
+    {
+        try {
+            $concern->update($request->all());
+
+            return response()->json($concern, 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong',
+                'reason' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

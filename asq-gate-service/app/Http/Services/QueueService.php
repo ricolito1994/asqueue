@@ -92,6 +92,34 @@ class QueueService extends BaseService
         ]);
     }
 
+    public function concernAdminIndex(Request $request):mixed
+    {
+        return $this->asyncRequest([
+            [
+                'method' => 'GET',
+                'url' => self::ASQ_C_QUEUE_BASE_URL . "/admin",
+                'headers' => [
+                    'Authorization' => "Bearer {$request->bearerToken()}"
+                ],
+                'options' => $request->all()
+            ]
+        ]);
+    }
+
+    public function concernUpdate(Request $request, $concern): mixed
+    {
+        return $this->asyncRequest([
+            [
+                'method' => 'PATCH',
+                'url' => self::ASQ_C_QUEUE_BASE_URL . "/{$concern}",
+                'headers' => [
+                    'Authorization' => "Bearer {$request->bearerToken()}"
+                ],
+                'options' => $request->all()
+            ]
+        ]);
+    }
+
     public function windowIndex(Request $request):mixed
     {
         return $this->asyncRequest([

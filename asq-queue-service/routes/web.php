@@ -25,6 +25,8 @@ Route::group([
         'prefix' => 'concerns',
     ], function () {
         Route::get('', 'ConcernController@index');
+        Route::get('admin', 'ConcernController@adminIndex');
+        Route::patch('{concern}', 'ConcernController@update');
     });
 
     Route::group([

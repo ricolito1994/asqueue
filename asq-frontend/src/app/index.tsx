@@ -31,6 +31,7 @@ import ClerkLayout from './layouts/ClerkLayout'
 import ClerkDashboard from './layouts/clerk/ClerkDashboard'
 import AdminDashboardLayout from './layouts/admin/AdminDashboardLayout'
 import DepartmentPage from "./layouts/admin/departments/DepartmentPage";
+import ConcernPage from "./layouts/admin/concerns/ConcernPage";
 
 import ProfileSettings from '@pages/main/settings/ProfileSettings'
 import UsersPage from './layouts/admin/users/UserPage'
@@ -143,10 +144,13 @@ const App = (): React.ReactElement => {
             <Route path="*" element={<>404 Page Not found</>} />
 
             <Route path="/asqueue/new-transaction">
+              {/* currently used */}
               <Route
                 path="company/:companyId/department/:departmentId/concerns"
                 element={<FrontDeskLayout />}
               />
+              
+              {/* Below is an old route */}
               <Route
                 path="company/:companyId/department/:departmentId/concerns/:concernId/windows"
                 element={<TransactionWindow />}
@@ -166,6 +170,7 @@ const App = (): React.ReactElement => {
               <Route path="departments" element={<DepartmentPage />} />
               <Route path="windows" element={<WindowPage />} />
               <Route path="assignments" element={<AssignmentPage />} />
+              <Route path="concerns" element={<ConcernPage />} />
             </Route>
           </Routes>
         </LoadingLayout>

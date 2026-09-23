@@ -147,4 +147,25 @@ class GateQueueController extends Controller
             return $this->processException($e);
         }
     }
+
+    public function concernAdminIndex(Request $request): Response|JsonResponse
+    {
+        try {
+            $res = $this->queueService->concernAdminIndex($request);
+            return response()->json($res['data'] ?? $res);
+        } catch (\Exception $e) {
+            return $this->processException($e);
+        }
+    }
+    
+    public function concernUpdate(Request $request, $concern): Response|JsonResponse
+    {
+        try {
+            $res = $this->queueService->concernUpdate($request, $concern);
+
+            return response()->json($res['data'] ?? $res);
+        } catch (\Exception $e) {
+            return $this->processException($e);
+        }
+    }
 }
