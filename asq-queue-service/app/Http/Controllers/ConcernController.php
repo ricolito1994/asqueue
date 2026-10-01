@@ -67,12 +67,52 @@ class ConcernController extends Controller
         }
     }
 
+    public function store(Request $request)
+    {
+        try {
+            $concern = Concern::create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'department_id' => $request->department_id,
+                'company_id' => 1,
+            ]);
+
+            return response()->json($concern, 201);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong',
+                'reason' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function update(Request $request, Concern $concern)
     {
         try {
             $concern->update($request->all());
 
             return response()->json($concern, 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong',
+                'reason' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function destroy(Concern $concern)
+    {
+        try {
+            $concern->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Concern deleted successfully.'
+            ], 200);
 
         } catch (Exception $e) {
             return response()->json([

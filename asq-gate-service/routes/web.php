@@ -66,7 +66,9 @@ Route::group([
         ],function () {
             Route::get('', 'GateQueueController@concernIndex');
             Route::get('admin', 'GateQueueController@concernAdminIndex');
+            Route::post('', 'GateQueueController@concernStore');
             Route::patch('{concern}', 'GateQueueController@concernUpdate');
+            Route::delete('{concern}', 'GateQueueController@concernDestroy');
         });
         Route::group([
             'prefix' => 'windows'

@@ -26,7 +26,9 @@ Route::group([
     ], function () {
         Route::get('', 'ConcernController@index');
         Route::get('admin', 'ConcernController@adminIndex');
+        Route::post('', 'ConcernController@store');
         Route::patch('{concern}', 'ConcernController@update');
+        Route::delete('{concern}', 'ConcernController@destroy');
     });
 
     Route::group([

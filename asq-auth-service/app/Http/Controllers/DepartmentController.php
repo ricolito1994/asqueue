@@ -34,6 +34,7 @@ class DepartmentController extends Controller
                 ->get([
                     'id',
                     'name',
+                    'company_id',
                 ]);
 
             return response()->json($departments, 200);

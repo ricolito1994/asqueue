@@ -25,12 +25,13 @@ interface Concern {
 interface Department {
   id: number;
   name: string;
+  company_id: number;
 }
 
 interface ConcernFormProps {
   open: boolean;
   onClose: () => void;
-  concern: Concern | null;
+  concern?: Concern | null;
   accessToken?: string | null;
   refreshToken?: string | null;
   onRefreshToken?: (data: any) => void;
@@ -69,13 +70,20 @@ const ConcernForm: React.FC<ConcernFormProps> = ({
   );
 
   useEffect(() => {
-    if (!open || !concern) {
+    if (!open) {
       return;
     }
 
-    setName(concern.name);
-    setDescription(concern.description ?? "");
-    setDepartmentId(String(concern.department_id));
+    if (concern) {
+      setName(concern.name);
+      setDescription(concern.description ?? "");
+      setDepartmentId(String(concern.department_id));
+    } else {
+      setName("");
+      setDescription("");
+      setDepartmentId("");
+    }
+
     setError("");
   }, [open, concern]);
 
@@ -90,7 +98,11 @@ const ConcernForm: React.FC<ConcernFormProps> = ({
 
         const response = await auth.current.departmentAll();
 
-        setDepartments(response);
+        setDepartments(
+          response.filter(
+            (department: Department) => department.company_id === 1,
+          ),
+        );
       } catch (error) {
         console.error("Failed to fetch departments:", error);
         setError("Failed to load departments.");
@@ -135,7 +147,7 @@ const ConcernForm: React.FC<ConcernFormProps> = ({
     }
   };
 
-  if (!open || !concern) {
+  if (!open) {
     return null;
   }
 
@@ -176,7 +188,10 @@ const ConcernForm: React.FC<ConcernFormProps> = ({
             <div className="flex-1 space-y-5 overflow-y-auto p-6">
               {/* Concern Name */}
               <div className="space-y-2">
-                <label htmlFor="concern-name" className="text-sm font-medium">
+                <label
+                  htmlFor="concern-name"
+                  className="block text-sm font-medium"
+                >
                   Concern
                 </label>
 
@@ -185,7 +200,7 @@ const ConcernForm: React.FC<ConcernFormProps> = ({
                   type="text"
                   value={name}
                   onChange={(event) => setName(event.target.value)}
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  className="h-10 w-full rounded-md border bg-background px-3 py-2 !text-sm !font-normal !leading-5 outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
 
@@ -193,7 +208,7 @@ const ConcernForm: React.FC<ConcernFormProps> = ({
               <div className="space-y-2">
                 <label
                   htmlFor="concern-department"
-                  className="text-sm font-medium"
+                  className="block text-sm font-medium"
                 >
                   Department
                 </label>
@@ -203,7 +218,7 @@ const ConcernForm: React.FC<ConcernFormProps> = ({
                   value={departmentId}
                   onChange={(event) => setDepartmentId(event.target.value)}
                   disabled={loadingDepartments}
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  className="h-10 w-full rounded-md border bg-background px-3 py-2 !text-sm !font-normal !leading-5 outline-none focus:ring-2 focus:ring-ring"
                 >
                   <option value="">
                     {loadingDepartments
@@ -223,7 +238,7 @@ const ConcernForm: React.FC<ConcernFormProps> = ({
               <div className="space-y-2">
                 <label
                   htmlFor="concern-description"
-                  className="text-sm font-medium"
+                  className="block text-sm font-medium"
                 >
                   Description
                 </label>
@@ -233,7 +248,7 @@ const ConcernForm: React.FC<ConcernFormProps> = ({
                   value={description}
                   onChange={(event) => setDescription(event.target.value)}
                   rows={4}
-                  className="w-full resize-none rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  className="w-full resize-none rounded-md border bg-background px-3 py-2 !text-sm !font-normal !leading-5 outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
 

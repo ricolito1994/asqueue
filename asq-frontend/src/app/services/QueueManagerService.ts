@@ -53,6 +53,55 @@ export class QueueManagerService extends AbstractApiService {
     }
   }
 
+  async updateConcern<T = any>(concernId: number, data: any, config?: any) {
+    try {
+      let response = await this.requestV2<T>(
+        this.queueManager["update-concern"](concernId),
+        data,
+        config,
+      );
+
+      return response?.data;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+
+  async createConcern<T = any>(
+    data: {
+      name: string;
+      description: string;
+      department_id: number;
+    },
+    config?: any,
+  ) {
+    try {
+      let response = await this.requestV2<T>(
+        this.queueManager["create-concern"](),
+        data,
+        config,
+      );
+
+      return response?.data;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+
+  async deleteConcern<T = any>(concernId: number, config?: any) {
+    try {
+      let response = await this.requestV2<T>(
+        this.queueManager["delete-concern"](concernId),
+        null,
+        config,
+      );
+
+      return response?.data;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+
   async windows<T = any>(page: number, data: any, config?: any) {
     try {
       let response = await this.requestV2<T>(

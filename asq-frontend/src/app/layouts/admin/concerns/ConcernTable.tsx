@@ -30,6 +30,7 @@ interface ConcernTableProps {
   loading?: boolean;
   paginationMeta?: PaginationMeta;
   onPageChange?: (page: number) => void;
+  onUpdated?: () => void;
   onView?: (concern: Concern) => void;
 }
 
@@ -38,6 +39,7 @@ const ConcernTable: React.FC<ConcernTableProps> = ({
   loading = false,
   paginationMeta,
   onPageChange,
+  onUpdated,
   onView,
 }) => {
   const columns: ColumnDef<Concern>[] = [
@@ -75,6 +77,7 @@ const ConcernTable: React.FC<ConcernTableProps> = ({
         <ConcernActions
           concern={row.original}
           onView={(concern) => onView?.(concern)}
+          onUpdated={onUpdated}
         />
       ),
     },

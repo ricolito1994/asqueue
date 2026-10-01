@@ -168,4 +168,27 @@ class GateQueueController extends Controller
             return $this->processException($e);
         }
     }
+
+    public function concernDestroy(Request $request, $concern): Response|JsonResponse
+    {
+        try {
+            $res = $this->queueService->concernDestroy($request, $concern);
+
+            return response()->json($res['data'] ?? $res);
+        } catch (\Exception $e) {
+            return $this->processException($e);
+        }
+    }
+    
+    public function concernStore(Request $request): Response|JsonResponse
+    {
+        try {
+            $res = $this->queueService->concernStore($request);
+
+            return response()->json($res['data'] ?? $res);
+        } catch (\Exception $e) {
+            return $this->processException($e);
+        }
+    }
+
 }

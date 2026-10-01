@@ -5,8 +5,11 @@ import { AppContext } from "@context/AppContext";
 import AuthenticationService from "@services/AuthenticationService";
 import { QueueManagerService } from "@services/QueueManagerService";
 
+import { toast } from "sonner";
+
 import ConcernTable from "./ConcernTable";
 import ConcernView from "./ConcernView";
+import ConcernForm from "./ConcernForm";
 
 interface Concern {
   id: number;
@@ -119,12 +122,25 @@ const ConcernPage: React.FC = (): React.ReactElement => {
   return (
     <div className="space-y-5">
       {/* Page Header */}
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Concerns</h1>
+      <div className="flex items-start justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-semibold tracking-tight">Concerns</h1>
 
-        <p className="text-sm text-muted-foreground">
-          Manage concerns and their assigned windows.
-        </p>
+          <p className="text-sm text-muted-foreground">
+            Manage concerns and their assigned windows.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            setSelectedConcern(null);
+            setViewOpen(true);
+          }}
+          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+        >
+          + New Concern
+        </button>
       </div>
 
       {/* Table */}
@@ -133,19 +149,36 @@ const ConcernPage: React.FC = (): React.ReactElement => {
         loading={loading}
         paginationMeta={paginationMeta}
         onPageChange={fetchConcerns}
+        onUpdated={() => fetchConcerns(paginationMeta?.currentPage ?? 1)}
         onView={(concern) => {
           setSelectedConcern(concern);
           setViewOpen(true);
         }}
       />
-      
-      <ConcernView
+
+      <ConcernForm
         open={viewOpen}
         onClose={() => {
           setViewOpen(false);
           setSelectedConcern(null);
         }}
         concern={selectedConcern}
+        accessToken={user?.access_token ?? null}
+        refreshToken={user?.refresh_token ?? null}
+        onRefreshToken={onRefreshToken}
+        onSubmit={async (data) => {
+          if (selectedConcern) {
+            await queue.current.updateConcern(selectedConcern.id, data);
+
+            toast.success("Concern updated successfully.");
+          } else {
+            await queue.current.createConcern(data);
+
+            toast.success("Concern created successfully.");
+          }
+
+          await fetchConcerns(paginationMeta?.currentPage ?? 1);
+        }}
       />
     </div>
   );
