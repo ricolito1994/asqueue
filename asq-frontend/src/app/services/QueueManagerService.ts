@@ -102,6 +102,26 @@ export class QueueManagerService extends AbstractApiService {
     }
   }
 
+  async assignConcernWindows<T = any>(
+    concernId: number,
+    data: {
+      window_ids: number[];
+    },
+    config?: any,
+  ) {
+    try {
+      let response = await this.requestV2<T>(
+        this.queueManager["assign-concern-windows"](concernId),
+        data,
+        config,
+      );
+
+      return response?.data;
+    } catch (e: any) {
+      throw e;
+    }
+  }
+
   async windows<T = any>(page: number, data: any, config?: any) {
     try {
       let response = await this.requestV2<T>(

@@ -123,4 +123,28 @@ class ConcernController extends Controller
         }
     }
 
+    public function assignWindows(Request $request, Concern $concern)
+    {
+        try {
+            $validated = $request->validate([
+                'window_ids' => 'required|array',
+                'window_ids.*' => 'integer',
+            ]);
+
+            $concern->windows()->sync($validated['window_ids']);
+
+            return response()->json(
+                $concern->load('windows'),
+                200
+            );
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong',
+                'reason' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

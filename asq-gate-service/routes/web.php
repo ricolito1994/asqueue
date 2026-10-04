@@ -69,6 +69,8 @@ Route::group([
             Route::post('', 'GateQueueController@concernStore');
             Route::patch('{concern}', 'GateQueueController@concernUpdate');
             Route::delete('{concern}', 'GateQueueController@concernDestroy');
+
+            Route::post('{concern}/windows', 'GateQueueController@concernAssignWindows');
         });
         Route::group([
             'prefix' => 'windows'

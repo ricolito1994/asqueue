@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 
-import { Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react";
+import { Edit, Eye, MoreHorizontal, Trash2, Monitor } from "lucide-react";
 
 import { AppContext } from "@context/AppContext";
 
@@ -9,6 +9,7 @@ import { QueueManagerService } from "@services/QueueManagerService";
 import AsConfirmModal from "@components/modals/AsConfirmModal";
 
 import ConcernForm from "./ConcernForm";
+import ConcernWindowAssignment from "./ConcernWindowAssignment";
 
 interface Concern {
   id: number;
@@ -47,6 +48,7 @@ const ConcernActions: React.FC<ConcernActionsProps> = ({
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [assignOpen, setAssignOpen] = useState(false);
 
   const actionsRef = useRef<HTMLDivElement>(null);
 
@@ -103,14 +105,27 @@ const ConcernActions: React.FC<ConcernActionsProps> = ({
     onEdit?.(concern);
   };
 
-  const handleCreate = () => {
-    setOpen(false);
-    setEditOpen(true);
-  };
-
   const handleDelete = () => {
     setOpen(false);
     setDeleteOpen(true);
+  };
+
+  const handleAssign = () => {
+    setOpen(false);
+    setAssignOpen(true);
+  };
+
+  const submitAssignment = async (windowIds: number[]) => {
+    try {
+      await queue.current.assignConcernWindows(concern.id, {
+        window_ids: windowIds,
+      });
+
+      setAssignOpen(false);
+      onUpdated?.();
+    } catch (error) {
+      console.error("Failed to assign windows:", error);
+    }
   };
 
   const confirmDelete = async () => {
@@ -173,6 +188,15 @@ const ConcernActions: React.FC<ConcernActionsProps> = ({
               <Trash2 className="h-4 w-4" />
               Delete
             </button>
+
+            <button
+              type="button"
+              onClick={handleAssign}
+              className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-muted"
+            >
+              <Monitor className="h-4 w-4" />
+              Assign Windows
+            </button>
           </div>
         )}
       </div>
@@ -197,7 +221,13 @@ const ConcernActions: React.FC<ConcernActionsProps> = ({
         denyText="Cancel"
       />
 
-
+      <ConcernWindowAssignment
+        open={assignOpen}
+        onClose={() => setAssignOpen(false)}
+        concernName={concern.name}
+        assignedWindowIds={concern.windows.map((window) => window.id)}
+        onSubmit={submitAssignment}
+      />
     </>
   );
 };

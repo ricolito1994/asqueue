@@ -134,6 +134,22 @@ class QueueService extends BaseService
         ]);
     }
 
+    public function concernAssignWindows(
+        Request $request,
+        int $concern
+    ): mixed {
+        return $this->asyncRequest([
+            [
+                'method' => 'POST',
+                'url' => self::ASQ_C_QUEUE_BASE_URL . "/{$concern}/windows",
+                'headers' => [
+                    'Authorization' => "Bearer {$request->bearerToken()}"
+                ],
+                'options' => $request->all()
+            ]
+        ]);
+    }
+
     public function concernStore(Request $request): mixed
     {
         return $this->asyncRequest([

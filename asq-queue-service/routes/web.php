@@ -29,6 +29,8 @@ Route::group([
         Route::post('', 'ConcernController@store');
         Route::patch('{concern}', 'ConcernController@update');
         Route::delete('{concern}', 'ConcernController@destroy');
+
+        Route::post('{concern}/windows', 'ConcernController@assignWindows');
     });
 
     Route::group([

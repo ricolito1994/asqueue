@@ -92,6 +92,8 @@ const QUEUE_MANAGER: Object = {
     'create-concern': (): HTTPEnpointType => ({ endpoint: `${BASE_URL}/queue/concerns`, req: "post" }),
     'delete-concern': (concernId: Number): HTTPEnpointType => ({ endpoint: `${BASE_URL}/queue/concerns/${concernId}`, req: "delete" }),
 
+    "assign-concern-windows": (concernId: number): HTTPEnpointType => ({ endpoint: `${BASE_URL}/queue/concerns/${concernId}/windows`,req: "post",}),
+
     'process-queue-number'  : ():   HTTPEnpointType => ({endpoint: `${BASE_URL}/queue/transaction/process`,req: "post"}),
     'recall-queue-number'  : (queueNumber: number):   HTTPEnpointType => ({endpoint: `${BASE_URL}/queue/transaction/recall/${queueNumber}`,req: "get"}),
 

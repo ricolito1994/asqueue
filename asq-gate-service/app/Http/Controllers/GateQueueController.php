@@ -191,4 +191,18 @@ class GateQueueController extends Controller
         }
     }
 
+    public function concernAssignWindows( Request $request, $concern ): Response|JsonResponse {
+        try {
+            $res = $this->queueService->concernAssignWindows(
+                $request,
+                $concern
+            );
+
+            return response()->json($res['data'] ?? $res);
+
+        } catch (\Exception $e) {
+            return $this->processException($e);
+        }
+    }
+
 }
