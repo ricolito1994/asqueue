@@ -1,0 +1,87 @@
+x-laravel-service: &laravel-service
+  restart: "unless-stopped"
+  networks: [microservices]
+  depends_on: 
+    asq_database: { condition: service_healthy }
+    redis: { condition: service_healthy }
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: asq-nginx
+    ports:
+      - "80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./asq-frontend/dist:/var/www/asq-frontend/dist:ro
+      - ./asq-auth-service/public:/var/www/asq-auth-service/public:ro
+      - ./asq-notif-service/public:/var/www/asq-notif-service/public:ro
+      - ./asq-gate-service/public:/var/www/asq-gate-service/public:ro
+      - ./asq-queue-service/public:/var/www/asq-queue-service/public:ro
+      - ./asq-one-queue-enrollment-service/public:/var/www/asq-one-queue-enrollment-service/public:ro
+    depends_on:
+      - asq-gate-service
+      - asq-auth-service
+      - asq-queue-service
+      - asq-one-queue-enrollment-service
+      - asq-notif-service
+    networks:
+      - microservices
+      - gateway-net
+
+  asq-gate-service:
+    <<: *laravel-service
+    build: ./asq-gate-service/Dockerfile.prod
+
+  asq-auth-service:
+    <<: *laravel-service
+    build: ./asq-auth-service/Dockerfile.prod
+
+  asq-queue-service:
+    <<: *laravel-service
+    build: ./asq-queue-service/Dockerfile.prod
+
+  asq-one-queue-enrollment-service:
+    <<: *laravel-service
+    build: ./asq-one-queue-enrollment-service/Dockerfile.prod
+  
+  asq-notif-service:
+    <<: *laravel-service
+    build: ./asq-notif-service
+
+  asq_database:
+    image: mysql:8.4
+    container_name: asq_database
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - asq_mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      retries: 20
+    networks:
+      - microservices
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 10
+    networks:
+      - microservices
+
+volumes:
+  asq_mysql_data:
+
+networks:
+  microservices:
+    driver: bridge
+  gateway-net:
+    external: true

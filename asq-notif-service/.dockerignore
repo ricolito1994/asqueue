@@ -1,0 +1,19 @@
+.env
+.env.*
+!.env.example
+
+vendor
+
+# Git and editors
+.git
+.gitignore
+.gitattributes
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# Docker files
+Dockerfile
+.dockerignore
+docker-compose*.yml
