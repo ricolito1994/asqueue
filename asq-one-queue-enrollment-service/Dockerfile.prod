@@ -1,0 +1,44 @@
+# ---------- base: runtime + PHP extensions ----------
+FROM php:8.4-fpm-alpine AS base
+
+RUN apk add --no-cache \
+        bash curl supervisor \
+        libzip oniguruma icu-libs libpq \
+    && apk add --no-cache --virtual .build-deps \
+        $PHPIZE_DEPS linux-headers \
+        libzip-dev oniguruma-dev icu-dev postgresql-dev \
+    && docker-php-ext-install -j$(nproc) \
+        pdo_mysql pdo_pgsql mbstring zip bcmath intl \
+        opcache pcntl posix \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && apk del .build-deps \
+    && rm -rf /tmp/pear
+
+WORKDIR /var/www/html
+
+# ---------- vendor: install dependencies ----------
+FROM base AS vendor
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1
+
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-autoloader \
+    --prefer-dist --no-interaction --no-progress
+
+COPY . .
+RUN composer dump-autoload --no-dev --optimize --classmap-authoritative
+
+# ---------- final: production image ----------
+FROM base
+
+COPY php-prod.ini /usr/local/etc/php/php.ini
+COPY supervisord.conf /etc/supervisord.conf
+
+COPY --from=vendor /var/www/html /var/www/html
+RUN mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
+
+EXPOSE 9000
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

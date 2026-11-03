@@ -1,5 +1,11 @@
-services:
+x-laravel-service: &laravel-service
+  restart: "unless-stopped"
+  networks: [microservices]
+  depends_on: 
+    asq_database: { condition: service_healthy }
+    redis: { condition: service_healthy }
 
+services:
   nginx:
     image: nginx:stable-alpine
     container_name: asq-nginx
@@ -12,61 +18,54 @@ services:
       - ./asq-notif-service/public:/var/www/asq-notif-service/public:ro
       - ./asq-gate-service/public:/var/www/asq-gate-service/public:ro
       - ./asq-queue-service/public:/var/www/asq-queue-service/public:ro
+      - ./asq-one-queue-enrollment-service/public:/var/www/asq-one-queue-enrollment-service/public:ro
     depends_on:
       - asq-gate-service
       - asq-auth-service
       - asq-queue-service
+      - asq-one-queue-enrollment-service
       - asq-notif-service
     networks:
       - microservices
       - gateway-net
 
   asq-gate-service:
+    <<: *laravel-service
     build: ./asq-gate-service
     volumes:
       - ./asq-gate-service:/var/www/html
-      - /var/www/html/vendor   
-    networks:
-      - microservices
-    depends_on:
-      - asq_database
-      - redis
+      - /var/www/html/vendor
 
   asq-auth-service:
+    <<: *laravel-service
     build: ./asq-auth-service
     volumes:
       - ./asq-auth-service:/var/www/html
-      - /var/www/html/vendor   
-    networks:
-      - microservices
-    depends_on:
-      - asq_database
-      - redis
+      - /var/www/html/vendor
 
   asq-queue-service:
+    <<: *laravel-service
     build: ./asq-queue-service
     volumes:
       - ./asq-queue-service:/var/www/html
       - /var/www/html/vendor
-    networks:
-      - microservices
-    depends_on:
-      - asq_database
-      - redis
+
+  asq-one-queue-enrollment-service:
+    <<: *laravel-service
+    build: ./asq-one-queue-enrollment-service
+    volumes:
+      - ./asq-one-queue-enrollment-service:/var/www/html
+      - /var/www/html/vendor
   
   asq-notif-service:
+    <<: *laravel-service
     build: ./asq-notif-service
     volumes:
       - ./asq-notif-service:/var/www/html
       - /var/www/html/vendor
-    networks:
-      - microservices
-    depends_on:
-      - asq_database
-      - redis
 
   asq_database:
-    image: mysql:8.0
+    image: mysql:8.4
     container_name: asq_database
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -77,11 +76,22 @@ services:
       - ./mysql-init:/docker-entrypoint-initdb.d
     networks:
       - microservices
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
 
   redis:
     image: redis:7-alpine
     networks:
       - microservices
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
 volumes:
   asq_mysql_data:
