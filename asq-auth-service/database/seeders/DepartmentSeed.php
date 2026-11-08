@@ -24,6 +24,22 @@ class DepartmentSeed extends Seeder
             'name' => 'Accounting',
             'company_id' => 1
         ],
+        [
+            'name' => 'Guidance',
+            'company_id' => 1
+        ],
+        [
+            'name' => 'Clinic',
+            'company_id' => 1
+        ],
+        [
+            'name' => 'NROTC',
+            'company_id' => 1
+        ],
+        [
+            'name' => 'MIS',
+            'company_id' => 1
+        ],
     ];
 
 

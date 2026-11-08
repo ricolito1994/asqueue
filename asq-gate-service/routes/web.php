@@ -77,4 +77,10 @@ Route::group([
         });
     });
 
+    Route::group([
+        'prefix' => 'onequeue'
+    ],function () {
+        Route::get('', 'OneQueueController@index');
+    });
+
 });
