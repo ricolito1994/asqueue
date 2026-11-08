@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-
+use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Throwable;
 
 abstract class Controller
 {
@@ -14,7 +15,7 @@ abstract class Controller
         return $string !== strip_tags($string);
     }
 
-    protected function processException (\Exception $e): JsonResponse|Response
+    protected function processException (Exeption|Throwable $e): JsonResponse|Response
     {
         $message = json_decode($e->getMessage(), true);
 

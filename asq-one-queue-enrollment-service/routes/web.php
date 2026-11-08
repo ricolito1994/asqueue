@@ -6,5 +6,5 @@ Route::group([
     'prefix' => 'onequeue',
     'namespace' => 'App\Http\Controllers'
 ], function () {
-
+    Route::get('/', "OneQueueController@index");
 });

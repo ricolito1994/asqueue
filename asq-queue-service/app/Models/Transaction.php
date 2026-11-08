@@ -31,6 +31,11 @@ class Transaction extends Model
         'process_start_at',
         'process_end_at',
         'is_priority',
+        'is_enrollment',
+        'skipped',
+        'student_enrollment_id',
+        'student_enrollment_number',
+        'enrollment_transaction_id',
     ];
 
     protected $appends = ['process_time'];
@@ -39,6 +44,8 @@ class Transaction extends Model
     {
         return [
             'is_priority' => 'boolean',
+            'is_enrollment' => 'boolean',
+            'skipped' => 'boolean',
             'process_end_at' => 'datetime',
             'process_start_at' => 'datetime'
         ];
