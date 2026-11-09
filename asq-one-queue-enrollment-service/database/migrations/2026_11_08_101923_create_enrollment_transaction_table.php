@@ -13,15 +13,29 @@ return new class extends Migration
     {
         Schema::create('enrollment_transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->references('id')->on('students');
+            $table->foreignId('student_id')->references('id')->on('student');
             $table->unsignedSmallInteger('step');
-            $table->text('description');
-            $table->foreignId('step_id')->references('id')->on('enrollment_steps')->nullable();
+            $table->text('description')->nullable();
+            $table->foreignId('step_id')
+                ->nullable()
+                ->references('id')
+                ->on('enrollment_steps');
+            $table->foreignId('school_year_id')
+                ->nullable()
+                ->references('id')
+                ->on('school_year');
+            $table->foreignId('semester_id')
+                ->nullable()
+                ->references('id')
+                ->on('semester');
             $table->unsignedSmallInteger('school_year');
+            $table->unsignedSmallInteger('semester');
             $table->dateTime('transaction_start_at');
             $table->dateTime('transaction_end_at');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index(['student_id', 'school_year_id', 'semester_id'], "student_steps_idx");
         });
     }
 
