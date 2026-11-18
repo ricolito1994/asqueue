@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Course extends Model
 {
@@ -15,6 +16,11 @@ class Course extends Model
         'course',
         'course_code',
         'company_id',
-        'department_id',
+        'college_id',
     ];
+
+    public function college(): BelongsTo
+    {
+        return $this->belongsTo(College::class);
+    }
 }
