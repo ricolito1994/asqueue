@@ -14,15 +14,17 @@ return new class extends Migration
         Schema::create('student', function (Blueprint $table) {
             $table->id();
 
-            $table->string('firstname');
-            $table->string('lastname');
-            $table->string('middlename')->nullable();
+            $table->string('lastname', 100);
+            $table->string('firstname', 100);
+            $table->string('middlename', 100)->nullable();
 
-            $table->string('student_enrollment_number', 255)->unique();
+            $table->string('student_enrollment_number', 255)->nullable()->unique();
 
             $table->boolean('is_transfer_student')->nullable();
 
             $table->foreignId('course_id')->constrained('courses');
+
+            $table->foreignId('college_id')->constrained('colleges');
 
             $table->date('birthday')->nullable();
 
@@ -30,8 +32,7 @@ return new class extends Migration
 
             $table->foreignId('school_year_id')->constrained('school_year');
 
-            $table->year('school_year');
-            $table->unsignedSmallInteger('semester');
+            $table->foreignId('year_level_id')->constrained('year_level');
 
             $table->unsignedSmallInteger('current_step');
 
@@ -67,6 +68,10 @@ return new class extends Migration
             $table->index('student_enrollment_number');
 
             $table->index('expires_at');
+        });
+
+        Schema::table('student', function (Blueprint $table) {
+            $table->index(Student::COMPOSITE_ATTRIBUTE, 'student_first_or_new_idx');
         });
     }
 

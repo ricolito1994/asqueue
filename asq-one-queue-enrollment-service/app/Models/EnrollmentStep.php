@@ -16,6 +16,7 @@ class EnrollmentStep extends Model
         'description',
         'long_description',
         'course_id',
+        'college_id',
         'year_level',
         'school_year',
         'school_year_id',

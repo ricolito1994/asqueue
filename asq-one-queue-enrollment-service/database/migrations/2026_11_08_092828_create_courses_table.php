@@ -54,7 +54,8 @@ return new class extends Migration
 
         Schema::create('colleges', function (Blueprint $table) {
             $table->id();
-            $table->string('college_name');
+            $table->string('college_code')->unique();
+            $table->string('college_name')->unique();;
             $table->unsignedBigInteger('company_id');
             $table->timestamps();
             $table->softDeletes();
@@ -63,6 +64,8 @@ return new class extends Migration
                 ['company_id', 'college_name'],
                 'college_company_idx'
             );
+
+            $table->index('college_code');
         });
 
         Schema::create('courses', function (Blueprint $table) {

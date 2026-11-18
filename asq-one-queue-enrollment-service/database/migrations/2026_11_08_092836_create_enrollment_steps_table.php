@@ -18,6 +18,7 @@ return new class extends Migration
             $table->longText("long_description")->nullable();
             $table->boolean("is_also_for_transfer_students")->nullable();
             $table->foreignId('course_id')->references('id')->on('courses');
+            $table->foreignId('college_id')->references('id')->on('colleges');
             $table->foreignId('year_level_id')->references('id')->on('year_level');
             $table->unsignedSmallInteger('year_level');
             $table->year('school_year');

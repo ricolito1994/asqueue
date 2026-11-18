@@ -15,7 +15,8 @@ class CollegeSeed extends Seeder
     {
         $data = [
             [
-                'college_name' => 'School of Maritime',
+                'college_code' => 'CME',
+                'college_name' => 'College of Maritime Engineering',
                 'company_id' => 1
             ],
         ];
