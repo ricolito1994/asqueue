@@ -254,7 +254,11 @@ const QueueDisplayV2: React.FC<any> = (): React.ReactElement => {
           </div>
 
           {/* Right Column - Media/Advertisements */}
-          <MediaPanel pathToMedia={vid} textToAnnounce={textToAnnounce} />
+          <MediaPanel 
+            pathToMedia={vid} 
+            textToAnnounce={textToAnnounce} 
+            tts={tts}
+          />
         </div>
       </div>
     </div>

@@ -2,10 +2,11 @@ import { useState, useEffect } from "react"
 
 interface MediaPanelProps {
   pathToMedia: string
-  textToAnnounce: string[]
+  textToAnnounce: string[],
+  tts?: any,
 }
 
-const MediaPanel: React.FC <MediaPanelProps> = ({ pathToMedia, textToAnnounce }): React.ReactElement => {
+const MediaPanel: React.FC <MediaPanelProps> = ({ pathToMedia, textToAnnounce, tts }): React.ReactElement => {
 
   const [currentTime, setCurrentTime] = useState(new Date())
 
@@ -35,7 +36,7 @@ const MediaPanel: React.FC <MediaPanelProps> = ({ pathToMedia, textToAnnounce })
               })}
             </p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+          <div onClick={()=>{tts.current.speak("Welcome to our queueing.")}} className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
             <svg
               className="w-6 h-6 text-primary"
               fill="none"
@@ -71,7 +72,7 @@ const MediaPanel: React.FC <MediaPanelProps> = ({ pathToMedia, textToAnnounce })
       {/* Announcement bar */}
       <div className="rounded-2xl bg-primary/10 border border-primary/20 p-4">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
+          <div onClick={()=>{tts.current.speak("Welcome to our queueing.");}} className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
             <svg
               className="w-4 h-4 text-primary"
               fill="none"
